@@ -31,7 +31,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+void print_out(uint32_t data, const char *text, uint8_t out_mode);
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -41,6 +41,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
+DMA_HandleTypeDef hdma_adc1;
 
 FDCAN_HandleTypeDef hfdcan1;
 
@@ -54,9 +55,9 @@ TIM_HandleTypeDef htim16;
 
 UART_HandleTypeDef huart2;
 
-DMA_HandleTypeDef hdma_memtomem_dma1_channel1;
 /* USER CODE BEGIN PV */
-
+uint8_t data_output_switch = 1;
+uint8_t switches[]
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -634,9 +635,6 @@ static void MX_TIM16_Init(void)
 
   /* USER CODE END TIM16_Init 0 */
 
-  TIM_OC_InitTypeDef sConfigOC = {0};
-  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
-
   /* USER CODE BEGIN TIM16_Init 1 */
 
   /* USER CODE END TIM16_Init 1 */
@@ -651,37 +649,9 @@ static void MX_TIM16_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_TIM_PWM_Init(&htim16) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
-  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-  if (HAL_TIM_PWM_ConfigChannel(&htim16, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
-  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
-  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-  sBreakDeadTimeConfig.DeadTime = 0;
-  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
-  sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
-  sBreakDeadTimeConfig.BreakFilter = 0;
-  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
-  if (HAL_TIMEx_ConfigBreakDeadTime(&htim16, &sBreakDeadTimeConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
   /* USER CODE BEGIN TIM16_Init 2 */
 
   /* USER CODE END TIM16_Init 2 */
-  HAL_TIM_MspPostInit(&htim16);
 
 }
 
@@ -735,8 +705,6 @@ static void MX_USART2_UART_Init(void)
 
 /**
   * Enable DMA controller clock
-  * Configure DMA for memory to memory transfers
-  *   hdma_memtomem_dma1_channel1
   */
 static void MX_DMA_Init(void)
 {
@@ -745,20 +713,10 @@ static void MX_DMA_Init(void)
   __HAL_RCC_DMAMUX1_CLK_ENABLE();
   __HAL_RCC_DMA1_CLK_ENABLE();
 
-  /* Configure DMA request hdma_memtomem_dma1_channel1 on DMA1_Channel1 */
-  hdma_memtomem_dma1_channel1.Instance = DMA1_Channel1;
-  hdma_memtomem_dma1_channel1.Init.Request = DMA_REQUEST_MEM2MEM;
-  hdma_memtomem_dma1_channel1.Init.Direction = DMA_MEMORY_TO_MEMORY;
-  hdma_memtomem_dma1_channel1.Init.PeriphInc = DMA_PINC_ENABLE;
-  hdma_memtomem_dma1_channel1.Init.MemInc = DMA_MINC_ENABLE;
-  hdma_memtomem_dma1_channel1.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
-  hdma_memtomem_dma1_channel1.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-  hdma_memtomem_dma1_channel1.Init.Mode = DMA_NORMAL;
-  hdma_memtomem_dma1_channel1.Init.Priority = DMA_PRIORITY_LOW;
-  if (HAL_DMA_Init(&hdma_memtomem_dma1_channel1) != HAL_OK)
-  {
-    Error_Handler( );
-  }
+  /* DMA interrupt init */
+  /* DMA1_Channel2_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel2_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel2_IRQn);
 
 }
 
@@ -769,19 +727,85 @@ static void MX_DMA_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
 /* USER CODE BEGIN MX_GPIO_Init_1 */
 /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOG_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(IN1_2_GPIO_Port, IN1_2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, IN0_2_Pin|SEL1_2_Pin|IN3_Pin|IN2_Pin
+                          |IN1_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, SEL0_2_Pin|IN0_Pin|IN3_2_Pin|SEL1_Pin
+                          |SEL0_Pin|IN2_2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : IN1_2_Pin */
+  GPIO_InitStruct.Pin = IN1_2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(IN1_2_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : IN0_2_Pin SEL1_2_Pin IN3_Pin IN2_Pin
+                           IN1_Pin */
+  GPIO_InitStruct.Pin = IN0_2_Pin|SEL1_2_Pin|IN3_Pin|IN2_Pin
+                          |IN1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : SEL0_2_Pin IN0_Pin IN3_2_Pin SEL1_Pin
+                           SEL0_Pin IN2_2_Pin */
+  GPIO_InitStruct.Pin = SEL0_2_Pin|IN0_Pin|IN3_2_Pin|SEL1_Pin
+                          |SEL0_Pin|IN2_2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
+void print_out(uint32_t data, const char *text, uint8_t out_mode){
 
+	// uint16_t length = strlen(string);
+	 //uint8_t CRLFbuff[] = "\r\n";
+	uint32_t data_buffer = 0;
+	data_buffer = data;
+	const char *buffer = text;
+	char msg[2+2+sizeof(buffer)+sizeof(data_buffer)+4+2+4] = "";
+	if(data == -1){
+		sprintf(msg, "\r\n%s \r\n", buffer);
+	}else{
+		sprintf(msg, "\r\n%s %lu\r\n", buffer, data_buffer);
+	}
+
+	switch(out_mode){
+		  case 1: //Ouput only through DEBUG
+			  HAL_UART_Transmit(&huart2, msg, sizeof(msg), 0xFF);
+			  text = "";
+			  break;
+		  case 0b10: //output only through CAN
+			  //TODO implement CAN
+			  break;
+		  case 0b11://output through BOTH CAN and DEBUG
+			  HAL_UART_Transmit(&huart2, msg, sizeof(msg), 0xFF);
+			  text = "";
+			  //TODO implement CAN
+			  break;
+		  }
+}
 /* USER CODE END 4 */
 
 /**
