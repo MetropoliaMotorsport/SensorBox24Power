@@ -57,7 +57,7 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 uint8_t data_output_switch = 1;
-uint8_t switches[]
+uint8_t Default_Switch_State;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
