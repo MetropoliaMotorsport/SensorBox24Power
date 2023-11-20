@@ -57,7 +57,11 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 uint8_t data_output_switch = 1;
+
 uint8_t Default_Switch_State;
+
+uint8_t PWM_out_enable;
+uint16_t PWM_Prescalers[8];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -123,7 +127,13 @@ int main(void)
   MX_TIM16_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_TIM_Base_Start_IT(&htim1); //PWM
+  HAL_TIM_Base_Start_IT(&htim2); //PWM
+  HAL_TIM_Base_Start_IT(&htim3); //PWM
+  HAL_TIM_Base_Start_IT(&htim4); //PWM
+  HAL_TIM_Base_Start_IT(&htim6);
+  HAL_TIM_Base_Start_IT(&htim7);
+  HAL_TIM_Base_Start_IT(&htim16);
   /* USER CODE END 2 */
 
   /* Infinite loop */
