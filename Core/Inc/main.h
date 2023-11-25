@@ -28,6 +28,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32g4xx_hal.h"
+#include "config.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -49,8 +50,6 @@ extern "C" {
 
 /* USER CODE END EM */
 
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -63,7 +62,7 @@ void Error_Handler(void);
 #define IN1_2_GPIO_Port GPIOG
 #define IN0_2_Pin GPIO_PIN_4
 #define IN0_2_GPIO_Port GPIOA
-#define SEL1_2_Pin GPIO_PIN_7
+#define SEL1_2_Pin GPIO_PIN_5
 #define SEL1_2_GPIO_Port GPIOA
 #define SEL0_2_Pin GPIO_PIN_0
 #define SEL0_2_GPIO_Port GPIOB
@@ -85,7 +84,9 @@ void Error_Handler(void);
 #define IN2_2_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-
+extern uint8_t Default_Switch_State;
+extern uint8_t PWM_out_enable;
+extern uint16_t PWM_Prescalers[8];
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

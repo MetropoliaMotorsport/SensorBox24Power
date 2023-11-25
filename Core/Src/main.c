@@ -32,6 +32,9 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 void print_out(uint32_t data, const char *text, uint8_t out_mode);
+void CS_read();
+void CS_process();
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc);
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -41,6 +44,7 @@ void print_out(uint32_t data, const char *text, uint8_t out_mode);
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
+ADC_HandleTypeDef hadc2;
 DMA_HandleTypeDef hdma_adc1;
 
 FDCAN_HandleTypeDef hfdcan1;
@@ -57,6 +61,25 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 uint8_t data_output_switch = 1;
+#define I_AVERAGE  32
+
+uint16_t IN1_1_CS[I_AVERAGE];
+uint16_t IN2_1_CS[I_AVERAGE];
+uint16_t IN3_1_CS[I_AVERAGE];
+uint16_t IN4_1_CS[I_AVERAGE];
+uint16_t IN1_2_CS[I_AVERAGE];
+uint16_t IN2_2_CS[I_AVERAGE];
+uint16_t IN3_2_CS[I_AVERAGE];
+uint16_t IN4_2_CS[I_AVERAGE];
+uint16_t IN1_1_PROC;
+uint16_t IN2_1_PROC;
+uint16_t IN3_1_PROC;
+uint16_t IN4_1_PROC;
+uint16_t IN1_2_PROC;
+uint16_t IN2_2_PROC;
+uint16_t IN3_2_PROC;
+uint16_t IN4_2_PROC;
+uint16_t TESTAUS;
 
 uint8_t Default_Switch_State;
 
@@ -78,13 +101,14 @@ static void MX_TIM6_Init(void);
 static void MX_TIM7_Init(void);
 static void MX_TIM16_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_ADC2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+//HAL_ADC_DMA_Start(&hdma1)
 /* USER CODE END 0 */
 
 /**
@@ -126,6 +150,7 @@ int main(void)
   MX_TIM7_Init();
   MX_TIM16_Init();
   MX_USART2_UART_Init();
+  MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim1); //PWM
   HAL_TIM_Base_Start_IT(&htim2); //PWM
@@ -141,7 +166,18 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+	  CS_read();
+	  CS_process();
+	  print_out(IN1_1_PROC,"1_1",data_output_switch);
+	  print_out(IN2_1_PROC,"2_1",data_output_switch);
+	  print_out(IN3_1_PROC,"3_1",data_output_switch);
+	  print_out(IN4_1_PROC,"4_1",data_output_switch);
+	  print_out(IN1_2_PROC,"1_2",data_output_switch);
+	  print_out(IN2_2_PROC,"2_2",data_output_switch);
+	  print_out(IN3_2_PROC,"3_2",data_output_switch);
+	  print_out(IN4_2_PROC,"4_2",data_output_switch);
 
+	  HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -252,6 +288,65 @@ static void MX_ADC1_Init(void)
   /* USER CODE BEGIN ADC1_Init 2 */
 
   /* USER CODE END ADC1_Init 2 */
+
+}
+
+/**
+  * @brief ADC2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC2_Init(void)
+{
+
+  /* USER CODE BEGIN ADC2_Init 0 */
+
+  /* USER CODE END ADC2_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC2_Init 1 */
+
+  /* USER CODE END ADC2_Init 1 */
+
+  /** Common config
+  */
+  hadc2.Instance = ADC2;
+  hadc2.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
+  hadc2.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc2.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc2.Init.GainCompensation = 0;
+  hadc2.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc2.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  hadc2.Init.LowPowerAutoWait = DISABLE;
+  hadc2.Init.ContinuousConvMode = DISABLE;
+  hadc2.Init.NbrOfConversion = 1;
+  hadc2.Init.DiscontinuousConvMode = DISABLE;
+  hadc2.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc2.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc2.Init.DMAContinuousRequests = DISABLE;
+  hadc2.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+  hadc2.Init.OversamplingMode = DISABLE;
+  if (HAL_ADC_Init(&hadc2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_3;
+  sConfig.Rank = ADC_REGULAR_RANK_1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_2CYCLES_5;
+  sConfig.SingleDiff = ADC_DIFFERENTIAL_ENDED;
+  sConfig.OffsetNumber = ADC_OFFSET_NONE;
+  sConfig.Offset = 0;
+  if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC2_Init 2 */
+
+  /* USER CODE END ADC2_Init 2 */
 
 }
 
@@ -376,7 +471,6 @@ static void MX_TIM1_Init(void)
   /* USER CODE BEGIN TIM1_Init 2 */
 
   /* USER CODE END TIM1_Init 2 */
-  HAL_TIM_MspPostInit(&htim1);
 
 }
 
@@ -435,7 +529,6 @@ static void MX_TIM2_Init(void)
   /* USER CODE BEGIN TIM2_Init 2 */
 
   /* USER CODE END TIM2_Init 2 */
-  HAL_TIM_MspPostInit(&htim2);
 
 }
 
@@ -494,7 +587,6 @@ static void MX_TIM3_Init(void)
   /* USER CODE BEGIN TIM3_Init 2 */
 
   /* USER CODE END TIM3_Init 2 */
-  HAL_TIM_MspPostInit(&htim3);
 
 }
 
@@ -553,7 +645,6 @@ static void MX_TIM4_Init(void)
   /* USER CODE BEGIN TIM4_Init 2 */
 
   /* USER CODE END TIM4_Init 2 */
-  HAL_TIM_MspPostInit(&htim4);
 
 }
 
@@ -815,6 +906,50 @@ void print_out(uint32_t data, const char *text, uint8_t out_mode){
 			  //TODO implement CAN
 			  break;
 		  }
+}
+
+void CS_read(){
+	for(int x = 0; x < 4; x++){
+		for(int i = 0; i < I_AVERAGE; i++){
+			if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
+			if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
+			if(HAL_ADC_PollForConversion(&hadc1,10)!=HAL_OK){Error_Handler();}
+			if(HAL_ADC_PollForConversion(&hadc2,10)!=HAL_OK){Error_Handler();}
+				switch(x){
+				case 0:
+					IN1_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
+					IN1_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
+					break;
+				case 1:
+					IN2_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
+					IN2_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
+					break;
+				case 2:
+					IN3_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
+					IN3_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
+					break;
+				case 3:
+					IN4_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
+					IN4_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
+					break;
+				}
+			if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
+			if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
+		}
+	}
+}
+
+void CS_process(){
+	for(int i = 0; i < I_AVERAGE; i++){
+		IN1_1_PROC = (IN1_1_PROC + IN1_1_CS[i])/2;
+		IN2_1_PROC = (IN2_1_PROC + IN2_1_CS[i])/2;
+		IN3_1_PROC = (IN3_1_PROC + IN3_1_CS[i])/2;
+		IN4_1_PROC = (IN4_1_PROC + IN4_1_CS[i])/2;
+		IN1_2_PROC = (IN1_2_PROC + IN1_2_CS[i])/2;
+		IN2_2_PROC = (IN2_2_PROC + IN2_2_CS[i])/2;
+		IN3_2_PROC = (IN3_2_PROC + IN3_2_CS[i])/2;
+		IN4_2_PROC = (IN4_2_PROC + IN4_2_CS[i])/2;
+	}
 }
 /* USER CODE END 4 */
 
