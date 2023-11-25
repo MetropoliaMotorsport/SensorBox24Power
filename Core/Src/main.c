@@ -34,7 +34,7 @@
 void print_out(uint32_t data, const char *text, uint8_t out_mode);
 void CS_read();
 void CS_process();
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc);
+void check_warnings();
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -79,7 +79,32 @@ uint16_t IN1_2_PROC;
 uint16_t IN2_2_PROC;
 uint16_t IN3_2_PROC;
 uint16_t IN4_2_PROC;
-uint16_t TESTAUS;
+uint16_t WC_1_1; //current warning 1_1
+uint16_t OC_1_1; //over current 1_1
+uint16_t UC_1_1; //under current 1_1
+uint16_t WC_2_1; //current warning 2_1
+uint16_t OC_2_1; //over current 2_1
+uint16_t UC_2_1; //under current 2_1
+uint16_t WC_3_1; //current warning 3_1
+uint16_t OC_3_1; //over current 3_1
+uint16_t UC_3_1; //under current 3_1
+uint16_t WC_4_1; //current warning 4_1
+uint16_t OC_4_1; //over current 4_1
+uint16_t UC_4_1; //under current 4_1
+uint16_t WC_1_2; //current warning 1_2
+uint16_t OC_1_2; //over current 1_2
+uint16_t UC_1_2; //under current 1_2
+uint16_t WC_2_2; //current warning 2_2
+uint16_t OC_2_2; //over current 2_2
+uint16_t UC_2_2; //under current 2_2
+uint16_t WC_3_2; //current warning 3_2
+uint16_t OC_3_2; //over current 3_2
+uint16_t UC_3_2; //under current 3_2
+uint16_t WC_4_2; //current warning 4_2
+uint16_t OC_4_2; //over current 4_2
+uint16_t UC_4_2; //under current 4_2
+
+uint8_t CS_SEL[2];
 
 uint8_t Default_Switch_State;
 
@@ -160,25 +185,18 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim7);
   HAL_TIM_Base_Start_IT(&htim16);
   /* USER CODE END 2 */
-
+  Config_Setup();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-	  CS_read();
-	  CS_process();
-	  print_out(IN1_1_PROC,"1_1",data_output_switch);
-	  print_out(IN2_1_PROC,"2_1",data_output_switch);
-	  print_out(IN3_1_PROC,"3_1",data_output_switch);
-	  print_out(IN4_1_PROC,"4_1",data_output_switch);
-	  print_out(IN1_2_PROC,"1_2",data_output_switch);
-	  print_out(IN2_2_PROC,"2_2",data_output_switch);
-	  print_out(IN3_2_PROC,"3_2",data_output_switch);
-	  print_out(IN4_2_PROC,"4_2",data_output_switch);
 
-	  HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
+  CS_read();
+  CS_process();
+  check_warnings();
+  HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }
@@ -841,12 +859,11 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(IN1_2_GPIO_Port, IN1_2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, IN0_2_Pin|SEL1_2_Pin|IN3_Pin|IN2_Pin
-                          |IN1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, IN0_2_Pin|IN3_Pin|IN2_Pin|IN1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, SEL0_2_Pin|IN0_Pin|IN3_2_Pin|SEL1_Pin
-                          |SEL0_Pin|IN2_2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, IN0_Pin|IN3_2_Pin|SEL1_Pin|SEL0_Pin
+                          |IN2_2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : IN1_2_Pin */
   GPIO_InitStruct.Pin = IN1_2_Pin;
@@ -855,19 +872,29 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(IN1_2_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : IN0_2_Pin SEL1_2_Pin IN3_Pin IN2_Pin
-                           IN1_Pin */
-  GPIO_InitStruct.Pin = IN0_2_Pin|SEL1_2_Pin|IN3_Pin|IN2_Pin
-                          |IN1_Pin;
+  /*Configure GPIO pins : IN0_2_Pin IN3_Pin IN2_Pin IN1_Pin */
+  GPIO_InitStruct.Pin = IN0_2_Pin|IN3_Pin|IN2_Pin|IN1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : SEL0_2_Pin IN0_Pin IN3_2_Pin SEL1_Pin
-                           SEL0_Pin IN2_2_Pin */
-  GPIO_InitStruct.Pin = SEL0_2_Pin|IN0_Pin|IN3_2_Pin|SEL1_Pin
-                          |SEL0_Pin|IN2_2_Pin;
+  /*Configure GPIO pin : SEL1_READ_Pin */
+  GPIO_InitStruct.Pin = SEL1_READ_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(SEL1_READ_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : SEL0_READ_Pin */
+  GPIO_InitStruct.Pin = SEL0_READ_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(SEL0_READ_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : IN0_Pin IN3_2_Pin SEL1_Pin SEL0_Pin
+                           IN2_2_Pin */
+  GPIO_InitStruct.Pin = IN0_Pin|IN3_2_Pin|SEL1_Pin|SEL0_Pin
+                          |IN2_2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -910,32 +937,82 @@ void print_out(uint32_t data, const char *text, uint8_t out_mode){
 
 void CS_read(){
 	for(int x = 0; x < 4; x++){
-		for(int i = 0; i < I_AVERAGE; i++){
-			if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
-			if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
-			if(HAL_ADC_PollForConversion(&hadc1,10)!=HAL_OK){Error_Handler();}
-			if(HAL_ADC_PollForConversion(&hadc2,10)!=HAL_OK){Error_Handler();}
-				switch(x){
-				case 0:
-					IN1_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
-					IN1_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
-					break;
-				case 1:
-					IN2_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
-					IN2_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
-					break;
-				case 2:
-					IN3_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
-					IN3_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
-					break;
-				case 3:
-					IN4_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
-					IN4_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
-					break;
-				}
-			if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
-			if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
+		switch(x){
+		case 0:
+			CS_SEL[0] = 0;
+			CS_SEL[1] = 0;
+			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
+			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,CS_SEL[1]);
+			for(int i = 0; i < I_AVERAGE; i++){
+				if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc1,10)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc2,10)!=HAL_OK){Error_Handler();}
+				IN1_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
+				IN1_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
+				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
+			}
+			break;
+		case 1:
+			CS_SEL[0] = 0;
+			CS_SEL[1] = 1;
+			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
+			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,CS_SEL[1]);
+			for(int i = 0; i < I_AVERAGE; i++){
+				if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc1,10)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc2,10)!=HAL_OK){Error_Handler();}
+				IN2_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
+				IN2_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
+				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
+			}
+			break;
+		case 2:
+			CS_SEL[0] = 1;
+			CS_SEL[1] = 0;
+			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
+			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,CS_SEL[1]);
+			for(int i = 0; i < I_AVERAGE; i++){
+				if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc1,10)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc2,10)!=HAL_OK){Error_Handler();}
+				IN3_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
+				IN3_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
+				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
+			}
+			break;
+		case 3:
+			CS_SEL[0] = 1;
+			CS_SEL[1] = 1;
+			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
+			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,CS_SEL[1]);
+			for(int i = 0; i < I_AVERAGE; i++){
+				if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc1,10)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc2,10)!=HAL_OK){Error_Handler();}
+				IN4_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
+				IN4_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
+				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
+			}
+			break;
 		}
+/*		if(HAL_GPIO_ReadPin(SEL0_READ_GPIO_Port, SEL0_READ_Pin) == GPIO_PIN_RESET){
+			print_out(0,"S0: ",data_output_switch);
+		}else{
+			print_out(1,"S0: ",data_output_switch);
+		}
+		if(HAL_GPIO_ReadPin(SEL1_READ_GPIO_Port, SEL1_READ_Pin) == GPIO_PIN_RESET){
+			print_out(0,"S1: ",data_output_switch);
+		}else{
+			print_out(1,"S1: ",data_output_switch);
+		}*/
 	}
 }
 
@@ -949,6 +1026,104 @@ void CS_process(){
 		IN2_2_PROC = (IN2_2_PROC + IN2_2_CS[i])/2;
 		IN3_2_PROC = (IN3_2_PROC + IN3_2_CS[i])/2;
 		IN4_2_PROC = (IN4_2_PROC + IN4_2_CS[i])/2;
+	}
+}
+
+void check_warnings(){
+	if(IN1_1_PROC >= WC_1_1){
+		if(IN1_1_PROC >= OC_1_1){
+			HAL_GPIO_WritePin(GPIOA,IN0_Pin,0);
+			print_out(-1,"1_OC",data_output_switch);
+		}else{
+			print_out(-1,"1_WC",data_output_switch);
+		}
+	}
+	if(IN1_1_PROC <= UC_1_1){
+		print_out(-1,"1_UC",data_output_switch);
+	}
+//------------------------------------------------------
+	if(IN2_1_PROC >= WC_2_1){
+		if(IN2_1_PROC >= OC_2_1){
+			HAL_GPIO_WritePin(GPIOA,IN1_Pin,0);
+			print_out(-1,"2_OC",data_output_switch);
+		}else{
+			print_out(-1,"2_WC",data_output_switch);
+		}
+	}
+	if(IN2_1_PROC <= UC_2_1){
+		print_out(-1,"2_UC",data_output_switch);
+	}
+//------------------------------------------------------
+	if(IN3_1_PROC >= WC_3_1){
+		if(IN3_1_PROC >= OC_3_1){
+			HAL_GPIO_WritePin(GPIOA,IN2_Pin,0);
+			print_out(-1,"3_OC",data_output_switch);
+		}else{
+			print_out(-1,"3_WC",data_output_switch);
+		}
+	}
+	if(IN3_1_PROC <= UC_3_1){
+		print_out(-1,"3_UC",data_output_switch);
+	}
+//------------------------------------------------------
+	if(IN4_1_PROC >= WC_4_1){
+		if(IN4_1_PROC >= OC_4_1){
+			HAL_GPIO_WritePin(GPIOA,IN3_Pin,0);
+			print_out(-1,"4_OC",data_output_switch);
+		}else{
+			print_out(-1,"4_WC",data_output_switch);
+		}
+	}
+	if(IN4_1_PROC <= UC_4_1){
+		print_out(-1,"4_UC",data_output_switch);
+	}
+//------------------------------------------------------
+	if(IN1_2_PROC >= WC_1_2){
+		if(IN1_2_PROC >= OC_1_2){
+			HAL_GPIO_WritePin(GPIOA,IN0_2_Pin,0);
+			print_out(-1,"5_OC",data_output_switch);
+		}else{
+			print_out(-1,"5_WC",data_output_switch);
+		}
+	}
+	if(IN1_2_PROC <= UC_1_2){
+		print_out(-1,"5_UC",data_output_switch);
+	}
+//------------------------------------------------------
+	if(IN2_2_PROC >= WC_2_2){
+		if(IN2_2_PROC >= OC_2_2){
+			HAL_GPIO_WritePin(GPIOA,IN1_2_Pin,0);
+			print_out(-1,"6_OC",data_output_switch);
+		}else{
+			print_out(-1,"6_WC",data_output_switch);
+		}
+	}
+	if(IN2_2_PROC <= UC_2_2){
+		print_out(-1,"6_UC",data_output_switch);
+	}
+//------------------------------------------------------
+	if(IN3_2_PROC >= WC_3_2){
+		if(IN3_2_PROC >= OC_3_2){
+			HAL_GPIO_WritePin(GPIOA,IN2_2_Pin,0);
+			print_out(-1,"7_OC",data_output_switch);
+		}else{
+			print_out(-1,"7_WC",data_output_switch);
+		}
+	}
+	if(IN3_2_PROC <= UC_3_2){
+		print_out(-1,"7_UC",data_output_switch);
+	}
+//------------------------------------------------------
+	if(IN4_2_PROC >= WC_4_2){
+		if(IN4_2_PROC >= OC_4_2){
+			HAL_GPIO_WritePin(GPIOA,IN3_2_Pin,0);
+			print_out(-1,"8_OC",data_output_switch);
+		}else{
+			print_out(-1,"8_WC",data_output_switch);
+		}
+	}
+	if(IN4_2_PROC <= UC_4_2){
+		print_out(-1,"8_UC",data_output_switch);
 	}
 }
 /* USER CODE END 4 */
