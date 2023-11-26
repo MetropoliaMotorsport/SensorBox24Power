@@ -1,0 +1,4 @@
+../Core/Src/functions.c:12:6:CS_process	16	static
+../Core/Src/functions.c:35:6:check_warnings	8	static
+../Core/Src/functions.c:133:6:CS_read	32	static
+../Core/Src/functions.c:218:6:print_out	56	static

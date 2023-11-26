@@ -59,10 +59,18 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define IN1_2_Pin GPIO_PIN_10
 #define IN1_2_GPIO_Port GPIOG
+#define ADC1_pos_Pin GPIO_PIN_0
+#define ADC1_pos_GPIO_Port GPIOA
+#define ADC1_neg_Pin GPIO_PIN_1
+#define ADC1_neg_GPIO_Port GPIOA
 #define IN0_2_Pin GPIO_PIN_4
 #define IN0_2_GPIO_Port GPIOA
 #define SEL1_READ_Pin GPIO_PIN_5
 #define SEL1_READ_GPIO_Port GPIOA
+#define ADC2_pos_Pin GPIO_PIN_6
+#define ADC2_pos_GPIO_Port GPIOA
+#define ADC2_neg_Pin GPIO_PIN_7
+#define ADC2_neg_GPIO_Port GPIOA
 #define SEL0_READ_Pin GPIO_PIN_0
 #define SEL0_READ_GPIO_Port GPIOB
 #define IN3_Pin GPIO_PIN_9
@@ -83,6 +91,9 @@ void Error_Handler(void);
 #define IN2_2_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
+
+#define I_AVERAGE  32
+
 extern uint8_t Default_Switch_State;
 extern uint8_t PWM_out_enable;
 extern uint16_t PWM_Prescalers[8];
@@ -110,6 +121,36 @@ extern uint16_t UC_3_2; //under current 3_2
 extern uint16_t WC_4_2; //current warning 4_2
 extern uint16_t OC_4_2; //over current 4_2
 extern uint16_t UC_4_2; //under current 4_2
+extern uint16_t IN1_1_CS[I_AVERAGE];
+extern uint16_t IN2_1_CS[I_AVERAGE];
+extern uint16_t IN3_1_CS[I_AVERAGE];
+extern uint16_t IN4_1_CS[I_AVERAGE];
+extern uint16_t IN1_2_CS[I_AVERAGE];
+extern uint16_t IN2_2_CS[I_AVERAGE];
+extern uint16_t IN3_2_CS[I_AVERAGE];
+extern uint16_t IN4_2_CS[I_AVERAGE];
+extern uint8_t CS_SEL[2];
+extern uint16_t IN1_1_PROC;
+extern uint16_t IN2_1_PROC;
+extern uint16_t IN3_1_PROC;
+extern uint16_t IN4_1_PROC;
+extern uint16_t IN1_2_PROC;
+extern uint16_t IN2_2_PROC;
+extern uint16_t IN3_2_PROC;
+extern uint16_t IN4_2_PROC;
+extern uint8_t data_output_switch;
+extern ADC_HandleTypeDef hadc1;
+extern ADC_HandleTypeDef hadc2;
+extern UART_HandleTypeDef huart2;
+extern uint16_t IN1_1_mA;
+extern uint16_t IN2_1_mA;
+extern uint16_t IN3_1_mA;
+extern uint16_t IN4_1_mA;
+extern uint16_t IN1_2_mA;
+extern uint16_t IN2_2_mA;
+extern uint16_t IN3_2_mA;
+extern uint16_t IN4_2_mA;
+extern uint16_t us;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
