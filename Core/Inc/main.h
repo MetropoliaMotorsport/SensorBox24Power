@@ -31,7 +31,8 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "config.h"
+#include "functions.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -49,6 +50,8 @@ extern "C" {
 
 /* USER CODE END EM */
 
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -65,14 +68,10 @@ void Error_Handler(void);
 #define ADC1_neg_GPIO_Port GPIOA
 #define IN0_2_Pin GPIO_PIN_4
 #define IN0_2_GPIO_Port GPIOA
-#define SEL1_READ_Pin GPIO_PIN_5
-#define SEL1_READ_GPIO_Port GPIOA
 #define ADC2_pos_Pin GPIO_PIN_6
 #define ADC2_pos_GPIO_Port GPIOA
 #define ADC2_neg_Pin GPIO_PIN_7
 #define ADC2_neg_GPIO_Port GPIOA
-#define SEL0_READ_Pin GPIO_PIN_0
-#define SEL0_READ_GPIO_Port GPIOB
 #define IN3_Pin GPIO_PIN_9
 #define IN3_GPIO_Port GPIOA
 #define IN2_Pin GPIO_PIN_10
@@ -96,7 +95,9 @@ void Error_Handler(void);
 
 extern uint8_t Default_Switch_State;
 extern uint8_t PWM_out_enable;
-extern uint16_t PWM_Prescalers[8];
+extern uint16_t PWM_Prescalers[2];
+extern uint16_t PWM_width[2];
+extern uint8_t CAN_id[8];
 extern uint16_t WC_1_1; //current warning 1_1
 extern uint16_t OC_1_1; //over current 1_1
 extern uint16_t UC_1_1; //under current 1_1
@@ -151,6 +152,8 @@ extern uint16_t IN2_2_mA;
 extern uint16_t IN3_2_mA;
 extern uint16_t IN4_2_mA;
 extern uint16_t us;
+extern uint8_t uart_rx_buffer[10];
+extern uint8_t uart_counter;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

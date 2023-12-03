@@ -13,5 +13,6 @@ void CS_process();
 void check_warnings();
 void print_out(uint32_t data, const char *text, uint8_t out_mode);
 void raw_to_mA();
+void set_pwm(TIM_HandleTypeDef *htim, uint16_t value);
 
 #endif /* INC_FUNCTIONS_H_ */

@@ -213,6 +213,7 @@ void CS_read(){
 		}*/
 //------------------------------------------------------
 	}
+	CS_process();
 }
 
 void print_out(uint32_t data, const char *text, uint8_t out_mode){
@@ -243,4 +244,20 @@ void print_out(uint32_t data, const char *text, uint8_t out_mode){
 			  //TODO implement CAN
 			  break;
 		  }
+}
+
+void set_pwm(TIM_HandleTypeDef *htim, uint16_t value){
+	  TIM_OC_InitTypeDef sConfigOC;
+
+	  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+	  sConfigOC.Pulse = value;
+	  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+	  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+	  HAL_TIM_PWM_ConfigChannel(htim, &sConfigOC, TIM_CHANNEL_1);
+	  HAL_TIM_PWM_Start(htim, TIM_CHANNEL_1);
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+	HAL_UART_Receive_IT(huart, &uart_rx_buffer[uart_counter],1);
+
 }

@@ -31,17 +31,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define SYSTICKCLOCK 170000000ULL
-#define SYSTICKPERUS (SYSTICKCLOCK / 1000000UL)
-
-// delay has to constant expression
-static void inline __attribute__((always_inline)) delayus(unsigned delay)
-{
-    uint32_t ticks = SYSTICKPERUS * delay;
-    uint32_t start_tick = SysTick -> VAL;
-
-    while(SysTick -> VAL - start_tick < ticks);
-}
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -119,12 +108,18 @@ uint16_t OC_4_2; //over current 4_2
 uint16_t UC_4_2; //under current 4_2
 uint16_t us;
 
+uint8_t uart_rx_buffer[10];
+uint8_t uart_counter;
+
 uint8_t CS_SEL[2];
 
 uint8_t Default_Switch_State;
 
 uint8_t PWM_out_enable;
-uint16_t PWM_Prescalers[8];
+uint16_t PWM_Prescalers[2];
+uint16_t PWM_width[2];
+
+uint8_t CAN_id[8];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -166,7 +161,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  Config_Setup();
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -191,15 +186,7 @@ int main(void)
   MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Init(&htim1);
-  HAL_TIM_Base_Start_IT(&htim1); //PWM
-  HAL_TIM_Base_Start_IT(&htim2); //PWM
-  HAL_TIM_Base_Start_IT(&htim3); //PWM
-  HAL_TIM_Base_Start_IT(&htim4); //PWM
-  HAL_TIM_Base_Start_IT(&htim6);
-  HAL_TIM_Base_Start_IT(&htim7);
-  HAL_TIM_Base_Start_IT(&htim16);
-
-  Config_Setup();
+  HAL_TIM_PWM_Init(&htim2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -210,12 +197,9 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  CS_read();
-	  CS_process();
-	  //check_warnings();
-	   __HAL_TIM_SET_COUNTER(&htim2, 0);
-	  HAL_Delay(1000);
-	  uint16_t timer_val = __HAL_TIM_GET_COUNTER(&htim2);
-	  print_out(timer_val,"TIME",data_output_switch);
+	  check_warnings();
+	  //if receives message to change pwm then set_pwm(duty cycle)
+
   }
   /* USER CODE END 3 */
 }
@@ -514,6 +498,7 @@ static void MX_TIM1_Init(void)
   /* USER CODE BEGIN TIM1_Init 2 */
 
   /* USER CODE END TIM1_Init 2 */
+  HAL_TIM_MspPostInit(&htim1);
 
 }
 
@@ -531,6 +516,7 @@ static void MX_TIM2_Init(void)
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
 
   /* USER CODE BEGIN TIM2_Init 1 */
 
@@ -550,15 +536,28 @@ static void MX_TIM2_Init(void)
   {
     Error_Handler();
   }
+  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
   {
     Error_Handler();
   }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
   /* USER CODE BEGIN TIM2_Init 2 */
 
   /* USER CODE END TIM2_Init 2 */
+  HAL_TIM_MspPostInit(&htim2);
 
 }
 
@@ -576,7 +575,6 @@ static void MX_TIM3_Init(void)
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
 
   /* USER CODE BEGIN TIM3_Init 1 */
 
@@ -596,21 +594,9 @@ static void MX_TIM3_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
-  {
-    Error_Handler();
-  }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -873,18 +859,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : SEL1_READ_Pin */
-  GPIO_InitStruct.Pin = SEL1_READ_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  HAL_GPIO_Init(SEL1_READ_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : SEL0_READ_Pin */
-  GPIO_InitStruct.Pin = SEL0_READ_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  HAL_GPIO_Init(SEL0_READ_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : IN0_Pin IN3_2_Pin SEL1_Pin SEL0_Pin
                            IN2_2_Pin */

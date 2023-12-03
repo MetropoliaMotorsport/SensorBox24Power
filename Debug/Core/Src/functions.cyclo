@@ -1,4 +1,6 @@
 ../Core/Src/functions.c:12:6:CS_process	2
 ../Core/Src/functions.c:35:6:check_warnings	25
 ../Core/Src/functions.c:133:6:CS_read	34
-../Core/Src/functions.c:218:6:print_out	5
+../Core/Src/functions.c:219:6:print_out	5
+../Core/Src/functions.c:249:6:set_pwm	1
+../Core/Src/functions.c:260:6:HAL_UART_RxCpltCallback	1
