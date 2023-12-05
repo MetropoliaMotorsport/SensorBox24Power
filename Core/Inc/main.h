@@ -154,6 +154,7 @@ extern uint16_t IN4_2_mA;
 extern uint16_t us;
 extern uint8_t uart_rx_buffer[10];
 extern uint8_t uart_counter;
+extern uint8_t uart_receive;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

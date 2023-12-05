@@ -232,14 +232,14 @@ void print_out(uint32_t data, const char *text, uint8_t out_mode){
 
 	switch(out_mode){
 		  case 1: //Ouput only through DEBUG
-			  HAL_UART_Transmit(&huart2, msg, sizeof(msg), 0xFF);
+			  HAL_UART_Transmit_IT(&huart2, msg, sizeof(msg));
 			  text = "";
 			  break;
 		  case 0b10: //output only through CAN
 			  //TODO implement CAN
 			  break;
 		  case 0b11://output through BOTH CAN and DEBUG
-			  HAL_UART_Transmit(&huart2, msg, sizeof(msg), 0xFF);
+			  HAL_UART_Transmit_IT(&huart2, msg, sizeof(msg));
 			  text = "";
 			  //TODO implement CAN
 			  break;
@@ -258,6 +258,19 @@ void set_pwm(TIM_HandleTypeDef *htim, uint16_t value){
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
-	HAL_UART_Receive_IT(huart, &uart_rx_buffer[uart_counter],1);
+	for(int i = 0; i < 9; i++){
+		uart_rx_buffer[i] = uart_rx_buffer[i+1];
+	}
+	HAL_UART_Transmit_IT(huart, &uart_receive,1);
+	HAL_UART_Receive_IT(huart, &uart_receive,1);
+	if(uart_receive == 13){
+		uint8_t array[2] = {13, 0x0A};
+		HAL_UART_Transmit_IT(huart, "\r\n",2);
+	}else{
+		uart_rx_buffer[9] = uart_receive;
+	}
+}
 
+void decode_uart(){
+uint8_t string = "\r\n";
 }

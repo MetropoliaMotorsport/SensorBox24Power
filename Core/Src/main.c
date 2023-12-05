@@ -112,6 +112,7 @@ uint8_t uart_rx_buffer[10];
 uint8_t uart_counter;
 
 uint8_t CS_SEL[2];
+uint8_t uart_receive;
 
 uint8_t Default_Switch_State;
 
@@ -187,6 +188,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Init(&htim1);
   HAL_TIM_PWM_Init(&htim2);
+
+  HAL_UART_Receive_IT(&huart2, &uart_receive, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -197,7 +200,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  CS_read();
-	  check_warnings();
+	  //check_warnings();
 	  //if receives message to change pwm then set_pwm(duty cycle)
 
   }

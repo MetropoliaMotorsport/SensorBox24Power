@@ -3,4 +3,5 @@
 ../Core/Src/functions.c:133:6:CS_read	32	static
 ../Core/Src/functions.c:219:6:print_out	56	static
 ../Core/Src/functions.c:249:6:set_pwm	48	static
-../Core/Src/functions.c:260:6:HAL_UART_RxCpltCallback	16	static
+../Core/Src/functions.c:260:6:HAL_UART_RxCpltCallback	24	static
+../Core/Src/functions.c:274:6:decode_uart	16	static
