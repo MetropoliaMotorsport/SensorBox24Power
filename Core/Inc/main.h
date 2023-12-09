@@ -33,6 +33,7 @@ extern "C" {
 /* USER CODE BEGIN Includes */
 #include "config.h"
 #include "functions.h"
+#include "commands.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -97,6 +98,7 @@ extern uint8_t Default_Switch_State;
 extern uint8_t PWM_out_enable;
 extern uint16_t PWM_Prescalers[2];
 extern uint16_t PWM_width[2];
+extern uint16_t PWM_speed[2];
 extern uint8_t CAN_id[8];
 extern uint16_t WC_1_1; //current warning 1_1
 extern uint16_t OC_1_1; //over current 1_1
@@ -152,9 +154,10 @@ extern uint16_t IN2_2_mA;
 extern uint16_t IN3_2_mA;
 extern uint16_t IN4_2_mA;
 extern uint16_t us;
-extern uint8_t uart_rx_buffer[10];
+extern uint8_t uart_rx_buffer[9];
 extern uint8_t uart_counter;
 extern uint8_t uart_receive;
+extern uint8_t command_received_flag;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

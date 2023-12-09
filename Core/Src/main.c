@@ -108,8 +108,9 @@ uint16_t OC_4_2; //over current 4_2
 uint16_t UC_4_2; //under current 4_2
 uint16_t us;
 
-uint8_t uart_rx_buffer[10];
+uint8_t uart_rx_buffer[9];
 uint8_t uart_counter;
+uint8_t command_received_flag = 0;
 
 uint8_t CS_SEL[2];
 uint8_t uart_receive;
@@ -119,6 +120,7 @@ uint8_t Default_Switch_State;
 uint8_t PWM_out_enable;
 uint16_t PWM_Prescalers[2];
 uint16_t PWM_width[2];
+uint16_t PWM_speed[2];
 
 uint8_t CAN_id[8];
 /* USER CODE END PV */
@@ -200,6 +202,9 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  CS_read();
+	  if(command_received_flag == 1){
+		  decode_uart();
+	  }
 	  //check_warnings();
 	  //if receives message to change pwm then set_pwm(duty cycle)
 
@@ -791,7 +796,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
+  huart2.Init.BaudRate = 9600;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;

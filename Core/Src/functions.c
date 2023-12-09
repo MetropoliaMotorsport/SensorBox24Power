@@ -143,8 +143,8 @@ void CS_read(){
 				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc1,10)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc2,10)!=HAL_OK){Error_Handler();}
-				IN1_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
-				IN1_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
+				IN1_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
+				IN1_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
 				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
 			}
@@ -159,8 +159,8 @@ void CS_read(){
 				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc1,10)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc2,10)!=HAL_OK){Error_Handler();}
-				IN2_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
-				IN2_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
+				IN2_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
+				IN2_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
 				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
 			}
@@ -175,8 +175,8 @@ void CS_read(){
 				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc1,10)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc2,10)!=HAL_OK){Error_Handler();}
-				IN3_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
-				IN3_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
+				IN3_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
+				IN3_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
 				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
 			}
@@ -191,8 +191,8 @@ void CS_read(){
 				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc1,10)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc2,10)!=HAL_OK){Error_Handler();}
-				IN4_1_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc1);
-				IN4_2_CS[i] = (uint16_t*)HAL_ADC_GetValue(&hadc2);
+				IN4_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
+				IN4_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
 				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
 			}
@@ -225,21 +225,21 @@ void print_out(uint32_t data, const char *text, uint8_t out_mode){
 	const char *buffer = text;
 	char msg[2+2+sizeof(buffer)+sizeof(data_buffer)+4+2+4] = "";
 	if(data == -1){
-		sprintf(msg, "\r\n%s \r\n", buffer);
+		sprintf(msg, "%s \r\n", buffer);
 	}else{
-		sprintf(msg, "\r\n%s %lu\r\n", buffer, data_buffer);
+		sprintf(msg, "%s %lu\r\n", buffer, data_buffer);
 	}
 
 	switch(out_mode){
 		  case 1: //Ouput only through DEBUG
-			  HAL_UART_Transmit_IT(&huart2, msg, sizeof(msg));
+			  HAL_UART_Transmit(&huart2, msg, sizeof(msg), 0xFF);
 			  text = "";
 			  break;
 		  case 0b10: //output only through CAN
 			  //TODO implement CAN
 			  break;
 		  case 0b11://output through BOTH CAN and DEBUG
-			  HAL_UART_Transmit_IT(&huart2, msg, sizeof(msg));
+			  HAL_UART_Transmit(&huart2, msg, sizeof(msg), 0xFF);
 			  text = "";
 			  //TODO implement CAN
 			  break;
@@ -258,19 +258,28 @@ void set_pwm(TIM_HandleTypeDef *htim, uint16_t value){
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
-	for(int i = 0; i < 9; i++){
-		uart_rx_buffer[i] = uart_rx_buffer[i+1];
-	}
-	HAL_UART_Transmit_IT(huart, &uart_receive,1);
-	HAL_UART_Receive_IT(huart, &uart_receive,1);
 	if(uart_receive == 13){
-		uint8_t array[2] = {13, 0x0A};
-		HAL_UART_Transmit_IT(huart, "\r\n",2);
+		const char *newline = "\r\n";
+		HAL_UART_Transmit_IT(huart, (uint8_t*)newline,2);
+		uart_rx_buffer[8] = 0;
+		command_received_flag = 1;
 	}else{
-		uart_rx_buffer[9] = uart_receive;
+		for(int i = 0; i < 7; i++){
+			uart_rx_buffer[i] = uart_rx_buffer[i+1];
+		}
+		HAL_UART_Transmit_IT(huart, &uart_receive,1);
+		uart_rx_buffer[7] = uart_receive;
+	}
+	HAL_UART_Receive_IT(huart, &uart_receive,1);
+}
+
+uint8_t check_bit(uint8_t byte, uint8_t bitn){
+	uint8_t buffer = 1<<bitn;
+	if (byte & buffer){
+		return 1;
+	}else{
+		return 0;
 	}
 }
 
-void decode_uart(){
-uint8_t string = "\r\n";
-}
+

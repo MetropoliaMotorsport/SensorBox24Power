@@ -59,12 +59,23 @@ void Config_1(void){
 	OC_4_2 = 2050;
 	UC_4_2 = 1800;
 
-	Default_Switch_State = 0b11111111; //each bit represent one output [1,2,3,4,5,6,7,8]
+	Default_Switch_State = 0b00011011; //each bit represent one output [8,7,6,5,4,3,2,1]
 	PWM_out_enable = 0b00;
 
 	//clock is xy MHz, thus set it such that xy/(prescaler*100) is going to be the frequency
 	PWM_Prescalers[0] = 0;
 	PWM_Prescalers[1] = 0;
+
+	if(PWM_out_enable >> 2 != 0){
+		PWM_speed[0] = 150000000/(PWM_Prescalers[0]*100);
+	}else{
+		PWM_speed[0] = 0;
+	}
+	if(PWM_out_enable >> 1 != 0){
+		PWM_speed[1] = 150000000/(PWM_Prescalers[1]*100);
+	}else{
+		PWM_speed[1] = 0;
+	}
 
 	//Duty cycle 0-100%
 	PWM_width[0] = 0;
@@ -122,7 +133,7 @@ void Config_2(void){
 	OC_4_2 = 2050;
 	UC_4_2 = 1800;
 
-	Default_Switch_State = 0b11111111; //each bit represent one output [1,2,3,4,5,6,7,8]
+	Default_Switch_State = 0b00000000; //each bit represent one output [1,2,3,4,5,6,7,8]
 	PWM_out_enable = 0b00;
 
 	//clock is xy MHz, thus set it such that xy/(prescaler*100) is going to be the frequency

@@ -16,5 +16,6 @@ void raw_to_mA();
 void set_pwm(TIM_HandleTypeDef *htim, uint16_t value);
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 void decode_uart();
+uint8_t check_bit(uint8_t byte, uint8_t bitn);
 
 #endif /* INC_FUNCTIONS_H_ */
