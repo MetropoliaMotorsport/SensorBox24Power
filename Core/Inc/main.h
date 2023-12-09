@@ -86,7 +86,7 @@ void Error_Handler(void);
 #define SEL1_GPIO_Port GPIOB
 #define SEL0_Pin GPIO_PIN_6
 #define SEL0_GPIO_Port GPIOB
-#define IN2_2_Pin GPIO_PIN_8
+#define IN2_2_Pin GPIO_PIN_7
 #define IN2_2_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
