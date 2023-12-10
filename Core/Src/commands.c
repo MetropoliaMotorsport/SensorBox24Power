@@ -42,7 +42,7 @@ void OUT_READ(){
 }
 
 //TODO implement separating numbers from command
-void PWM_set(){
+void PWM_set(uint8_t value){
 	set_pwm(&htim3, value);
 }
 

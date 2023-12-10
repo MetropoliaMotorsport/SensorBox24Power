@@ -11,6 +11,6 @@
 void decode_uart(void);
 void PWM(void);
 void OUT_READ(void);
-void PWM_set(void);
+void PWM_set(uint8_t value);
 
 #endif /* INC_COMMANDS_H_ */
