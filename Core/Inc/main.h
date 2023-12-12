@@ -154,7 +154,7 @@ extern uint16_t IN2_2_mA;
 extern uint16_t IN3_2_mA;
 extern uint16_t IN4_2_mA;
 extern uint16_t us;
-extern uint8_t uart_rx_buffer[9];
+extern uint8_t uart_rx_buffer[30];
 extern uint8_t uart_counter;
 extern uint8_t uart_receive;
 extern uint8_t command_received_flag;

@@ -223,7 +223,7 @@ void print_out(uint32_t data, const char *text, uint8_t out_mode){
 	uint32_t data_buffer = 0;
 	data_buffer = data;
 	const char *buffer = text;
-	char msg[2+2+sizeof(buffer)+sizeof(data_buffer)+4+2+4] = "";
+	char msg[2+2+sizeof(buffer)+1+4+2+4] = "";
 	if(data == -1){
 		sprintf(msg, "%s \r\n", buffer);
 	}else{
@@ -232,14 +232,14 @@ void print_out(uint32_t data, const char *text, uint8_t out_mode){
 
 	switch(out_mode){
 		  case 1: //Ouput only through DEBUG
-			  HAL_UART_Transmit(&huart2, msg, sizeof(msg), 0xFF);
+			  HAL_UART_Transmit_DMA(&huart2, msg, sizeof(msg));
 			  text = "";
 			  break;
-		  case 0b10: //output only through CAN
+		  case 2: //output only through CAN
 			  //TODO implement CAN
 			  break;
-		  case 0b11://output through BOTH CAN and DEBUG
-			  HAL_UART_Transmit(&huart2, msg, sizeof(msg), 0xFF);
+		  case 3://output through BOTH CAN and DEBUG
+			  HAL_UART_Transmit_DMA(&huart2, msg, sizeof(msg));
 			  text = "";
 			  //TODO implement CAN
 			  break;
@@ -260,17 +260,17 @@ void set_pwm(TIM_HandleTypeDef *htim, uint16_t value){
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 	if(uart_receive == 13){
 		const char *newline = "\r\n";
-		HAL_UART_Transmit_IT(huart, (uint8_t*)newline,2);
-		uart_rx_buffer[8] = 0;
+		HAL_UART_Transmit_DMA(huart, (uint8_t*)newline,2);
+		uart_rx_buffer[29] = 0;
 		command_received_flag = 1;
 	}else{
-		for(int i = 0; i < 7; i++){
+		for(int i = 0; i < 28; i++){
 			uart_rx_buffer[i] = uart_rx_buffer[i+1];
 		}
-		HAL_UART_Transmit_IT(huart, &uart_receive,1);
-		uart_rx_buffer[7] = uart_receive;
+		HAL_UART_Transmit_DMA(huart, &uart_receive,1);
+		uart_rx_buffer[28] = uart_receive;
 	}
-	HAL_UART_Receive_IT(huart, &uart_receive,1);
+	HAL_UART_Receive_DMA(huart, &uart_receive,1);
 }
 
 uint8_t check_bit(uint8_t byte, uint8_t bitn){
