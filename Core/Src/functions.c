@@ -36,97 +36,97 @@ void check_warnings(){
 	if(IN1_1_PROC >= WC_1_1){
 		if(IN1_1_PROC >= OC_1_1){
 			HAL_GPIO_WritePin(GPIOA,IN0_Pin,0);
-			print_out(-1,"1_OC",data_output_switch);
+			print_out("1_OC",data_output_switch);
 		}else{
-			print_out(-1,"1_WC",data_output_switch);
+			print_out("1_WC",data_output_switch);
 		}
 	}
 	if(IN1_1_PROC <= UC_1_1){
-		print_out(-1,"1_UC",data_output_switch);
+		print_out("1_UC",data_output_switch);
 	}
 //------------------------------------------------------
 	if(IN2_1_PROC >= WC_2_1){
 		if(IN2_1_PROC >= OC_2_1){
 			HAL_GPIO_WritePin(GPIOA,IN1_Pin,0);
-			print_out(-1,"2_OC",data_output_switch);
+			print_out("2_OC",data_output_switch);
 		}else{
-			print_out(-1,"2_WC",data_output_switch);
+			print_out("2_WC",data_output_switch);
 		}
 	}
 	if(IN2_1_PROC <= UC_2_1){
-		print_out(-1,"2_UC",data_output_switch);
+		print_out("2_UC",data_output_switch);
 	}
 //------------------------------------------------------
 	if(IN3_1_PROC >= WC_3_1){
 		if(IN3_1_PROC >= OC_3_1){
 			HAL_GPIO_WritePin(GPIOA,IN2_Pin,0);
-			print_out(-1,"3_OC",data_output_switch);
+			print_out("3_OC",data_output_switch);
 		}else{
-			print_out(-1,"3_WC",data_output_switch);
+			print_out("3_WC",data_output_switch);
 		}
 	}
 	if(IN3_1_PROC <= UC_3_1){
-		print_out(-1,"3_UC",data_output_switch);
+		print_out("3_UC",data_output_switch);
 	}
 //------------------------------------------------------
 	if(IN4_1_PROC >= WC_4_1){
 		if(IN4_1_PROC >= OC_4_1){
 			HAL_GPIO_WritePin(GPIOA,IN3_Pin,0);
-			print_out(-1,"4_OC",data_output_switch);
+			print_out("4_OC",data_output_switch);
 		}else{
-			print_out(-1,"4_WC",data_output_switch);
+			print_out("4_WC",data_output_switch);
 		}
 	}
 	if(IN4_1_PROC <= UC_4_1){
-		print_out(-1,"4_UC",data_output_switch);
+		print_out("4_UC",data_output_switch);
 	}
 //------------------------------------------------------
 	if(IN1_2_PROC >= WC_1_2){
 		if(IN1_2_PROC >= OC_1_2){
 			HAL_GPIO_WritePin(GPIOA,IN0_2_Pin,0);
-			print_out(-1,"5_OC",data_output_switch);
+			print_out("5_OC",data_output_switch);
 		}else{
-			print_out(-1,"5_WC",data_output_switch);
+			print_out("5_WC",data_output_switch);
 		}
 	}
 	if(IN1_2_PROC <= UC_1_2){
-		print_out(-1,"5_UC",data_output_switch);
+		print_out("5_UC",data_output_switch);
 	}
 //------------------------------------------------------
 	if(IN2_2_PROC >= WC_2_2){
 		if(IN2_2_PROC >= OC_2_2){
 			HAL_GPIO_WritePin(GPIOA,IN1_2_Pin,0);
-			print_out(-1,"6_OC",data_output_switch);
+			print_out("6_OC",data_output_switch);
 		}else{
-			print_out(-1,"6_WC",data_output_switch);
+			print_out("6_WC",data_output_switch);
 		}
 	}
 	if(IN2_2_PROC <= UC_2_2){
-		print_out(-1,"6_UC",data_output_switch);
+		print_out("6_UC",data_output_switch);
 	}
 //------------------------------------------------------
 	if(IN3_2_PROC >= WC_3_2){
 		if(IN3_2_PROC >= OC_3_2){
 			HAL_GPIO_WritePin(GPIOA,IN2_2_Pin,0);
-			print_out(-1,"7_OC",data_output_switch);
+			print_out("7_OC",data_output_switch);
 		}else{
-			print_out(-1,"7_WC",data_output_switch);
+			print_out("7_WC",data_output_switch);
 		}
 	}
 	if(IN3_2_PROC <= UC_3_2){
-		print_out(-1,"7_UC",data_output_switch);
+		print_out("7_UC",data_output_switch);
 	}
 //------------------------------------------------------
 	if(IN4_2_PROC >= WC_4_2){
 		if(IN4_2_PROC >= OC_4_2){
 			HAL_GPIO_WritePin(GPIOA,IN3_2_Pin,0);
-			print_out(-1,"8_OC",data_output_switch);
+			print_out("8_OC",data_output_switch);
 		}else{
-			print_out(-1,"8_WC",data_output_switch);
+			print_out("8_WC",data_output_switch);
 		}
 	}
 	if(IN4_2_PROC <= UC_4_2){
-		print_out(-1,"8_UC",data_output_switch);
+		print_out("8_UC",data_output_switch);
 	}
 }
 
@@ -216,30 +216,22 @@ void CS_read(){
 	CS_process();
 }
 
-void print_out(uint32_t data, const char *text, uint8_t out_mode){
+void print_out(const char *text, uint8_t out_mode){
 
 	// uint16_t length = strlen(string);
 	 //uint8_t CRLFbuff[] = "\r\n";
-	uint32_t data_buffer = 0;
-	data_buffer = data;
-	const char *buffer = text;
-	char msg[2+2+sizeof(buffer)+1+4+2+4] = "";
-	if(data == -1){
-		sprintf(msg, "%s \r\n", buffer);
-	}else{
-		sprintf(msg, "%s %lu\r\n", buffer, data_buffer);
-	}
-
+	char buffer[strlen(text)+1];
+	strcpy(buffer, text);
 	switch(out_mode){
 		  case 1: //Ouput only through DEBUG
-			  HAL_UART_Transmit_DMA(&huart2, msg, sizeof(msg));
+			  HAL_UART_Transmit_DMA(&huart2, buffer, sizeof(text));
 			  text = "";
 			  break;
 		  case 2: //output only through CAN
 			  //TODO implement CAN
 			  break;
 		  case 3://output through BOTH CAN and DEBUG
-			  HAL_UART_Transmit_DMA(&huart2, msg, sizeof(msg));
+			  HAL_UART_Transmit_DMA(&huart2, buffer, sizeof(text));
 			  text = "";
 			  //TODO implement CAN
 			  break;

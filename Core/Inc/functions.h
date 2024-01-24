@@ -11,7 +11,7 @@
 void CS_read();
 void CS_process();
 void check_warnings();
-void print_out(uint32_t data, const char *text, uint8_t out_mode);
+void print_out(const char *text, uint8_t out_mode);
 void raw_to_mA();
 void set_pwm(TIM_HandleTypeDef *htim, uint16_t value);
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
