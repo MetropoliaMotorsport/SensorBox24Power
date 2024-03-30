@@ -1,4 +1,3 @@
-../Core/Src/commands.c:14:6:decode_uart	16
-../Core/Src/commands.c:94:6:PWM	1
-../Core/Src/commands.c:109:6:OUT_READ	1
-../Core/Src/commands.c:118:6:PWM_set	1
+../Core/Src/commands.c:95:6:PWM	1
+../Core/Src/commands.c:110:6:OUT_READ	1
+../Core/Src/commands.c:119:6:PWM_set	1

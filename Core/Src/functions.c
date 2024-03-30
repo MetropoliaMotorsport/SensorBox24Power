@@ -6,7 +6,41 @@
  */
 #include "main.h"
 #include "stm32g4xx_hal.h"
+#include "stm32g4xx.h"
 #include "stdio.h"
+
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim2;
+
+extern FDCAN_RxHeaderTypeDef RxHeader;
+extern uint8_t RxData[8];
+
+void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
+{
+  if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
+  {
+    Error_Handler();
+  }else{
+	  devode();
+  }
+}
+
+void decode(){
+	switch(RxData[0]){
+	case 1:							//Set PWM for fans
+		set_pwm(&htim1,RxData[1]);
+		break;
+	case 2:							//Set PWM for pumps
+		set_pwm(&htim2,RxData[1]);
+		break;
+	case 3:							//Swith output on/off
+		switch(RxData[1]){
+		case 1:
+
+		}
+	}
+}
+
 
 
 void CS_process(){
@@ -216,7 +250,7 @@ void CS_read(){
 	CS_process();
 }
 
-void print_out(const char *text, uint8_t out_mode){
+/*void print_out(const char *text, uint8_t out_mode){
 
 	// uint16_t length = strlen(string);
 	 //uint8_t CRLFbuff[] = "\r\n";
@@ -236,7 +270,7 @@ void print_out(const char *text, uint8_t out_mode){
 			  //TODO implement CAN
 			  break;
 		  }
-}
+}*/
 
 void set_pwm(TIM_HandleTypeDef *htim, uint16_t value){
 	  TIM_OC_InitTypeDef sConfigOC;
@@ -249,7 +283,7 @@ void set_pwm(TIM_HandleTypeDef *htim, uint16_t value){
 	  HAL_TIM_PWM_Start(htim, TIM_CHANNEL_1);
 }
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+/*void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 	if(uart_receive == 13){
 		const char *newline = "\r\n";
 		HAL_UART_Transmit_DMA(huart, (uint8_t*)newline,2);
@@ -263,7 +297,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 		uart_rx_buffer[28] = uart_receive;
 	}
 	HAL_UART_Receive_DMA(huart, &uart_receive,1);
-}
+}*/
 
 uint8_t check_bit(uint8_t byte, uint8_t bitn){
 	uint8_t buffer = 1<<bitn;
@@ -271,6 +305,15 @@ uint8_t check_bit(uint8_t byte, uint8_t bitn){
 		return 1;
 	}else{
 		return 0;
+	}
+}
+
+void set_bit(uint8_t byte, uint8_t pos, uint8_t new_bit){
+	uint8_t mask = 1 << pos;
+	if(new_bit == 1){
+		Default_Switch_State |= (1 << pos);
+	}else{
+		Default_Switch_State &= ~(1 << pos);
 	}
 }
 

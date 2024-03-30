@@ -11,7 +11,7 @@
 
 
 
-void decode_uart(){
+/*void decode_uart(){
 	uint8_t str1[7];
 	uint8_t str2[5];
 	uint8_t str3[3];
@@ -77,7 +77,7 @@ void decode_uart(){
 	}else{
 		print_out("ERR", data_output_switch);
 	}
-/*
+
 	if(strcmp(uart_rx_buffer,"PWM READ") == 0){
 		PWM();
 	}else if(strcmp(uart_rx_buffer,"OUT READ") == 0){
@@ -86,10 +86,11 @@ void decode_uart(){
 		PWM_set();
 	}else{
 		print_out(-1, "!!WRONG COMMAND!!", data_output_switch);
-	}*/
+	}
 
 	command_received_flag = 0;
-}
+}*/
+
 
 void PWM(){
 	char msg1[20];
@@ -118,6 +119,7 @@ void OUT_READ(uint8_t value){
 void PWM_set(uint8_t value){
 	//set_pwm(htim1, value);
 }
+
 
 
 

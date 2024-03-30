@@ -8,7 +8,7 @@
 #ifndef INC_COMMANDS_H_
 #define INC_COMMANDS_H_
 
-void decode_uart(void);
+void decode(void);
 void PWM(void);
 void OUT_READ(uint8_t value);
 void PWM_set(uint8_t value);

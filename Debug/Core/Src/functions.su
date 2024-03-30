@@ -1,7 +1,8 @@
-../Core/Src/functions.c:12:6:CS_process	16	static
-../Core/Src/functions.c:35:6:check_warnings	8	static
-../Core/Src/functions.c:133:6:CS_read	32	static
-../Core/Src/functions.c:219:6:print_out	48	dynamic
-../Core/Src/functions.c:241:6:set_pwm	48	static
-../Core/Src/functions.c:252:6:HAL_UART_RxCpltCallback	24	static
-../Core/Src/functions.c:268:9:check_bit	24	static
+../Core/Src/functions.c:18:6:HAL_FDCAN_RxFifo0Callback	16	static
+../Core/Src/functions.c:28:6:decode	8	static
+../Core/Src/functions.c:46:6:CS_process	16	static
+../Core/Src/functions.c:69:6:check_warnings	8	static
+../Core/Src/functions.c:167:6:CS_read	32	static
+../Core/Src/functions.c:275:6:set_pwm	48	static
+../Core/Src/functions.c:302:9:check_bit	24	static
+../Core/Src/functions.c:311:6:set_bit	24	static

@@ -67,12 +67,18 @@ void Error_Handler(void);
 #define ADC1_pos_GPIO_Port GPIOA
 #define ADC1_neg_Pin GPIO_PIN_1
 #define ADC1_neg_GPIO_Port GPIOA
+#define AC1_2_pos_Pin GPIO_PIN_2
+#define AC1_2_pos_GPIO_Port GPIOA
+#define ADC1_2_neg_Pin GPIO_PIN_3
+#define ADC1_2_neg_GPIO_Port GPIOA
 #define IN0_2_Pin GPIO_PIN_4
 #define IN0_2_GPIO_Port GPIOA
 #define ADC2_pos_Pin GPIO_PIN_6
 #define ADC2_pos_GPIO_Port GPIOA
 #define ADC2_neg_Pin GPIO_PIN_7
 #define ADC2_neg_GPIO_Port GPIOA
+#define LED1_Pin GPIO_PIN_0
+#define LED1_GPIO_Port GPIOB
 #define IN3_Pin GPIO_PIN_9
 #define IN3_GPIO_Port GPIOA
 #define IN2_Pin GPIO_PIN_10
@@ -144,7 +150,6 @@ extern uint16_t IN4_2_PROC;
 extern uint8_t data_output_switch;
 extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc2;
-extern UART_HandleTypeDef huart2;
 extern uint16_t IN1_1_mA;
 extern uint16_t IN2_1_mA;
 extern uint16_t IN3_1_mA;

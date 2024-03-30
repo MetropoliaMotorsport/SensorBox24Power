@@ -31,6 +31,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define CAN_ID 3
+#define I_AVERAGE  32
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -52,14 +54,7 @@ TIM_HandleTypeDef htim6;
 TIM_HandleTypeDef htim7;
 TIM_HandleTypeDef htim16;
 
-UART_HandleTypeDef huart2;
-DMA_HandleTypeDef hdma_usart2_rx;
-DMA_HandleTypeDef hdma_usart2_tx;
-
 /* USER CODE BEGIN PV */
-uint8_t data_output_switch = 1;
-#define I_AVERAGE  32
-
 uint16_t IN1_1_CS[I_AVERAGE];
 uint16_t IN2_1_CS[I_AVERAGE];
 uint16_t IN3_1_CS[I_AVERAGE];
@@ -130,7 +125,6 @@ uint8_t CAN_id[8];
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_DMA_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_FDCAN1_Init(void);
 static void MX_TIM1_Init(void);
@@ -140,7 +134,6 @@ static void MX_TIM4_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_TIM7_Init(void);
 static void MX_TIM16_Init(void);
-static void MX_USART2_UART_Init(void);
 static void MX_ADC2_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -157,6 +150,7 @@ static void MX_ADC2_Init(void);
   */
 int main(void)
 {
+
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -179,7 +173,6 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_ADC1_Init();
   MX_FDCAN1_Init();
   MX_TIM1_Init();
@@ -189,13 +182,13 @@ int main(void)
   MX_TIM6_Init();
   MX_TIM7_Init();
   MX_TIM16_Init();
-  MX_USART2_UART_Init();
   MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Init(&htim1);
   HAL_TIM_PWM_Init(&htim2);
 
-  HAL_UART_Receive_DMA(&huart2, &uart_receive, 1);
+  if(HAL_FDCAN_Start(&hfdcan1)!= HAL_OK){ Error_Handler(); }
+  if(HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE,0) != HAL_OK) { Error_Handler(); }
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -207,7 +200,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  CS_read();
 	  if(command_received_flag == 1){
-		  decode_uart();
+		  decode();
 	  }
 	  //check_warnings();
 	  //if receives message to change pwm then set_pwm(duty cycle)
@@ -536,7 +529,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 149;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 4.294967294E9;
+  htim2.Init.Period = 4294967294;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
@@ -785,74 +778,6 @@ static void MX_TIM16_Init(void)
 }
 
 /**
-  * @brief USART2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USART2_UART_Init(void)
-{
-
-  /* USER CODE BEGIN USART2_Init 0 */
-
-  /* USER CODE END USART2_Init 0 */
-
-  /* USER CODE BEGIN USART2_Init 1 */
-
-  /* USER CODE END USART2_Init 1 */
-  huart2.Instance = USART2;
-  huart2.Init.BaudRate = 9600;
-  huart2.Init.WordLength = UART_WORDLENGTH_8B;
-  huart2.Init.StopBits = UART_STOPBITS_1;
-  huart2.Init.Parity = UART_PARITY_NONE;
-  huart2.Init.Mode = UART_MODE_TX_RX;
-  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
-  huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  huart2.Init.ClockPrescaler = UART_PRESCALER_DIV1;
-  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_UART_Init(&huart2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_UARTEx_SetTxFifoThreshold(&huart2, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_UARTEx_SetRxFifoThreshold(&huart2, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_UARTEx_DisableFifoMode(&huart2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART2_Init 2 */
-
-  /* USER CODE END USART2_Init 2 */
-
-}
-
-/**
-  * Enable DMA controller clock
-  */
-static void MX_DMA_Init(void)
-{
-
-  /* DMA controller clock enable */
-  __HAL_RCC_DMAMUX1_CLK_ENABLE();
-  __HAL_RCC_DMA1_CLK_ENABLE();
-
-  /* DMA interrupt init */
-  /* DMA1_Channel1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
-  /* DMA1_Channel2_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel2_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Channel2_IRQn);
-
-}
-
-/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -864,6 +789,7 @@ static void MX_GPIO_Init(void)
 /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
@@ -875,7 +801,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOA, IN0_2_Pin|IN3_Pin|IN2_Pin|IN1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0|IN0_Pin|IN3_2_Pin|SEL1_Pin
+  HAL_GPIO_WritePin(GPIOB, LED1_Pin|IN0_Pin|IN3_2_Pin|SEL1_Pin
                           |SEL0_Pin|IN2_2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : IN1_2_Pin */
@@ -892,9 +818,9 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PB0 IN0_Pin IN3_2_Pin SEL1_Pin
+  /*Configure GPIO pins : LED1_Pin IN0_Pin IN3_2_Pin SEL1_Pin
                            SEL0_Pin IN2_2_Pin */
-  GPIO_InitStruct.Pin = GPIO_PIN_0|IN0_Pin|IN3_2_Pin|SEL1_Pin
+  GPIO_InitStruct.Pin = LED1_Pin|IN0_Pin|IN3_2_Pin|SEL1_Pin
                           |SEL0_Pin|IN2_2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
