@@ -9,158 +9,193 @@
 #include "stm32g4xx.h"
 #include "stdio.h"
 
-extern TIM_HandleTypeDef htim1;
-extern TIM_HandleTypeDef htim2;
 
-extern FDCAN_RxHeaderTypeDef RxHeader;
+
+
+
 extern uint8_t RxData[8];
+uint8_t TxData[8];
+
 
 void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 {
-  if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
+  if((RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) != RESET)
   {
+    /* Retreive Rx messages from RX FIFO0 */
+    if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
+    {
+    /* Reception Error */
     Error_Handler();
+    }
   }else{
-	  devode();
+	decode();
   }
+
+  if (HAL_FDCAN_ActivateNotification(hfdcan, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0) != HAL_OK)
+  {
+    /* Notification Error */
+    Error_Handler();
+  }
+}
+
+void CanSend(uint8_t *TxData){
+	TxHeader.Identifier = CAN_ID;
+	while(HAL_FDCAN_GetTxFifoFreeLevel(&hfdcan1) != 0 && HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &TxHeader, TxData) != HAL_OK){ Error_Handler(); }
+}
+
+void CAN_switch_state(){
+	TxHeader.Identifier = CAN_ID;
+	TxData[0] = 11;
+	for(int i = 1; i < 5;i++){
+		TxData[i] = check_bit(Default_Switch_State,i-1);
+	}
+	while(HAL_FDCAN_GetTxFifoFreeLevel(&hfdcan1) != 0 && HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &TxHeader, TxData) != HAL_OK){ Error_Handler(); }
+	TxData[0] = 12;
+	for(int i = 1; i < 5;i++){
+		TxData[i] = check_bit(Default_Switch_State,i+3);
+	}
+	while(HAL_FDCAN_GetTxFifoFreeLevel(&hfdcan1) != 0 && HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &TxHeader, TxData) != HAL_OK){ Error_Handler(); }
+}
+
+
+
+void output(){
+	uint8_t i = 0;
+	uint8_t bit = 0;
+	for(i = 0; i < 8;i++){
+		bit = check_bit(Default_Switch_State, i);
+		switch(i){
+		case 0:
+			HAL_GPIO_WritePin(GPIOA,IN0_Pin,bit);
+			break;
+		case 1:
+			HAL_GPIO_WritePin(GPIOA,IN1_Pin,bit);
+			break;
+		case 2:
+			HAL_GPIO_WritePin(GPIOA,IN2_Pin,bit);
+			break;
+		case 3:
+			HAL_GPIO_WritePin(GPIOA,IN3_Pin,bit);
+			break;
+		case 4:
+			HAL_GPIO_WritePin(GPIOA,IN0_2_Pin,bit);
+			break;
+		case 5:
+			HAL_GPIO_WritePin(GPIOA,IN1_2_Pin,bit);
+			break;
+		case 6:
+			HAL_GPIO_WritePin(GPIOA,IN2_2_Pin,bit);
+			break;
+		case 7:
+			HAL_GPIO_WritePin(GPIOA,IN3_2_Pin,bit);
+			break;
+		default:
+			Error_Handler();
+			break;
+		}
+	}
+}
+
+void Over_current(uint8_t output_pin){
+	TxData[1] = 15;
+	TxData[2] = output_pin;
+	CanSend(TxData);
+}
+
+void Warning_current(uint8_t output_pin){
+	TxData[1] = 14;
+	TxData[2] = output_pin;
+	CanSend(TxData);
+}
+
+void Under_current(uint8_t output_pin){
+	TxData[1] = 13;
+	TxData[2] = output_pin;
+	CanSend(TxData);
 }
 
 void decode(){
 	switch(RxData[0]){
-	case 1:							//Set PWM for fans
-		set_pwm(&htim1,RxData[1]);
-		break;
-	case 2:							//Set PWM for pumps
-		set_pwm(&htim2,RxData[1]);
-		break;
-	case 3:							//Swith output on/off
+	case 1:							//Set PWM RxData[1] -> which PWM, RxData[2] = 1 -> Duty Cycle || RxData[2] = 2 -> Frequency, RxData[3] -> value
 		switch(RxData[1]){
-		case 1:
-
+		case 1:										//PUMPS
+			switch(RxData[2]){
+			case 1:
+				set_pwm_duty_cycle(&htim1,RxData[3]);
+				break;
+			case 2:
+				set_pwm_freq(&htim1, RxData[3]);
+				break;
+			default:
+				//decode_error();
+				Error_Handler();
+				break;
+			}
+		case 2:										//FANS
+			switch(RxData[2]){
+			case 1:
+				set_pwm_duty_cycle(&htim2,RxData[3]);
+				break;
+			case 2:
+				set_pwm_freq(&htim2, RxData[3]);
+				break;
+			default:
+				//decode_error();
+				Error_Handler();
+				break;
+			}
+		default:
+			//decode_error(); //TODO: IMPLEMENT
+			Error_Handler();
+			break;
 		}
+	case 2:							//Switch output on/off
+		Default_Switch_State = set_bit(Default_Switch_State,RxData[1],RxData[2]); //if RxData[2] is 0 -> OFF, if RxData[2] is 1 -> ON
+		break;
+	default:
+		Error_Handler();
+		break;
 	}
 }
 
 
 
 void CS_process(){
-	//4031 == 3.3V since 12bit, got to pick shunt resistor according to this
-	IN1_1_PROC = IN1_1_CS[0];
-	IN2_1_PROC = IN2_1_CS[0];
-	IN3_1_PROC = IN3_1_CS[0];
-	IN4_1_PROC = IN4_1_CS[0];
-	IN1_2_PROC = IN1_2_CS[0];
-	IN2_2_PROC = IN2_2_CS[0];
-	IN3_2_PROC = IN3_2_CS[0];
-	IN4_2_PROC = IN4_2_CS[0];
+	//4031 == 3.3V since 12bit, have to pick shunt resistor according to this
+	PROC[0] = IN1_1_CS[0];
+	PROC[1] = IN2_1_CS[0];
+	PROC[2] = IN3_1_CS[0];
+	PROC[3] = IN4_1_CS[0];
+	PROC[4] = IN1_2_CS[0];
+	PROC[5] = IN2_2_CS[0];
+	PROC[6] = IN3_2_CS[0];
+	PROC[7] = IN4_2_CS[0];
 	for(int i = 1; i < I_AVERAGE; i++){
-		IN1_1_PROC = (IN1_1_PROC + IN1_1_CS[i])/2;
-		IN2_1_PROC = (IN2_1_PROC + IN2_1_CS[i])/2;
-		IN3_1_PROC = (IN3_1_PROC + IN3_1_CS[i])/2;
-		IN4_1_PROC = (IN4_1_PROC + IN4_1_CS[i])/2;
-		IN1_2_PROC = (IN1_2_PROC + IN1_2_CS[i])/2;
-		IN2_2_PROC = (IN2_2_PROC + IN2_2_CS[i])/2;
-		IN3_2_PROC = (IN3_2_PROC + IN3_2_CS[i])/2;
-		IN4_2_PROC = (IN4_2_PROC + IN4_2_CS[i])/2;
+		PROC[0] = (PROC[0] + IN1_1_CS[i])/2;
+		PROC[1] = (PROC[1] + IN2_1_CS[i])/2;
+		PROC[2] = (PROC[2] + IN3_1_CS[i])/2;
+		PROC[3] = (PROC[3] + IN4_1_CS[i])/2;
+		PROC[4] = (PROC[4] + IN1_2_CS[i])/2;
+		PROC[5] = (PROC[5] + IN2_2_CS[i])/2;
+		PROC[6] = (PROC[6] + IN3_2_CS[i])/2;
+		PROC[7] = (PROC[7] + IN4_2_CS[i])/2;
 	}
 
 }
 
 void check_warnings(){
-	if(IN1_1_PROC >= WC_1_1){
-		if(IN1_1_PROC >= OC_1_1){
-			HAL_GPIO_WritePin(GPIOA,IN0_Pin,0);
-			print_out("1_OC",data_output_switch);
-		}else{
-			print_out("1_WC",data_output_switch);
+	for(uint8_t x = 0; x < 8; x++){
+		if(PROC[x] >= WC[x]){
+			if(PROC[x] >= OC[x]){
+				Default_Switch_State = set_bit(Default_Switch_State, x, 0);
+				Over_current(x);
+			}else{
+				Warning_current(x);
+			}
 		}
-	}
-	if(IN1_1_PROC <= UC_1_1){
-		print_out("1_UC",data_output_switch);
-	}
-//------------------------------------------------------
-	if(IN2_1_PROC >= WC_2_1){
-		if(IN2_1_PROC >= OC_2_1){
-			HAL_GPIO_WritePin(GPIOA,IN1_Pin,0);
-			print_out("2_OC",data_output_switch);
-		}else{
-			print_out("2_WC",data_output_switch);
+		if(PROC[x] <= UC[x]){
+			Under_current(x);
 		}
-	}
-	if(IN2_1_PROC <= UC_2_1){
-		print_out("2_UC",data_output_switch);
-	}
-//------------------------------------------------------
-	if(IN3_1_PROC >= WC_3_1){
-		if(IN3_1_PROC >= OC_3_1){
-			HAL_GPIO_WritePin(GPIOA,IN2_Pin,0);
-			print_out("3_OC",data_output_switch);
-		}else{
-			print_out("3_WC",data_output_switch);
-		}
-	}
-	if(IN3_1_PROC <= UC_3_1){
-		print_out("3_UC",data_output_switch);
-	}
-//------------------------------------------------------
-	if(IN4_1_PROC >= WC_4_1){
-		if(IN4_1_PROC >= OC_4_1){
-			HAL_GPIO_WritePin(GPIOA,IN3_Pin,0);
-			print_out("4_OC",data_output_switch);
-		}else{
-			print_out("4_WC",data_output_switch);
-		}
-	}
-	if(IN4_1_PROC <= UC_4_1){
-		print_out("4_UC",data_output_switch);
-	}
-//------------------------------------------------------
-	if(IN1_2_PROC >= WC_1_2){
-		if(IN1_2_PROC >= OC_1_2){
-			HAL_GPIO_WritePin(GPIOA,IN0_2_Pin,0);
-			print_out("5_OC",data_output_switch);
-		}else{
-			print_out("5_WC",data_output_switch);
-		}
-	}
-	if(IN1_2_PROC <= UC_1_2){
-		print_out("5_UC",data_output_switch);
-	}
-//------------------------------------------------------
-	if(IN2_2_PROC >= WC_2_2){
-		if(IN2_2_PROC >= OC_2_2){
-			HAL_GPIO_WritePin(GPIOA,IN1_2_Pin,0);
-			print_out("6_OC",data_output_switch);
-		}else{
-			print_out("6_WC",data_output_switch);
-		}
-	}
-	if(IN2_2_PROC <= UC_2_2){
-		print_out("6_UC",data_output_switch);
-	}
-//------------------------------------------------------
-	if(IN3_2_PROC >= WC_3_2){
-		if(IN3_2_PROC >= OC_3_2){
-			HAL_GPIO_WritePin(GPIOA,IN2_2_Pin,0);
-			print_out("7_OC",data_output_switch);
-		}else{
-			print_out("7_WC",data_output_switch);
-		}
-	}
-	if(IN3_2_PROC <= UC_3_2){
-		print_out("7_UC",data_output_switch);
-	}
-//------------------------------------------------------
-	if(IN4_2_PROC >= WC_4_2){
-		if(IN4_2_PROC >= OC_4_2){
-			HAL_GPIO_WritePin(GPIOA,IN3_2_Pin,0);
-			print_out("8_OC",data_output_switch);
-		}else{
-			print_out("8_WC",data_output_switch);
-		}
-	}
-	if(IN4_2_PROC <= UC_4_2){
-		print_out("8_UC",data_output_switch);
 	}
 }
 
@@ -250,54 +285,6 @@ void CS_read(){
 	CS_process();
 }
 
-/*void print_out(const char *text, uint8_t out_mode){
-
-	// uint16_t length = strlen(string);
-	 //uint8_t CRLFbuff[] = "\r\n";
-	char buffer[strlen(text)+1];
-	strcpy(buffer, text);
-	switch(out_mode){
-		  case 1: //Ouput only through DEBUG
-			  HAL_UART_Transmit_DMA(&huart2, buffer, sizeof(text));
-			  text = "";
-			  break;
-		  case 2: //output only through CAN
-			  //TODO implement CAN
-			  break;
-		  case 3://output through BOTH CAN and DEBUG
-			  HAL_UART_Transmit_DMA(&huart2, buffer, sizeof(text));
-			  text = "";
-			  //TODO implement CAN
-			  break;
-		  }
-}*/
-
-void set_pwm(TIM_HandleTypeDef *htim, uint16_t value){
-	  TIM_OC_InitTypeDef sConfigOC;
-
-	  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-	  sConfigOC.Pulse = value;
-	  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-	  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-	  HAL_TIM_PWM_ConfigChannel(htim, &sConfigOC, TIM_CHANNEL_1);
-	  HAL_TIM_PWM_Start(htim, TIM_CHANNEL_1);
-}
-
-/*void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
-	if(uart_receive == 13){
-		const char *newline = "\r\n";
-		HAL_UART_Transmit_DMA(huart, (uint8_t*)newline,2);
-		uart_rx_buffer[29] = 0;
-		command_received_flag = 1;
-	}else{
-		for(int i = 0; i < 28; i++){
-			uart_rx_buffer[i] = uart_rx_buffer[i+1];
-		}
-		HAL_UART_Transmit_DMA(huart, &uart_receive,1);
-		uart_rx_buffer[28] = uart_receive;
-	}
-	HAL_UART_Receive_DMA(huart, &uart_receive,1);
-}*/
 
 uint8_t check_bit(uint8_t byte, uint8_t bitn){
 	uint8_t buffer = 1<<bitn;
@@ -308,13 +295,14 @@ uint8_t check_bit(uint8_t byte, uint8_t bitn){
 	}
 }
 
-void set_bit(uint8_t byte, uint8_t pos, uint8_t new_bit){
+uint8_t set_bit(uint8_t byte, uint8_t pos, uint8_t new_bit){
 	uint8_t mask = 1 << pos;
 	if(new_bit == 1){
-		Default_Switch_State |= (1 << pos);
+		byte |= mask;
 	}else{
-		Default_Switch_State &= ~(1 << pos);
+		byte &= ~mask;
 	}
+	return byte;
 }
 
 

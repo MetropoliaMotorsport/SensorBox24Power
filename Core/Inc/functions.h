@@ -11,12 +11,16 @@
 void CS_read();
 void CS_process();
 void check_warnings();
-void print_out(const char *text, uint8_t out_mode);
+void output();
 void raw_to_mA();
-void set_pwm(TIM_HandleTypeDef *htim, uint16_t value);
-//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 void decode();
 uint8_t check_bit(uint8_t byte, uint8_t bitn);
-void set_bit(uint8_t byte, uint8_t pos, uint8_t new_bit);
+uint8_t set_bit(uint8_t byte, uint8_t pos, uint8_t new_bit);
+void CAN_switch_state();
+void Over_current(uint8_t output_pin);
+void Warning_current(uint8_t output_pin);
+void Under_current(uint8_t output_pin);
+void CAN_Send(uint8_t *TxData, uint32_t id);
+void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs);
 
 #endif /* INC_FUNCTIONS_H_ */

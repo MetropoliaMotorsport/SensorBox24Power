@@ -1,4 +1,6 @@
 #include "main.h"
+#include "functions.h"
+#include "commands.h"
 #include "config.h"
 
 void Config_Setup(void)
@@ -19,45 +21,48 @@ void Config_Setup(void)
 
 void Config_1(void){
 
+	CAN_ID = 3;
+	CAN_interval = 1000; //in ms
+
 	//OUTPUT 1 in mA
-	WC_1_1 = 1900;
-	OC_1_1 = 2050;
-	UC_1_1 = 1800;
+	WC[0] = 1900;
+	OC[0] = 2050;
+	UC[0] = 1800;
 
 	//OUTPUT 2 in mA
-	WC_2_1 = 1900;
-	OC_2_1 = 2050;
-	UC_2_1 = 1800;
+	WC[1] = 1900;
+	OC[1] = 2050;
+	UC[1] = 1800;
 
 	//OUTPUT 3 in mA
-	WC_3_1 = 1900;
-	OC_3_1 = 2050;
-	UC_3_1 = 1800;
+	WC[2] = 1900;
+	OC[2] = 2050;
+	UC[2] = 1800;
 
 	//OUTPUT 4 in mA
-	WC_4_1 = 1900;
-	OC_4_1 = 2050;
-	UC_4_1 = 1800;
+	WC[3] = 1900;
+	OC[3] = 2050;
+	UC[3] = 1800;
 
 	//OUTPUT 5 in mA
-	WC_1_2 = 1900;
-	OC_1_2 = 2050;
-	UC_1_2 = 1800;
+	WC[4] = 1900;
+	OC[4] = 2050;
+	UC[4] = 1800;
 
 	//OUTPUT 6 in mA
-	WC_2_2 = 1900;
-	OC_2_2 = 2050;
-	UC_2_2 = 1800;
+	WC[5] = 1900;
+	OC[5] = 2050;
+	UC[5] = 1800;
 
 	//OUTPUT 7 in mA
-	WC_3_2 = 1900;
-	OC_3_2 = 2050;
-	UC_3_2 = 1800;
+	WC[6] = 1900;
+	OC[6] = 2050;
+	UC[6] = 1800;
 
 	//OUTPUT 8 in mA
-	WC_4_2 = 1900;
-	OC_4_2 = 2050;
-	UC_4_2 = 1800;
+	WC[7] = 1900;
+	OC[7] = 2050;
+	UC[7] = 1800;
 
 	Default_Switch_State = 0b00011011; //each bit represent one output [8,7,6,5,4,3,2,1]
 	PWM_out_enable = 0b00;
@@ -81,57 +86,59 @@ void Config_1(void){
 	PWM_width[0] = 0;
 	PWM_width[1] = 0;
 
-	CAN_id[0] = 0x01; //CAN ID for output 1
-	CAN_id[1] = 0x02; //CAN ID for output 2
-	CAN_id[2] = 0x03; //CAN ID for output 3
-	CAN_id[3] = 0x04; //CAN ID for output 4
-	CAN_id[4] = 0x05; //CAN ID for output 5
-	CAN_id[5] = 0x06; //CAN ID for output 6
-	CAN_id[6] = 0x07; //CAN ID for output 7
-	CAN_id[7] = 0x08; //CAN ID for output 8
+	set_pwm_duty_cycle(&htim1,PWM_width[0]);
+	set_pwm_duty_cycle(&htim2,PWM_width[1]);
+
+	set_pwm_freq(&htim1,PWM_speed[0]);
+	set_pwm_freq(&htim2,PWM_speed[1]);
+
+	output();
 }
 
 void Config_2(void){
 
+	CAN_ID = 4;
+	CAN_interval = 1000; //in ms
+
 	//OUTPUT 1 in mA
-	WC_1_1 = 1900;
-	OC_1_1 = 2050;
-	UC_1_1 = 1800;
+	WC[0] = 1900;
+	OC[0] = 2050;
+	UC[0] = 1800;
 
 	//OUTPUT 2 in mA
-	WC_2_1 = 1900;
-	OC_2_1 = 2050;
-	UC_2_1 = 1800;
+	WC[1] = 1900;
+	OC[1] = 2050;
+	UC[1] = 1800;
 
 	//OUTPUT 3 in mA
-	WC_3_1 = 1900;
-	OC_3_1 = 2050;
-	UC_3_1 = 1800;
+	WC[2] = 1900;
+	OC[2] = 2050;
+	UC[2] = 1800;
 
 	//OUTPUT 4 in mA
-	WC_4_1 = 1900;
-	OC_4_1 = 2050;
-	UC_4_1 = 1800;
+	WC[3] = 1900;
+	OC[3] = 2050;
+	UC[3] = 1800;
 
 	//OUTPUT 5 in mA
-	WC_1_2 = 1900;
-	OC_1_2 = 2050;
-	UC_1_2 = 1800;
+	WC[4] = 1900;
+	OC[4] = 2050;
+	UC[4] = 1800;
 
 	//OUTPUT 6 in mA
-	WC_2_2 = 1900;
-	OC_2_2 = 2050;
-	UC_2_2 = 1800;
+	WC[5] = 1900;
+	OC[5] = 2050;
+	UC[5] = 1800;
 
 	//OUTPUT 7 in mA
-	WC_3_2 = 1900;
-	OC_3_2 = 2050;
-	UC_3_2 = 1800;
+	WC[6] = 1900;
+	OC[6] = 2050;
+	UC[6] = 1800;
 
 	//OUTPUT 8 in mA
-	WC_4_2 = 1900;
-	OC_4_2 = 2050;
-	UC_4_2 = 1800;
+	WC[7] = 1900;
+	OC[7] = 2050;
+	UC[7] = 1800;
 
 	Default_Switch_State = 0b00000000; //each bit represent one output [1,2,3,4,5,6,7,8]
 	PWM_out_enable = 0b00;
@@ -144,57 +151,59 @@ void Config_2(void){
 	PWM_width[0] = 0;
 	PWM_width[1] = 0;
 
-	CAN_id[0] = 0x01; //CAN ID for output 1
-	CAN_id[1] = 0x02; //CAN ID for output 2
-	CAN_id[2] = 0x03; //CAN ID for output 3
-	CAN_id[3] = 0x04; //CAN ID for output 4
-	CAN_id[4] = 0x05; //CAN ID for output 5
-	CAN_id[5] = 0x06; //CAN ID for output 6
-	CAN_id[6] = 0x07; //CAN ID for output 7
-	CAN_id[7] = 0x08; //CAN ID for output 8
+	set_pwm_duty_cycle(&htim1,PWM_width[0]);
+	set_pwm_duty_cycle(&htim2,PWM_width[1]);
+
+	set_pwm_freq(&htim1,PWM_speed[0]);
+	set_pwm_freq(&htim2,PWM_speed[1]);
+
+	output();
 }
 
 void Config_3(void){
 
+	CAN_ID = 5;
+	CAN_interval = 1000; //in ms
+
 	//OUTPUT 1 in mA
-	WC_1_1 = 1900;
-	OC_1_1 = 2050;
-	UC_1_1 = 1800;
+	WC[0] = 1900;
+	OC[0] = 2050;
+	UC[0] = 1800;
 
 	//OUTPUT 2 in mA
-	WC_2_1 = 1900;
-	OC_2_1 = 2050;
-	UC_2_1 = 1800;
+	WC[1] = 1900;
+	OC[1] = 2050;
+	UC[1] = 1800;
 
 	//OUTPUT 3 in mA
-	WC_3_1 = 1900;
-	OC_3_1 = 2050;
-	UC_3_1 = 1800;
+	WC[2] = 1900;
+	OC[2] = 2050;
+	UC[2] = 1800;
 
 	//OUTPUT 4 in mA
-	WC_4_1 = 1900;
-	OC_4_1 = 2050;
-	UC_4_1 = 1800;
+	WC[3] = 1900;
+	OC[3] = 2050;
+	UC[3] = 1800;
 
 	//OUTPUT 5 in mA
-	WC_1_2 = 1900;
-	OC_1_2 = 2050;
-	UC_1_2 = 1800;
+	WC[4] = 1900;
+	OC[4] = 2050;
+	UC[4] = 1800;
 
 	//OUTPUT 6 in mA
-	WC_2_2 = 1900;
-	OC_2_2 = 2050;
-	UC_2_2 = 1800;
+	WC[5] = 1900;
+	OC[5] = 2050;
+	UC[5] = 1800;
 
 	//OUTPUT 7 in mA
-	WC_3_2 = 1900;
-	OC_3_2 = 2050;
-	UC_3_2 = 1800;
+	WC[6] = 1900;
+	OC[6] = 2050;
+	UC[6] = 1800;
 
 	//OUTPUT 8 in mA
-	WC_4_2 = 1900;
-	OC_4_2 = 2050;
-	UC_4_2 = 1800;
+	WC[7] = 1900;
+	OC[7] = 2050;
+	UC[7] = 1800;
 
 	Default_Switch_State = 0b11111111; //each bit represent one output [1,2,3,4,5,6,7,8]
 	PWM_out_enable = 0b00;
@@ -207,14 +216,13 @@ void Config_3(void){
 	PWM_width[0] = 0;
 	PWM_width[1] = 0;
 
-	CAN_id[0] = 0x01; //CAN ID for output 1
-	CAN_id[1] = 0x02; //CAN ID for output 2
-	CAN_id[2] = 0x03; //CAN ID for output 3
-	CAN_id[3] = 0x04; //CAN ID for output 4
-	CAN_id[4] = 0x05; //CAN ID for output 5
-	CAN_id[5] = 0x06; //CAN ID for output 6
-	CAN_id[6] = 0x07; //CAN ID for output 7
-	CAN_id[7] = 0x08; //CAN ID for output 8
+	set_pwm_duty_cycle(&htim1,PWM_width[0]);
+	set_pwm_duty_cycle(&htim2,PWM_width[1]);
+
+	set_pwm_freq(&htim1,PWM_speed[0]);
+	set_pwm_freq(&htim2,PWM_speed[1]);
+
+	output();
 }
 
 

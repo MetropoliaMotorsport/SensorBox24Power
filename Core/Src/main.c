@@ -31,7 +31,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define CAN_ID 3
 #define I_AVERAGE  32
 /* USER CODE END PD */
 
@@ -45,6 +44,9 @@ ADC_HandleTypeDef hadc1;
 ADC_HandleTypeDef hadc2;
 
 FDCAN_HandleTypeDef hfdcan1;
+
+FDCAN_RxHeaderTypeDef RxHeader;
+FDCAN_TxHeaderTypeDef TxHeader;
 
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
@@ -63,14 +65,7 @@ uint16_t IN1_2_CS[I_AVERAGE];
 uint16_t IN2_2_CS[I_AVERAGE];
 uint16_t IN3_2_CS[I_AVERAGE];
 uint16_t IN4_2_CS[I_AVERAGE];
-uint16_t IN1_1_PROC;
-uint16_t IN2_1_PROC;
-uint16_t IN3_1_PROC;
-uint16_t IN4_1_PROC;
-uint16_t IN1_2_PROC;
-uint16_t IN2_2_PROC;
-uint16_t IN3_2_PROC;
-uint16_t IN4_2_PROC;
+uint16_t PROC[8];
 uint16_t IN1_1_mA;
 uint16_t IN2_1_mA;
 uint16_t IN3_1_mA;
@@ -79,38 +74,14 @@ uint16_t IN1_2_mA;
 uint16_t IN2_2_mA;
 uint16_t IN3_2_mA;
 uint16_t IN4_2_mA;
-uint16_t WC_1_1; //current warning 1_1
-uint16_t OC_1_1; //over current 1_1
-uint16_t UC_1_1; //under current 1_1
-uint16_t WC_2_1; //current warning 2_1
-uint16_t OC_2_1; //over current 2_1
-uint16_t UC_2_1; //under current 2_1
-uint16_t WC_3_1; //current warning 3_1
-uint16_t OC_3_1; //over current 3_1
-uint16_t UC_3_1; //under current 3_1
-uint16_t WC_4_1; //current warning 4_1
-uint16_t OC_4_1; //over current 4_1
-uint16_t UC_4_1; //under current 4_1
-uint16_t WC_1_2; //current warning 1_2
-uint16_t OC_1_2; //over current 1_2
-uint16_t UC_1_2; //under current 1_2
-uint16_t WC_2_2; //current warning 2_2
-uint16_t OC_2_2; //over current 2_2
-uint16_t UC_2_2; //under current 2_2
-uint16_t WC_3_2; //current warning 3_2
-uint16_t OC_3_2; //over current 3_2
-uint16_t UC_3_2; //under current 3_2
-uint16_t WC_4_2; //current warning 4_2
-uint16_t OC_4_2; //over current 4_2
-uint16_t UC_4_2; //under current 4_2
-uint16_t us;
+uint16_t WC[8]; //current warnings
+uint16_t OC[8]; //over currents
+uint16_t UC[8]; //under currents
 
-uint8_t uart_rx_buffer[30];
-uint8_t uart_counter;
-uint8_t command_received_flag = 0;
+uint16_t us;
+uint16_t millis;
 
 uint8_t CS_SEL[2];
-uint8_t uart_receive;
 
 uint8_t Default_Switch_State;
 
@@ -119,7 +90,8 @@ uint16_t PWM_Prescalers[2];
 uint16_t PWM_width[2];
 uint16_t PWM_speed[2];
 
-uint8_t CAN_id[8];
+uint8_t CAN_ID;
+uint16_t CAN_interval;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -186,6 +158,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Init(&htim1);
   HAL_TIM_PWM_Init(&htim2);
+  HAL_TIM_Base_Start_IT(&htim3);
 
   if(HAL_FDCAN_Start(&hfdcan1)!= HAL_OK){ Error_Handler(); }
   if(HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE,0) != HAL_OK) { Error_Handler(); }
@@ -198,9 +171,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  CS_read();
-	  if(command_received_flag == 1){
-		  decode();
+	  if(millis % 100 == 0){
+		  CS_read();
 	  }
 	  //check_warnings();
 	  //if receives message to change pwm then set_pwm(duty cycle)
@@ -230,10 +202,10 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV4;
-  RCC_OscInitStruct.PLL.PLLN = 75;
+  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV1;
+  RCC_OscInitStruct.PLL.PLLN = 8;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
+  RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV8;
   RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -249,7 +221,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
     Error_Handler();
   }
@@ -277,7 +249,7 @@ static void MX_ADC1_Init(void)
   /** Common config
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc1.Init.GainCompensation = 0;
@@ -344,7 +316,7 @@ static void MX_ADC2_Init(void)
   /** Common config
   */
   hadc2.Instance = ADC2;
-  hadc2.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc2.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
   hadc2.Init.Resolution = ADC_RESOLUTION_12B;
   hadc2.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc2.Init.GainCompensation = 0;
@@ -404,9 +376,9 @@ static void MX_FDCAN1_Init(void)
   hfdcan1.Init.AutoRetransmission = DISABLE;
   hfdcan1.Init.TransmitPause = DISABLE;
   hfdcan1.Init.ProtocolException = DISABLE;
-  hfdcan1.Init.NominalPrescaler = 16;
+  hfdcan1.Init.NominalPrescaler = 1;
   hfdcan1.Init.NominalSyncJumpWidth = 1;
-  hfdcan1.Init.NominalTimeSeg1 = 2;
+  hfdcan1.Init.NominalTimeSeg1 = 13;
   hfdcan1.Init.NominalTimeSeg2 = 2;
   hfdcan1.Init.DataPrescaler = 1;
   hfdcan1.Init.DataSyncJumpWidth = 1;
@@ -585,9 +557,9 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 0;
+  htim3.Init.Prescaler = 63;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 65535;
+  htim3.Init.Period = 999;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)

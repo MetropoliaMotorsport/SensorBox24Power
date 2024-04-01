@@ -11,6 +11,7 @@
 void decode(void);
 void PWM(void);
 void OUT_READ(uint8_t value);
-void PWM_set(uint8_t value);
+void set_pwm_duty_cycle(TIM_HandleTypeDef *htim, uint16_t value);
+void set_pwm_freq(TIM_HandleTypeDef *htim, uint16_t value);
 
 #endif /* INC_COMMANDS_H_ */

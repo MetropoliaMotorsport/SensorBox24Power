@@ -100,36 +100,16 @@ void Error_Handler(void);
 
 #define I_AVERAGE  32
 
+extern uint8_t CAN_ID;
+extern uint16_t CAN_interval;
 extern uint8_t Default_Switch_State;
 extern uint8_t PWM_out_enable;
 extern uint16_t PWM_Prescalers[2];
 extern uint16_t PWM_width[2];
 extern uint16_t PWM_speed[2];
-extern uint8_t CAN_id[8];
-extern uint16_t WC_1_1; //current warning 1_1
-extern uint16_t OC_1_1; //over current 1_1
-extern uint16_t UC_1_1; //under current 1_1
-extern uint16_t WC_2_1; //current warning 2_1
-extern uint16_t OC_2_1; //over current 2_1
-extern uint16_t UC_2_1; //under current 2_1
-extern uint16_t WC_3_1; //current warning 3_1
-extern uint16_t OC_3_1; //over current 3_1
-extern uint16_t UC_3_1; //under current 3_1
-extern uint16_t WC_4_1; //current warning 4_1
-extern uint16_t OC_4_1; //over current 4_1
-extern uint16_t UC_4_1; //under current 4_1
-extern uint16_t WC_1_2; //current warning 1_2
-extern uint16_t OC_1_2; //over current 1_2
-extern uint16_t UC_1_2; //under current 1_2
-extern uint16_t WC_2_2; //current warning 2_2
-extern uint16_t OC_2_2; //over current 2_2
-extern uint16_t UC_2_2; //under current 2_2
-extern uint16_t WC_3_2; //current warning 3_2
-extern uint16_t OC_3_2; //over current 3_2
-extern uint16_t UC_3_2; //under current 3_2
-extern uint16_t WC_4_2; //current warning 4_2
-extern uint16_t OC_4_2; //over current 4_2
-extern uint16_t UC_4_2; //under current 4_2
+extern uint16_t WC[8]; //current warnings
+extern uint16_t OC[8]; //over currents
+extern uint16_t UC[8]; //under currents
 extern uint16_t IN1_1_CS[I_AVERAGE];
 extern uint16_t IN2_1_CS[I_AVERAGE];
 extern uint16_t IN3_1_CS[I_AVERAGE];
@@ -139,15 +119,7 @@ extern uint16_t IN2_2_CS[I_AVERAGE];
 extern uint16_t IN3_2_CS[I_AVERAGE];
 extern uint16_t IN4_2_CS[I_AVERAGE];
 extern uint8_t CS_SEL[2];
-extern uint16_t IN1_1_PROC;
-extern uint16_t IN2_1_PROC;
-extern uint16_t IN3_1_PROC;
-extern uint16_t IN4_1_PROC;
-extern uint16_t IN1_2_PROC;
-extern uint16_t IN2_2_PROC;
-extern uint16_t IN3_2_PROC;
-extern uint16_t IN4_2_PROC;
-extern uint8_t data_output_switch;
+extern uint16_t PROC[8];
 extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc2;
 extern uint16_t IN1_1_mA;
@@ -159,10 +131,15 @@ extern uint16_t IN2_2_mA;
 extern uint16_t IN3_2_mA;
 extern uint16_t IN4_2_mA;
 extern uint16_t us;
-extern uint8_t uart_rx_buffer[30];
-extern uint8_t uart_counter;
-extern uint8_t uart_receive;
-extern uint8_t command_received_flag;
+extern uint16_t millis;
+extern FDCAN_HandleTypeDef hfdcan1;
+
+extern FDCAN_RxHeaderTypeDef RxHeader;
+extern FDCAN_TxHeaderTypeDef TxHeader;
+
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim2;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

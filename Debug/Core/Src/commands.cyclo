@@ -1,3 +1,2 @@
-../Core/Src/commands.c:95:6:PWM	1
-../Core/Src/commands.c:110:6:OUT_READ	1
-../Core/Src/commands.c:119:6:PWM_set	1
+../Core/Src/commands.c:13:6:set_pwm_duty_cycle	1
+../Core/Src/commands.c:24:6:set_pwm_freq	1
