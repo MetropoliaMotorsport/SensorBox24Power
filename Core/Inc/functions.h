@@ -12,7 +12,7 @@ void CS_read();
 void CS_process();
 void check_warnings();
 void output();
-void raw_to_mA();
+uint16_t CS_Raw_to_mA(uint16_t raw);
 void decode();
 uint8_t check_bit(uint8_t byte, uint8_t bitn);
 uint8_t set_bit(uint8_t byte, uint8_t pos, uint8_t new_bit);

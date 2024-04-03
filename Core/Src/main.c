@@ -62,6 +62,7 @@ uint16_t IN1_2_CS[I_AVERAGE];
 uint16_t IN2_2_CS[I_AVERAGE];
 uint16_t IN3_2_CS[I_AVERAGE];
 uint16_t IN4_2_CS[I_AVERAGE];
+uint16_t Analog_CS[I_AVERAGE];
 uint16_t PROC[8];
 uint16_t IN1_1_mA;
 uint16_t IN2_1_mA;
@@ -252,11 +253,11 @@ static void MX_ADC1_Init(void)
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc1.Init.GainCompensation = 0;
-  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc1.Init.LowPowerAutoWait = DISABLE;
   hadc1.Init.ContinuousConvMode = DISABLE;
-  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.NbrOfConversion = 2;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
@@ -280,7 +281,7 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_1;
   sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_2CYCLES_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_12CYCLES_5;
   sConfig.SingleDiff = ADC_DIFFERENTIAL_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
@@ -288,8 +289,17 @@ static void MX_ADC1_Init(void)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN ADC1_Init 2 */
 
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_3;
+  sConfig.Rank = ADC_REGULAR_RANK_2;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+  //if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_DIFFERENTIAL_ENDED)!= HAL_OK){ Error_Handler(); }
   /* USER CODE END ADC1_Init 2 */
 
 }
@@ -339,7 +349,7 @@ static void MX_ADC2_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_3;
   sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_2CYCLES_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_12CYCLES_5;
   sConfig.SingleDiff = ADC_DIFFERENTIAL_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
@@ -348,7 +358,7 @@ static void MX_ADC2_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN ADC2_Init 2 */
-
+  //if (HAL_ADCEx_Calibration_Start(&hadc2, ADC_DIFFERENTIAL_ENDED)!= HAL_OK){ Error_Handler(); }
   /* USER CODE END ADC2_Init 2 */
 
 }
@@ -781,7 +791,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LED1_Pin|IN0_Pin|IN3_2_Pin|SEL1_Pin
-                          |SEL0_Pin|IN2_2_Pin, GPIO_PIN_RESET);
+                          |SEL0_Pin|IN2_2_Pin|AnalogPower_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : IN1_2_Pin */
   GPIO_InitStruct.Pin = IN1_2_Pin;
@@ -798,9 +808,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED1_Pin IN0_Pin IN3_2_Pin SEL1_Pin
-                           SEL0_Pin IN2_2_Pin */
+                           SEL0_Pin IN2_2_Pin AnalogPower_EN_Pin */
   GPIO_InitStruct.Pin = LED1_Pin|IN0_Pin|IN3_2_Pin|SEL1_Pin
-                          |SEL0_Pin|IN2_2_Pin;
+                          |SEL0_Pin|IN2_2_Pin|AnalogPower_EN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

@@ -186,6 +186,14 @@ void CS_process(){
 		PROC[6] = (PROC[6] + IN3_2_CS[i])/2;
 		PROC[7] = (PROC[7] + IN4_2_CS[i])/2;
 	}
+	PROC[0] = CS_Raw_to_mA(PROC[0]);
+	PROC[1] = CS_Raw_to_mA(PROC[1]);
+	PROC[2] = CS_Raw_to_mA(PROC[2]);
+	PROC[3] = CS_Raw_to_mA(PROC[3]);
+	PROC[4] = CS_Raw_to_mA(PROC[4]);
+	PROC[5] = CS_Raw_to_mA(PROC[5]);
+	PROC[6] = CS_Raw_to_mA(PROC[6]);
+	PROC[7] = CS_Raw_to_mA(PROC[7]);
 	check_warnings();
 }
 
@@ -214,14 +222,19 @@ void CS_read(){
 			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
 			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,CS_SEL[1]);
 			for(int i = 0; i < I_AVERAGE; i++){
-				if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc1,10)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc2,10)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Start(&hadc2)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
 				IN1_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
 				IN1_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
-				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Stop(&hadc2)!=HAL_OK){Error_Handler();}
+
+				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+				Analog_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
 			}
 			break;
 		case 1:
@@ -230,14 +243,19 @@ void CS_read(){
 			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
 			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,CS_SEL[1]);
 			for(int i = 0; i < I_AVERAGE; i++){
-				if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc1,10)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc2,10)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Start(&hadc2)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
 				IN2_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
 				IN2_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
-				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_Stop(&hadc2)!=HAL_OK){Error_Handler();}
+
+				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+				Analog_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
 			}
 			break;
 		case 2:
@@ -248,12 +266,17 @@ void CS_read(){
 			for(int i = 0; i < I_AVERAGE; i++){
 				if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc1,10)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc2,10)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
 				IN3_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
 				IN3_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
 				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
+
+				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+				Analog_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
 			}
 			break;
 		case 3:
@@ -264,12 +287,17 @@ void CS_read(){
 			for(int i = 0; i < I_AVERAGE; i++){
 				if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc1,10)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc2,10)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
 				IN4_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
 				IN4_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
 				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
+
+				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+				Analog_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
 			}
 			break;
 		}
@@ -309,6 +337,16 @@ uint8_t set_bit(uint8_t byte, uint8_t pos, uint8_t new_bit){
 		byte &= ~mask;
 	}
 	return byte;
+}
+
+uint16_t CS_Raw_to_mA(uint16_t raw){
+	//4095 is the max, depending on resistors we will find the current values		3.3 V == 4,95 A
+	uint32_t max_mA = 4950;
+	uint16_t current = 0;
+
+	current = raw*max_mA / 4095;
+
+	return current;
 }
 
 

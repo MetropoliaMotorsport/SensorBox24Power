@@ -73,6 +73,10 @@ void Error_Handler(void);
 #define ADC1_2_neg_GPIO_Port GPIOA
 #define IN0_2_Pin GPIO_PIN_4
 #define IN0_2_GPIO_Port GPIOA
+#define ADC2_pos_Pin GPIO_PIN_6
+#define ADC2_pos_GPIO_Port GPIOA
+#define ADC2_neg_Pin GPIO_PIN_7
+#define ADC2_neg_GPIO_Port GPIOA
 #define LED1_Pin GPIO_PIN_0
 #define LED1_GPIO_Port GPIOB
 #define IN3_Pin GPIO_PIN_9
@@ -91,6 +95,8 @@ void Error_Handler(void);
 #define SEL0_GPIO_Port GPIOB
 #define IN2_2_Pin GPIO_PIN_7
 #define IN2_2_GPIO_Port GPIOB
+#define AnalogPower_EN_Pin GPIO_PIN_8
+#define AnalogPower_EN_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
@@ -114,6 +120,7 @@ extern uint16_t IN1_2_CS[I_AVERAGE];
 extern uint16_t IN2_2_CS[I_AVERAGE];
 extern uint16_t IN3_2_CS[I_AVERAGE];
 extern uint16_t IN4_2_CS[I_AVERAGE];
+extern uint16_t Analog_CS[I_AVERAGE];
 extern uint8_t CS_SEL[2];
 extern uint16_t PROC[8];
 extern ADC_HandleTypeDef hadc1;
