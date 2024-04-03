@@ -13,48 +13,53 @@
 
 
 
-extern uint8_t RxData[8];
+uint8_t RxData[8];
 uint8_t TxData[8];
 
 
 void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 {
-  if((RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) != RESET)
-  {
-    /* Retreive Rx messages from RX FIFO0 */
-    if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
-    {
-    /* Reception Error */
-    Error_Handler();
-    }
-  }else{
-	decode();
-  }
+	if((RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) != RESET)
+	{
+		/* Retreive Rx messages from RX FIFO0 */
+		if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
+		{
+			/* Reception Error */
+			Error_Handler();
+		}else{
+			decode();
+		}
 
-  if (HAL_FDCAN_ActivateNotification(hfdcan, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0) != HAL_OK)
-  {
-    /* Notification Error */
-    Error_Handler();
-  }
+		if (HAL_FDCAN_ActivateNotification(hfdcan, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0) != HAL_OK)
+		{
+			/* Notification Error */
+			Error_Handler();
+		}
+	}
 }
 
 void CanSend(uint8_t *TxData){
-	TxHeader.Identifier = CAN_ID;
-	while(HAL_FDCAN_GetTxFifoFreeLevel(&hfdcan1) != 0 && HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &TxHeader, TxData) != HAL_OK){ Error_Handler(); }
+	while(HAL_FDCAN_GetTxFifoFreeLevel(&hfdcan1) != 0 && HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &TxHeader, TxData) != HAL_OK){
+		Error_Handler();
+	}
 }
 
 void CAN_switch_state(){
-	TxHeader.Identifier = CAN_ID;
-	TxData[0] = 11;
+	uint8_t TxData1[5];
+	uint8_t TxData2[5];
+
+
+	TxData1[0] = 11;
 	for(int i = 1; i < 5;i++){
-		TxData[i] = check_bit(Default_Switch_State,i-1);
+		TxData1[i] = check_bit(Default_Switch_State,i-1);
 	}
-	while(HAL_FDCAN_GetTxFifoFreeLevel(&hfdcan1) != 0 && HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &TxHeader, TxData) != HAL_OK){ Error_Handler(); }
-	TxData[0] = 12;
+	CanSend(TxData1);
+
+	TxData2[0] = 12;
 	for(int i = 1; i < 5;i++){
-		TxData[i] = check_bit(Default_Switch_State,i+3);
+		TxData2[i] = check_bit(Default_Switch_State,i+3);
 	}
-	while(HAL_FDCAN_GetTxFifoFreeLevel(&hfdcan1) != 0 && HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &TxHeader, TxData) != HAL_OK){ Error_Handler(); }
+	CanSend(TxData2);
 }
 
 
@@ -97,20 +102,20 @@ void output(){
 }
 
 void Over_current(uint8_t output_pin){
-	TxData[1] = 15;
-	TxData[2] = output_pin;
+	TxData[0] = 15;
+	TxData[1] = output_pin;
 	CanSend(TxData);
 }
 
 void Warning_current(uint8_t output_pin){
-	TxData[1] = 14;
-	TxData[2] = output_pin;
+	TxData[0] = 14;
+	TxData[1] = output_pin;
 	CanSend(TxData);
 }
 
 void Under_current(uint8_t output_pin){
-	TxData[1] = 13;
-	TxData[2] = output_pin;
+	TxData[0] = 13;
+	TxData[1] = output_pin;
 	CanSend(TxData);
 }
 
@@ -151,6 +156,7 @@ void decode(){
 		}
 	case 2:							//Switch output on/off
 		Default_Switch_State = set_bit(Default_Switch_State,RxData[1],RxData[2]); //if RxData[2] is 0 -> OFF, if RxData[2] is 1 -> ON
+		output();
 		break;
 	default:
 		Error_Handler();
@@ -180,7 +186,7 @@ void CS_process(){
 		PROC[6] = (PROC[6] + IN3_2_CS[i])/2;
 		PROC[7] = (PROC[7] + IN4_2_CS[i])/2;
 	}
-
+	check_warnings();
 }
 
 void check_warnings(){
