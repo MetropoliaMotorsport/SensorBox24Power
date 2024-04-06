@@ -22,5 +22,7 @@ void Warning_current(uint8_t output_pin);
 void Under_current(uint8_t output_pin);
 void CAN_Send(uint8_t *TxData, uint32_t id);
 void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs);
+void analog_read();
+void chip_select_read();
 
 #endif /* INC_FUNCTIONS_H_ */

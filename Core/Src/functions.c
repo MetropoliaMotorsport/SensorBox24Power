@@ -15,6 +15,7 @@
 
 uint8_t RxData[8];
 uint8_t TxData[8];
+uint8_t toggle = 0;
 
 
 void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
@@ -176,6 +177,7 @@ void CS_process(){
 	PROC[5] = IN2_2_CS[0];
 	PROC[6] = IN3_2_CS[0];
 	PROC[7] = IN4_2_CS[0];
+	PROC[8] = Analog_CS[0];
 	for(int i = 1; i < I_AVERAGE; i++){
 		PROC[0] = (PROC[0] + IN1_1_CS[i])/2;
 		PROC[1] = (PROC[1] + IN2_1_CS[i])/2;
@@ -185,6 +187,9 @@ void CS_process(){
 		PROC[5] = (PROC[5] + IN2_2_CS[i])/2;
 		PROC[6] = (PROC[6] + IN3_2_CS[i])/2;
 		PROC[7] = (PROC[7] + IN4_2_CS[i])/2;
+		if(i % 2 == 0){
+			PROC[8] = (PROC[8] + Analog_CS[i])/2;
+		}
 	}
 	PROC[0] = CS_Raw_to_mA(PROC[0]);
 	PROC[1] = CS_Raw_to_mA(PROC[1]);
@@ -194,6 +199,7 @@ void CS_process(){
 	PROC[5] = CS_Raw_to_mA(PROC[5]);
 	PROC[6] = CS_Raw_to_mA(PROC[6]);
 	PROC[7] = CS_Raw_to_mA(PROC[7]);
+	PROC[8] = CS_Raw_to_mA(PROC[8]);
 	check_warnings();
 }
 
@@ -207,16 +213,17 @@ void check_warnings(){
 				Warning_current(x);
 			}
 		}
-		if(PROC[x] <= UC[x]){
+		if(PROC[x] < UC[x]){
 			Under_current(x);
 		}
 	}
 }
 
 void CS_read(){
-	for(int x = 0; x < 4; x++){
+	for(int x = 0; x < 5; x++){
 		switch(x){
 		case 0:
+			chip_select_read();
 			CS_SEL[0] = 0;
 			CS_SEL[1] = 0;
 			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
@@ -230,14 +237,10 @@ void CS_read(){
 				IN1_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
 				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Stop(&hadc2)!=HAL_OK){Error_Handler();}
-
-				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
-				Analog_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
-				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
 			}
 			break;
 		case 1:
+			chip_select_read();
 			CS_SEL[0] = 0;
 			CS_SEL[1] = 1;
 			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
@@ -251,14 +254,10 @@ void CS_read(){
 				IN2_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
 				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Stop(&hadc2)!=HAL_OK){Error_Handler();}
-
-				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
-				Analog_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
-				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
 			}
 			break;
 		case 2:
+			chip_select_read();
 			CS_SEL[0] = 1;
 			CS_SEL[1] = 0;
 			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
@@ -272,14 +271,10 @@ void CS_read(){
 				IN3_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
 				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
-
-				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
-				Analog_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
-				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
 			}
 			break;
 		case 3:
+			chip_select_read();
 			CS_SEL[0] = 1;
 			CS_SEL[1] = 1;
 			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
@@ -293,13 +288,26 @@ void CS_read(){
 				IN4_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
 				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
-
-				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
-				Analog_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
-				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
 			}
 			break;
+		case 4:
+			analog_read();
+			for(int i = 0; i < I_AVERAGE/2; i++){
+				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+				Analog_CS_1[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
+			}
+			analog_read();
+			for(int i = 0; i < I_AVERAGE/2; i++){
+				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
+				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+				Analog_CS_2[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
+				Analog_CS[i] = Analog_CS_1[i] - Analog_CS_2[i];
+			}
+			break;
+
 		}
 //		This function is for checking how CS_SEL pins behave
 //		During writing the code it behaved as expected
@@ -341,6 +349,7 @@ uint8_t set_bit(uint8_t byte, uint8_t pos, uint8_t new_bit){
 
 uint16_t CS_Raw_to_mA(uint16_t raw){
 	//4095 is the max, depending on resistors we will find the current values		3.3 V == 4,95 A
+	uint8_t counter = 0;
 	uint32_t max_mA = 4950;
 	uint16_t current = 0;
 
@@ -348,5 +357,47 @@ uint16_t CS_Raw_to_mA(uint16_t raw){
 
 	return current;
 }
+
+void analog_read(){
+
+	ADC_ChannelConfTypeDef sConfig = {0};
+
+	if(toggle == 0){
+		sConfig.Channel = ADC_CHANNEL_3;
+		sConfig.Rank = ADC_REGULAR_RANK_1;
+		sConfig.SamplingTime = ADC_SAMPLETIME_12CYCLES_5;
+		sConfig.OffsetNumber = ADC_OFFSET_NONE;
+		sConfig.SingleDiff = ADC_SINGLE_ENDED;
+		toggle = 1;
+	}else{
+		sConfig.Channel = ADC_CHANNEL_4;
+		sConfig.Rank = ADC_REGULAR_RANK_1;
+		sConfig.SamplingTime = ADC_SAMPLETIME_12CYCLES_5;
+		sConfig.OffsetNumber = ADC_OFFSET_NONE;
+		sConfig.SingleDiff = ADC_SINGLE_ENDED;
+		toggle = 0;
+	}
+	if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+	{
+		Error_Handler();
+	}
+}
+
+void chip_select_read(){
+	ADC_ChannelConfTypeDef sConfig = {0};
+	  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+	  */
+	  sConfig.Channel = ADC_CHANNEL_1;
+	  sConfig.Rank = ADC_REGULAR_RANK_1;
+	  sConfig.SamplingTime = ADC_SAMPLETIME_12CYCLES_5;
+	  sConfig.SingleDiff = ADC_SINGLE_ENDED;
+	  sConfig.OffsetNumber = ADC_OFFSET_NONE;
+	  sConfig.Offset = 0;
+	  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+	  {
+	    Error_Handler();
+	  }
+}
+
 
 

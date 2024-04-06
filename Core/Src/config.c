@@ -27,42 +27,42 @@ void Config_1(void){
 	//OUTPUT 1 in mA
 	WC[0] = 1900;
 	OC[0] = 2050;
-	UC[0] = 1800;
+	UC[0] = 00;
 
 	//OUTPUT 2 in mA
 	WC[1] = 1900;
 	OC[1] = 2050;
-	UC[1] = 1800;
+	UC[1] = 00;
 
 	//OUTPUT 3 in mA
 	WC[2] = 1900;
 	OC[2] = 2050;
-	UC[2] = 1800;
+	UC[2] = 00;
 
 	//OUTPUT 4 in mA
 	WC[3] = 1900;
 	OC[3] = 2050;
-	UC[3] = 1800;
+	UC[3] = 00;
 
 	//OUTPUT 5 in mA
 	WC[4] = 1900;
 	OC[4] = 2050;
-	UC[4] = 1800;
+	UC[4] = 00;
 
 	//OUTPUT 6 in mA
 	WC[5] = 1900;
 	OC[5] = 2050;
-	UC[5] = 1800;
+	UC[5] = 00;
 
 	//OUTPUT 7 in mA
 	WC[6] = 1900;
 	OC[6] = 2050;
-	UC[6] = 1800;
+	UC[6] = 00;
 
 	//OUTPUT 8 in mA
 	WC[7] = 1900;
 	OC[7] = 2050;
-	UC[7] = 1800;
+	UC[7] = 00;
 
 	Default_Switch_State = 0b00011011; //each bit represent one output [8,7,6,5,4,3,2,1]
 	PWM_out_enable = 0b00;
