@@ -188,7 +188,7 @@ void CS_process(){
 		PROC[6] = (PROC[6] + IN3_2_CS[i])/2;
 		PROC[7] = (PROC[7] + IN4_2_CS[i])/2;
 		if(i % 2 == 0){
-			PROC[8] = (PROC[8] + Analog_CS[i])/2;
+			PROC[8] = (PROC[8] + Analog_CS[i/2])/2;
 		}
 	}
 	PROC[0] = CS_Raw_to_mA(PROC[0]);
@@ -349,7 +349,6 @@ uint8_t set_bit(uint8_t byte, uint8_t pos, uint8_t new_bit){
 
 uint16_t CS_Raw_to_mA(uint16_t raw){
 	//4095 is the max, depending on resistors we will find the current values		3.3 V == 4,95 A
-	uint8_t counter = 0;
 	uint32_t max_mA = 4950;
 	uint16_t current = 0;
 

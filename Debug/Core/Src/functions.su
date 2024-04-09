@@ -11,6 +11,6 @@
 ../Core/Src/functions.c:222:6:CS_read	40	static
 ../Core/Src/functions.c:331:9:check_bit	24	static
 ../Core/Src/functions.c:340:9:set_bit	24	static
-../Core/Src/functions.c:350:10:CS_Raw_to_mA	32	static
-../Core/Src/functions.c:361:6:analog_read	40	static
-../Core/Src/functions.c:386:6:chip_select_read	40	static
+../Core/Src/functions.c:350:10:CS_Raw_to_mA	24	static
+../Core/Src/functions.c:360:6:analog_read	40	static
+../Core/Src/functions.c:385:6:chip_select_read	40	static
