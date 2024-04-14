@@ -42,6 +42,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 void CanSend(uint8_t *TxData){
 	while(HAL_FDCAN_GetTxFifoFreeLevel(&hfdcan1) != 0 && HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &TxHeader, TxData) != HAL_OK){
 		Error_Handler();
+		HAL_GPIO_WritePin(GPIOB,LED1_Pin,0);
 	}
 }
 
@@ -72,7 +73,7 @@ void output(){
 		bit = check_bit(Default_Switch_State, i);
 		switch(i){
 		case 0:
-			HAL_GPIO_WritePin(GPIOA,IN0_Pin,bit);
+			HAL_GPIO_WritePin(GPIOB,IN0_Pin,bit);
 			break;
 		case 1:
 			HAL_GPIO_WritePin(GPIOA,IN1_Pin,bit);
@@ -87,13 +88,13 @@ void output(){
 			HAL_GPIO_WritePin(GPIOA,IN0_2_Pin,bit);
 			break;
 		case 5:
-			HAL_GPIO_WritePin(GPIOA,IN1_2_Pin,bit);
+			HAL_GPIO_WritePin(IN1_2_GPIO_Port,IN1_2_Pin,bit);
 			break;
 		case 6:
-			HAL_GPIO_WritePin(GPIOA,IN2_2_Pin,bit);
+			HAL_GPIO_WritePin(GPIOB,IN2_2_Pin,bit);
 			break;
 		case 7:
-			HAL_GPIO_WritePin(GPIOA,IN3_2_Pin,bit);
+			HAL_GPIO_WritePin(GPIOB,IN3_2_Pin,bit);
 			break;
 		default:
 			Error_Handler();
@@ -159,6 +160,9 @@ void decode(){
 		Default_Switch_State = set_bit(Default_Switch_State,RxData[1],RxData[2]); //if RxData[2] is 0 -> OFF, if RxData[2] is 1 -> ON
 		output();
 		break;
+	case 3:
+		HAL_GPIO_WritePin(GPIOB,AnalogPower_EN_Pin,RxData[1]);
+		break;
 	default:
 		Error_Handler();
 		break;
@@ -204,7 +208,7 @@ void CS_process(){
 }
 
 void check_warnings(){
-	for(uint8_t x = 0; x < 8; x++){
+	for(uint8_t x = 0; x < 7; x++){
 		if(PROC[x] >= WC[x]){
 			if(PROC[x] >= OC[x]){
 				Default_Switch_State = set_bit(Default_Switch_State, x, 0);
@@ -213,10 +217,22 @@ void check_warnings(){
 				Warning_current(x);
 			}
 		}
-		if(PROC[x] < UC[x]){
+	/*	if(PROC[x] < UC[x]){
 			Under_current(x);
+		}*/
+	}
+	if(PROC[8] >= WC[8]){
+		if(PROC[8] >= OC[8]){
+			Over_current(8);
+			HAL_GPIO_WritePin(GPIOB,AnalogPower_EN_Pin,0);
+		}else{
+			Warning_current(8);
 		}
 	}
+	/*if(PROC[8] < UC[8]){
+		Under_current(8);
+	}*/
+
 }
 
 void CS_read(){
@@ -304,7 +320,11 @@ void CS_read(){
 				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
 				Analog_CS_2[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
 				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
-				Analog_CS[i] = Analog_CS_1[i] - Analog_CS_2[i];
+				if(Analog_CS_1[i]>Analog_CS_2[i]){
+					Analog_CS[i] = Analog_CS_1[i] - Analog_CS_2[i];
+				}else{
+					Analog_CS[i] = 0;
+				}
 			}
 			break;
 

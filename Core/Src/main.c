@@ -162,8 +162,10 @@ int main(void)
   HAL_TIM_PWM_Init(&htim2);
   HAL_TIM_Base_Start_IT(&htim3);
 
-  if(HAL_FDCAN_Start(&hfdcan1)!= HAL_OK){ Error_Handler(); }
+
+  if(HAL_FDCAN_Start(&hfdcan1)!= HAL_OK){ Error_Handler(); }else{HAL_GPIO_WritePin(GPIOB,LED1_Pin,1); }
   if(HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE,0) != HAL_OK) { Error_Handler(); }
+  HAL_GPIO_WritePin(GPIOB,AnalogPower_EN_Pin,1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -173,7 +175,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  if(millis % 10 == 0){
+	  if(millis % 100 == 0){
 		  CS_read();
 	  }
 	  //check_warnings();
