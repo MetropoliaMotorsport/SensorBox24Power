@@ -69,7 +69,7 @@ void Config_1(void){
 	OC[8] = 2000;
 	UC[8] = 0;
 
-	Default_Switch_State = 0b11111111; //each bit represent one output [8,7,6,5,4,3,2,1]
+	Default_Switch_State = 0b11011111; //each bit represent one output [8,7,6,5,4,3,2,1]
 	PWM_out_enable = 0b00;
 
 	//clock is xy MHz, thus set it such that xy/(prescaler*100) is going to be the frequency

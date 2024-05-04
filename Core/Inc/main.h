@@ -61,8 +61,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define IN1_2_Pin GPIO_PIN_10
-#define IN1_2_GPIO_Port GPIOG
+#define IN1_2_Pin GPIO_PIN_1
+#define IN1_2_GPIO_Port GPIOA
 #define IN0_2_Pin GPIO_PIN_4
 #define IN0_2_GPIO_Port GPIOA
 #define LED1_Pin GPIO_PIN_0
@@ -125,6 +125,7 @@ extern uint16_t IN3_2_mA;
 extern uint16_t IN4_2_mA;
 extern uint16_t us;
 extern uint16_t millis;
+extern uint8_t can_select;
 extern FDCAN_HandleTypeDef hfdcan1;
 
 extern FDCAN_RxHeaderTypeDef RxHeader;

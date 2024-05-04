@@ -237,8 +237,13 @@ void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
 	millis++;
-	if(millis % CAN_interval == 0){
-		  CAN_switch_state();
+	if(millis % (CAN_interval/2) == 0){
+		  CAN_switch_state(can_select);
+		  if(can_select == 0){
+			  can_select = 1;
+		  }else{
+			  can_select = 0;
+		  }
 	}
   /* USER CODE END TIM3_IRQn 0 */
   HAL_TIM_IRQHandler(&htim3);

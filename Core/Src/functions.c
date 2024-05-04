@@ -28,7 +28,9 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 			/* Reception Error */
 			Error_Handler();
 		}else{
-			decode();
+			if(RxHeader.Identifier == CAN_ID){
+				decode();
+			}
 		}
 
 		if (HAL_FDCAN_ActivateNotification(hfdcan, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0) != HAL_OK)
@@ -46,22 +48,24 @@ void CanSend(uint8_t *TxData){
 	}
 }
 
-void CAN_switch_state(){
+void CAN_switch_state(uint8_t values){
 	uint8_t TxData1[5];
 	uint8_t TxData2[5];
 
-
-	TxData1[0] = 11;
-	for(int i = 1; i < 5;i++){
-		TxData1[i] = check_bit(Default_Switch_State,i-1);
+	if(can_select == 0){
+		TxData1[0] = 11;
+		for(int i = 1; i < 5;i++){
+			TxData1[i] = check_bit(Default_Switch_State,i-1);
+		}
+		CanSend(TxData1);
 	}
-	CanSend(TxData1);
-
-	TxData2[0] = 12;
-	for(int i = 1; i < 5;i++){
-		TxData2[i] = check_bit(Default_Switch_State,i+3);
+	if(can_select == 1){
+		TxData2[0] = 12;
+		for(int i = 1; i < 5;i++){
+			TxData2[i] = check_bit(Default_Switch_State,i+3);
+		}
+		CanSend(TxData2);
 	}
-	CanSend(TxData2);
 }
 
 
@@ -88,7 +92,7 @@ void output(){
 			HAL_GPIO_WritePin(GPIOA,IN0_2_Pin,bit);
 			break;
 		case 5:
-			HAL_GPIO_WritePin(IN1_2_GPIO_Port,IN1_2_Pin,bit);
+			HAL_GPIO_WritePin(GPIOA,IN1_2_Pin,bit);
 			break;
 		case 6:
 			HAL_GPIO_WritePin(GPIOB,IN2_2_Pin,bit);
@@ -232,6 +236,7 @@ void check_warnings(){
 	/*if(PROC[8] < UC[8]){
 		Under_current(8);
 	}*/
+	output();
 
 }
 
@@ -239,7 +244,7 @@ void CS_read(){
 	for(int x = 0; x < 5; x++){
 		switch(x){
 		case 0:
-			chip_select_read();
+			//chip_select_read();
 			CS_SEL[0] = 0;
 			CS_SEL[1] = 0;
 			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
@@ -256,7 +261,7 @@ void CS_read(){
 			}
 			break;
 		case 1:
-			chip_select_read();
+			//chip_select_read();
 			CS_SEL[0] = 0;
 			CS_SEL[1] = 1;
 			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
@@ -273,7 +278,7 @@ void CS_read(){
 			}
 			break;
 		case 2:
-			chip_select_read();
+			//chip_select_read();
 			CS_SEL[0] = 1;
 			CS_SEL[1] = 0;
 			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
@@ -290,7 +295,7 @@ void CS_read(){
 			}
 			break;
 		case 3:
-			chip_select_read();
+			//chip_select_read();
 			CS_SEL[0] = 1;
 			CS_SEL[1] = 1;
 			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
@@ -307,14 +312,14 @@ void CS_read(){
 			}
 			break;
 		case 4:
-			analog_read();
+			//analog_read();
 			for(int i = 0; i < I_AVERAGE/2; i++){
 				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
 				Analog_CS_1[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
 				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
 			}
-			analog_read();
+			//analog_read();
 			for(int i = 0; i < I_AVERAGE/2; i++){
 				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
@@ -372,7 +377,8 @@ uint16_t CS_Raw_to_mA(uint16_t raw){
 	uint32_t max_mA = 4950;
 	uint16_t current = 0;
 
-	current = raw*max_mA / 4095;
+	//current = raw*max_mA / 4095;
+	current = raw*3300 / 4095;
 
 	return current;
 }
