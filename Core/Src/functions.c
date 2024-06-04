@@ -132,40 +132,47 @@ void decode(){
 		case 1:										//PUMPS
 			switch(RxData[2]){
 			case 1:
-				set_pwm_duty_cycle(&htim1,RxData[3]);
+				PWM_width[0] = RxData[3];
+				set_pwm_duty_cycle(&htim1);
 				break;
 			case 2:
-				set_pwm_freq(&htim1, RxData[3]);
+				PWM_Prescalers[0] = RxData[3];
+				set_pwm_freq(&htim1);
 				break;
 			default:
 				//decode_error();
 				Error_Handler();
 				break;
 			}
+			break;
 		case 2:										//FANS
 			switch(RxData[2]){
 			case 1:
-				set_pwm_duty_cycle(&htim2,RxData[3]);
+				PWM_width[1] = RxData[3];
+				set_pwm_duty_cycle(&htim2);
 				break;
 			case 2:
-				set_pwm_freq(&htim2, RxData[3]);
+				PWM_Prescalers[1] = RxData[3];
+				set_pwm_freq(&htim2);
 				break;
 			default:
 				//decode_error();
 				Error_Handler();
 				break;
 			}
+			break;
 		default:
 			//decode_error(); //TODO: IMPLEMENT
 			Error_Handler();
 			break;
 		}
+		break;
 	case 2:							//Switch output on/off
 		Default_Switch_State = set_bit(Default_Switch_State,RxData[1],RxData[2]); //if RxData[2] is 0 -> OFF, if RxData[2] is 1 -> ON
 		output();
 		break;
 	case 3:
-		HAL_GPIO_WritePin(GPIOB,AnalogPower_EN_Pin,RxData[1]);
+		//HAL_GPIO_WritePin(GPIOB,AnalogPower_EN_Pin,RxData[1]);
 		break;
 	default:
 		Error_Handler();
@@ -228,7 +235,7 @@ void check_warnings(){
 	if(PROC[8] >= WC[8]){
 		if(PROC[8] >= OC[8]){
 			Over_current(8);
-			HAL_GPIO_WritePin(GPIOB,AnalogPower_EN_Pin,0);
+			//HAL_GPIO_WritePin(GPIOB,AnalogPower_EN_Pin,0);
 		}else{
 			Warning_current(8);
 		}

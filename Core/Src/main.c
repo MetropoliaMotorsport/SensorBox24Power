@@ -163,10 +163,15 @@ int main(void)
   HAL_TIM_PWM_Init(&htim2);
   HAL_TIM_Base_Start_IT(&htim3);
 
+  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);
+
+  set_pwm_duty_cycle(&htim1);
+  set_pwm_duty_cycle(&htim2);
 
   if(HAL_FDCAN_Start(&hfdcan1)!= HAL_OK){ Error_Handler(); }else{HAL_GPIO_WritePin(GPIOB,LED1_Pin,1); }
   if(HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE,0) != HAL_OK) { Error_Handler(); }
-  HAL_GPIO_WritePin(GPIOB,AnalogPower_EN_Pin,1);
+  //HAL_GPIO_WritePin(GPIOB,AnalogPower_EN_Pin,1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -176,6 +181,9 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+		 __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1,PWM_speed[0]);
+
+		 __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1,PWM_speed[1]);
 	  if(millis % 100 == 0){
 		  CS_read();
 	  }
@@ -450,9 +458,9 @@ static void MX_TIM1_Init(void)
 
   /* USER CODE END TIM1_Init 1 */
   htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 0;
+  htim1.Init.Prescaler = 15;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 65535;
+  htim1.Init.Period = 39;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -531,9 +539,9 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 149;
+  htim2.Init.Prescaler = 15;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 4294967294;
+  htim2.Init.Period = 39;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
@@ -798,26 +806,26 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, IN1_2_Pin|IN0_2_Pin|IN3_Pin|IN2_Pin
-                          |IN1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, IN1_2_Pin|IN0_2_Pin|LED2_Pin|IN3_Pin
+                          |IN2_Pin|IN1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LED1_Pin|IN0_Pin|IN3_2_Pin|SEL1_Pin
-                          |SEL0_Pin|IN2_2_Pin|AnalogPower_EN_Pin, GPIO_PIN_RESET);
+                          |SEL0_Pin|IN2_2_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : IN1_2_Pin IN0_2_Pin IN3_Pin IN2_Pin
-                           IN1_Pin */
-  GPIO_InitStruct.Pin = IN1_2_Pin|IN0_2_Pin|IN3_Pin|IN2_Pin
-                          |IN1_Pin;
+  /*Configure GPIO pins : IN1_2_Pin IN0_2_Pin LED2_Pin IN3_Pin
+                           IN2_Pin IN1_Pin */
+  GPIO_InitStruct.Pin = IN1_2_Pin|IN0_2_Pin|LED2_Pin|IN3_Pin
+                          |IN2_Pin|IN1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED1_Pin IN0_Pin IN3_2_Pin SEL1_Pin
-                           SEL0_Pin IN2_2_Pin AnalogPower_EN_Pin */
+                           SEL0_Pin IN2_2_Pin */
   GPIO_InitStruct.Pin = LED1_Pin|IN0_Pin|IN3_2_Pin|SEL1_Pin
-                          |SEL0_Pin|IN2_2_Pin|AnalogPower_EN_Pin;
+                          |SEL0_Pin|IN2_2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

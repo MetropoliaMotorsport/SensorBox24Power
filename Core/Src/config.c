@@ -70,32 +70,14 @@ void Config_1(void){
 	UC[8] = 0;
 
 	Default_Switch_State = 0b11011111; //each bit represent one output [8,7,6,5,4,3,2,1]
-	PWM_out_enable = 0b00;
-
-	//clock is xy MHz, thus set it such that xy/(prescaler*100) is going to be the frequency
-	PWM_Prescalers[0] = 0;
-	PWM_Prescalers[1] = 0;
-
-	if(PWM_out_enable >> 2 != 0){
-		PWM_speed[0] = 150000000/(PWM_Prescalers[0]*100);
-	}else{
-		PWM_speed[0] = 0;
-	}
-	if(PWM_out_enable >> 1 != 0){
-		PWM_speed[1] = 150000000/(PWM_Prescalers[1]*100);
-	}else{
-		PWM_speed[1] = 0;
-	}
+	PWM_out_enable = 0b11;
 
 	//Duty cycle 0-100%
-	PWM_width[0] = 0;
-	PWM_width[1] = 0;
+	PWM_width[0] = 10;
+	PWM_width[1] = 10;
 
-	set_pwm_duty_cycle(&htim1,PWM_width[0]);
-	set_pwm_duty_cycle(&htim2,PWM_width[1]);
-
-	set_pwm_freq(&htim1,PWM_speed[0]);
-	set_pwm_freq(&htim2,PWM_speed[1]);
+	//set_pwm_freq(&htim1);
+	//set_pwm_freq(&htim2);
 
 	output();
 }
@@ -156,11 +138,11 @@ void Config_2(void){
 	PWM_width[0] = 0;
 	PWM_width[1] = 0;
 
-	set_pwm_duty_cycle(&htim1,PWM_width[0]);
-	set_pwm_duty_cycle(&htim2,PWM_width[1]);
+	set_pwm_duty_cycle(&htim1);
+	set_pwm_duty_cycle(&htim2);
 
-	set_pwm_freq(&htim1,PWM_speed[0]);
-	set_pwm_freq(&htim2,PWM_speed[1]);
+	set_pwm_freq(&htim1);
+	set_pwm_freq(&htim2);
 
 	output();
 }
@@ -221,11 +203,11 @@ void Config_3(void){
 	PWM_width[0] = 0;
 	PWM_width[1] = 0;
 
-	set_pwm_duty_cycle(&htim1,PWM_width[0]);
-	set_pwm_duty_cycle(&htim2,PWM_width[1]);
+	set_pwm_duty_cycle(&htim1);
+	set_pwm_duty_cycle(&htim2);
 
-	set_pwm_freq(&htim1,PWM_speed[0]);
-	set_pwm_freq(&htim2,PWM_speed[1]);
+	set_pwm_freq(&htim1);
+	set_pwm_freq(&htim2);
 
 	output();
 }
