@@ -54,17 +54,17 @@ TIM_HandleTypeDef htim7;
 TIM_HandleTypeDef htim16;
 
 /* USER CODE BEGIN PV */
-uint16_t IN1_1_CS[I_AVERAGE];
-uint16_t IN2_1_CS[I_AVERAGE];
-uint16_t IN3_1_CS[I_AVERAGE];
-uint16_t IN4_1_CS[I_AVERAGE];
-uint16_t IN1_2_CS[I_AVERAGE];
-uint16_t IN2_2_CS[I_AVERAGE];
-uint16_t IN3_2_CS[I_AVERAGE];
-uint16_t IN4_2_CS[I_AVERAGE];
-uint16_t Analog_CS_1[I_AVERAGE/2];
-uint16_t Analog_CS_2[I_AVERAGE/2];
-uint16_t Analog_CS[I_AVERAGE/2];
+uint16_t IN1_1_Current_Sense[I_AVERAGE];
+uint16_t IN2_1_Current_Sense[I_AVERAGE];
+uint16_t IN3_1_Current_Sense[I_AVERAGE];
+uint16_t IN4_1_Current_Sense[I_AVERAGE];
+uint16_t IN1_2_Current_Sense[I_AVERAGE];
+uint16_t IN2_2_Current_Sense[I_AVERAGE];
+uint16_t IN3_2_Current_Sense[I_AVERAGE];
+uint16_t IN4_2_Current_Sense[I_AVERAGE];
+uint16_t Analog_Current_Sense_1[I_AVERAGE/2];
+uint16_t Analog_Current_Sense_2[I_AVERAGE/2];
+uint16_t Analog_Current_Sense[I_AVERAGE/2];
 uint16_t PROC[9];
 uint16_t IN1_1_mA;
 uint16_t IN2_1_mA;
@@ -74,15 +74,15 @@ uint16_t IN1_2_mA;
 uint16_t IN2_2_mA;
 uint16_t IN3_2_mA;
 uint16_t IN4_2_mA;
-uint16_t WC[8]; //current warnings
-uint16_t OC[8]; //over currents
-uint16_t UC[8]; //under currents
+uint16_t Warning_Current[8]; //current warnings
+uint16_t Over_Current[8]; //over currents
+uint16_t Under_Current[8]; //under currents
 
 uint16_t us;
 uint16_t millis;
 
 uint8_t can_select;
-uint8_t CS_SEL[2];
+uint8_t Current_Sense_SEL[2];
 
 uint8_t Default_Switch_State;
 
@@ -185,7 +185,7 @@ int main(void)
 
 		 __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1,PWM_speed[1]);
 	  if(millis % 100 == 0){
-		  CS_read();
+		  Current_Sense_read();
 	  }
 	  //check_warnings();
 	  //if receives message to change pwm then set_pwm(duty cycle)

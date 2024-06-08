@@ -27,25 +27,25 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  0000900c  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00015dd0  00000000  00000000  0000903c  2**0
+ 12 .debug_info   00015de2  00000000  00000000  0000903c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00002b5b  00000000  00000000  0001ee0c  2**0
+ 13 .debug_abbrev 00002b2f  00000000  00000000  0001ee1e  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00001420  00000000  00000000  00021968  2**3
+ 14 .debug_aranges 00001420  00000000  00000000  00021950  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_rnglists 00000f7c  00000000  00000000  00022d88  2**0
+ 15 .debug_rnglists 00000f7c  00000000  00000000  00022d70  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  00020728  00000000  00000000  00023d04  2**0
+ 16 .debug_macro  00020728  00000000  00000000  00023cec  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0001518b  00000000  00000000  0004442c  2**0
+ 17 .debug_line   0001521b  00000000  00000000  00044414  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000da46e  00000000  00000000  000595b7  2**0
+ 18 .debug_str    000da537  00000000  00000000  0005962f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  00133a25  2**0
+ 19 .comment      00000043  00000000  00000000  00133b66  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00005664  00000000  00000000  00133a68  2**2
+ 20 .debug_frame  00005664  00000000  00000000  00133bac  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 00000062  00000000  00000000  001390cc  2**0
+ 21 .debug_line_str 0000005b  00000000  00000000  00139210  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -224,127 +224,127 @@ void Config_1(void){
  80002dc:	801a      	strh	r2, [r3, #0]
 
 	//OUTPUT 1 in mA
-	WC[0] = 1900;
+	Warning_Current[0] = 1900;
  80002de:	4b3b      	ldr	r3, [pc, #236]	@ (80003cc <Config_1+0x100>)
  80002e0:	f240 726c 	movw	r2, #1900	@ 0x76c
  80002e4:	801a      	strh	r2, [r3, #0]
-	OC[0] = 2050;
+	Over_Current[0] = 2050;
  80002e6:	4b3a      	ldr	r3, [pc, #232]	@ (80003d0 <Config_1+0x104>)
  80002e8:	f640 0202 	movw	r2, #2050	@ 0x802
  80002ec:	801a      	strh	r2, [r3, #0]
-	UC[0] = 00;
+	Under_Current[0] = 00;
  80002ee:	4b39      	ldr	r3, [pc, #228]	@ (80003d4 <Config_1+0x108>)
  80002f0:	2200      	movs	r2, #0
  80002f2:	801a      	strh	r2, [r3, #0]
 
 	//OUTPUT 2 in mA
-	WC[1] = 1900;
+	Warning_Current[1] = 1900;
  80002f4:	4b35      	ldr	r3, [pc, #212]	@ (80003cc <Config_1+0x100>)
  80002f6:	f240 726c 	movw	r2, #1900	@ 0x76c
  80002fa:	805a      	strh	r2, [r3, #2]
-	OC[1] = 2050;
+	Over_Current[1] = 2050;
  80002fc:	4b34      	ldr	r3, [pc, #208]	@ (80003d0 <Config_1+0x104>)
  80002fe:	f640 0202 	movw	r2, #2050	@ 0x802
  8000302:	805a      	strh	r2, [r3, #2]
-	UC[1] = 00;
+	Under_Current[1] = 00;
  8000304:	4b33      	ldr	r3, [pc, #204]	@ (80003d4 <Config_1+0x108>)
  8000306:	2200      	movs	r2, #0
  8000308:	805a      	strh	r2, [r3, #2]
 
 	//OUTPUT 3 in mA
-	WC[2] = 1900;
+	Warning_Current[2] = 1900;
  800030a:	4b30      	ldr	r3, [pc, #192]	@ (80003cc <Config_1+0x100>)
  800030c:	f240 726c 	movw	r2, #1900	@ 0x76c
  8000310:	809a      	strh	r2, [r3, #4]
-	OC[2] = 2050;
+	Over_Current[2] = 2050;
  8000312:	4b2f      	ldr	r3, [pc, #188]	@ (80003d0 <Config_1+0x104>)
  8000314:	f640 0202 	movw	r2, #2050	@ 0x802
  8000318:	809a      	strh	r2, [r3, #4]
-	UC[2] = 00;
+	Under_Current[2] = 00;
  800031a:	4b2e      	ldr	r3, [pc, #184]	@ (80003d4 <Config_1+0x108>)
  800031c:	2200      	movs	r2, #0
  800031e:	809a      	strh	r2, [r3, #4]
 
 	//OUTPUT 4 in mA
-	WC[3] = 1900;
+	Warning_Current[3] = 1900;
  8000320:	4b2a      	ldr	r3, [pc, #168]	@ (80003cc <Config_1+0x100>)
  8000322:	f240 726c 	movw	r2, #1900	@ 0x76c
  8000326:	80da      	strh	r2, [r3, #6]
-	OC[3] = 2050;
+	Over_Current[3] = 2050;
  8000328:	4b29      	ldr	r3, [pc, #164]	@ (80003d0 <Config_1+0x104>)
  800032a:	f640 0202 	movw	r2, #2050	@ 0x802
  800032e:	80da      	strh	r2, [r3, #6]
-	UC[3] = 00;
+	Under_Current[3] = 00;
  8000330:	4b28      	ldr	r3, [pc, #160]	@ (80003d4 <Config_1+0x108>)
  8000332:	2200      	movs	r2, #0
  8000334:	80da      	strh	r2, [r3, #6]
 
 	//OUTPUT 5 in mA
-	WC[4] = 1900;
+	Warning_Current[4] = 1900;
  8000336:	4b25      	ldr	r3, [pc, #148]	@ (80003cc <Config_1+0x100>)
  8000338:	f240 726c 	movw	r2, #1900	@ 0x76c
  800033c:	811a      	strh	r2, [r3, #8]
-	OC[4] = 2050;
+	Over_Current[4] = 2050;
  800033e:	4b24      	ldr	r3, [pc, #144]	@ (80003d0 <Config_1+0x104>)
  8000340:	f640 0202 	movw	r2, #2050	@ 0x802
  8000344:	811a      	strh	r2, [r3, #8]
-	UC[4] = 00;
+	Under_Current[4] = 00;
  8000346:	4b23      	ldr	r3, [pc, #140]	@ (80003d4 <Config_1+0x108>)
  8000348:	2200      	movs	r2, #0
  800034a:	811a      	strh	r2, [r3, #8]
 
 	//OUTPUT 6 in mA
-	WC[5] = 1900;
+	Warning_Current[5] = 1900;
  800034c:	4b1f      	ldr	r3, [pc, #124]	@ (80003cc <Config_1+0x100>)
  800034e:	f240 726c 	movw	r2, #1900	@ 0x76c
  8000352:	815a      	strh	r2, [r3, #10]
-	OC[5] = 2050;
+	Over_Current[5] = 2050;
  8000354:	4b1e      	ldr	r3, [pc, #120]	@ (80003d0 <Config_1+0x104>)
  8000356:	f640 0202 	movw	r2, #2050	@ 0x802
  800035a:	815a      	strh	r2, [r3, #10]
-	UC[5] = 00;
+	Under_Current[5] = 00;
  800035c:	4b1d      	ldr	r3, [pc, #116]	@ (80003d4 <Config_1+0x108>)
  800035e:	2200      	movs	r2, #0
  8000360:	815a      	strh	r2, [r3, #10]
 
 	//OUTPUT 7 in mA
-	WC[6] = 1900;
+	Warning_Current[6] = 1900;
  8000362:	4b1a      	ldr	r3, [pc, #104]	@ (80003cc <Config_1+0x100>)
  8000364:	f240 726c 	movw	r2, #1900	@ 0x76c
  8000368:	819a      	strh	r2, [r3, #12]
-	OC[6] = 2050;
+	Over_Current[6] = 2050;
  800036a:	4b19      	ldr	r3, [pc, #100]	@ (80003d0 <Config_1+0x104>)
  800036c:	f640 0202 	movw	r2, #2050	@ 0x802
  8000370:	819a      	strh	r2, [r3, #12]
-	UC[6] = 00;
+	Under_Current[6] = 00;
  8000372:	4b18      	ldr	r3, [pc, #96]	@ (80003d4 <Config_1+0x108>)
  8000374:	2200      	movs	r2, #0
  8000376:	819a      	strh	r2, [r3, #12]
 
 	//OUTPUT 8 in mA
-	WC[7] = 1900;
+	Warning_Current[7] = 1900;
  8000378:	4b14      	ldr	r3, [pc, #80]	@ (80003cc <Config_1+0x100>)
  800037a:	f240 726c 	movw	r2, #1900	@ 0x76c
  800037e:	81da      	strh	r2, [r3, #14]
-	OC[7] = 2050;
+	Over_Current[7] = 2050;
  8000380:	4b13      	ldr	r3, [pc, #76]	@ (80003d0 <Config_1+0x104>)
  8000382:	f640 0202 	movw	r2, #2050	@ 0x802
  8000386:	81da      	strh	r2, [r3, #14]
-	UC[7] = 00;
+	Under_Current[7] = 00;
  8000388:	4b12      	ldr	r3, [pc, #72]	@ (80003d4 <Config_1+0x108>)
  800038a:	2200      	movs	r2, #0
  800038c:	81da      	strh	r2, [r3, #14]
 
 	//For analog node
-	WC[8] = 2000;
+	Warning_Current[8] = 2000;
  800038e:	4b0f      	ldr	r3, [pc, #60]	@ (80003cc <Config_1+0x100>)
  8000390:	f44f 62fa 	mov.w	r2, #2000	@ 0x7d0
  8000394:	821a      	strh	r2, [r3, #16]
-	OC[8] = 2000;
+	Over_Current[8] = 2000;
  8000396:	4b0e      	ldr	r3, [pc, #56]	@ (80003d0 <Config_1+0x104>)
  8000398:	f44f 62fa 	mov.w	r2, #2000	@ 0x7d0
  800039c:	821a      	strh	r2, [r3, #16]
-	UC[8] = 0;
+	Under_Current[8] = 0;
  800039e:	4b0d      	ldr	r3, [pc, #52]	@ (80003d4 <Config_1+0x108>)
  80003a0:	2200      	movs	r2, #0
  80003a2:	821a      	strh	r2, [r3, #16]
@@ -948,69 +948,69 @@ void decode(){
  800076c:	200001c0 	.word	0x200001c0
  8000770:	20000632 	.word	0x20000632
 
-08000774 <CS_process>:
+08000774 <Current_Sense_process>:
 
 
 
-void CS_process(){
+void Current_Sense_process(){
  8000774:	b580      	push	{r7, lr}
  8000776:	b082      	sub	sp, #8
  8000778:	af00      	add	r7, sp, #0
 	//4031 == 3.3V since 12bit, have to pick shunt resistor according to this
-	PROC[0] = IN1_1_CS[0];
- 800077a:	4b86      	ldr	r3, [pc, #536]	@ (8000994 <CS_process+0x220>)
+	PROC[0] = IN1_1_Current_Sense[0];
+ 800077a:	4b86      	ldr	r3, [pc, #536]	@ (8000994 <Current_Sense_process+0x220>)
  800077c:	881a      	ldrh	r2, [r3, #0]
- 800077e:	4b86      	ldr	r3, [pc, #536]	@ (8000998 <CS_process+0x224>)
+ 800077e:	4b86      	ldr	r3, [pc, #536]	@ (8000998 <Current_Sense_process+0x224>)
  8000780:	801a      	strh	r2, [r3, #0]
-	PROC[1] = IN2_1_CS[0];
- 8000782:	4b86      	ldr	r3, [pc, #536]	@ (800099c <CS_process+0x228>)
+	PROC[1] = IN2_1_Current_Sense[0];
+ 8000782:	4b86      	ldr	r3, [pc, #536]	@ (800099c <Current_Sense_process+0x228>)
  8000784:	881a      	ldrh	r2, [r3, #0]
- 8000786:	4b84      	ldr	r3, [pc, #528]	@ (8000998 <CS_process+0x224>)
+ 8000786:	4b84      	ldr	r3, [pc, #528]	@ (8000998 <Current_Sense_process+0x224>)
  8000788:	805a      	strh	r2, [r3, #2]
-	PROC[2] = IN3_1_CS[0];
- 800078a:	4b85      	ldr	r3, [pc, #532]	@ (80009a0 <CS_process+0x22c>)
+	PROC[2] = IN3_1_Current_Sense[0];
+ 800078a:	4b85      	ldr	r3, [pc, #532]	@ (80009a0 <Current_Sense_process+0x22c>)
  800078c:	881a      	ldrh	r2, [r3, #0]
- 800078e:	4b82      	ldr	r3, [pc, #520]	@ (8000998 <CS_process+0x224>)
+ 800078e:	4b82      	ldr	r3, [pc, #520]	@ (8000998 <Current_Sense_process+0x224>)
  8000790:	809a      	strh	r2, [r3, #4]
-	PROC[3] = IN4_1_CS[0];
- 8000792:	4b84      	ldr	r3, [pc, #528]	@ (80009a4 <CS_process+0x230>)
+	PROC[3] = IN4_1_Current_Sense[0];
+ 8000792:	4b84      	ldr	r3, [pc, #528]	@ (80009a4 <Current_Sense_process+0x230>)
  8000794:	881a      	ldrh	r2, [r3, #0]
- 8000796:	4b80      	ldr	r3, [pc, #512]	@ (8000998 <CS_process+0x224>)
+ 8000796:	4b80      	ldr	r3, [pc, #512]	@ (8000998 <Current_Sense_process+0x224>)
  8000798:	80da      	strh	r2, [r3, #6]
-	PROC[4] = IN1_2_CS[0];
- 800079a:	4b83      	ldr	r3, [pc, #524]	@ (80009a8 <CS_process+0x234>)
+	PROC[4] = IN1_2_Current_Sense[0];
+ 800079a:	4b83      	ldr	r3, [pc, #524]	@ (80009a8 <Current_Sense_process+0x234>)
  800079c:	881a      	ldrh	r2, [r3, #0]
- 800079e:	4b7e      	ldr	r3, [pc, #504]	@ (8000998 <CS_process+0x224>)
+ 800079e:	4b7e      	ldr	r3, [pc, #504]	@ (8000998 <Current_Sense_process+0x224>)
  80007a0:	811a      	strh	r2, [r3, #8]
-	PROC[5] = IN2_2_CS[0];
- 80007a2:	4b82      	ldr	r3, [pc, #520]	@ (80009ac <CS_process+0x238>)
+	PROC[5] = IN2_2_Current_Sense[0];
+ 80007a2:	4b82      	ldr	r3, [pc, #520]	@ (80009ac <Current_Sense_process+0x238>)
  80007a4:	881a      	ldrh	r2, [r3, #0]
- 80007a6:	4b7c      	ldr	r3, [pc, #496]	@ (8000998 <CS_process+0x224>)
+ 80007a6:	4b7c      	ldr	r3, [pc, #496]	@ (8000998 <Current_Sense_process+0x224>)
  80007a8:	815a      	strh	r2, [r3, #10]
-	PROC[6] = IN3_2_CS[0];
- 80007aa:	4b81      	ldr	r3, [pc, #516]	@ (80009b0 <CS_process+0x23c>)
+	PROC[6] = IN3_2_Current_Sense[0];
+ 80007aa:	4b81      	ldr	r3, [pc, #516]	@ (80009b0 <Current_Sense_process+0x23c>)
  80007ac:	881a      	ldrh	r2, [r3, #0]
- 80007ae:	4b7a      	ldr	r3, [pc, #488]	@ (8000998 <CS_process+0x224>)
+ 80007ae:	4b7a      	ldr	r3, [pc, #488]	@ (8000998 <Current_Sense_process+0x224>)
  80007b0:	819a      	strh	r2, [r3, #12]
-	PROC[7] = IN4_2_CS[0];
- 80007b2:	4b80      	ldr	r3, [pc, #512]	@ (80009b4 <CS_process+0x240>)
+	PROC[7] = IN4_2_Current_Sense[0];
+ 80007b2:	4b80      	ldr	r3, [pc, #512]	@ (80009b4 <Current_Sense_process+0x240>)
  80007b4:	881a      	ldrh	r2, [r3, #0]
- 80007b6:	4b78      	ldr	r3, [pc, #480]	@ (8000998 <CS_process+0x224>)
+ 80007b6:	4b78      	ldr	r3, [pc, #480]	@ (8000998 <Current_Sense_process+0x224>)
  80007b8:	81da      	strh	r2, [r3, #14]
-	PROC[8] = Analog_CS[0];
- 80007ba:	4b7f      	ldr	r3, [pc, #508]	@ (80009b8 <CS_process+0x244>)
+	PROC[8] = Analog_Current_Sense[0];
+ 80007ba:	4b7f      	ldr	r3, [pc, #508]	@ (80009b8 <Current_Sense_process+0x244>)
  80007bc:	881a      	ldrh	r2, [r3, #0]
- 80007be:	4b76      	ldr	r3, [pc, #472]	@ (8000998 <CS_process+0x224>)
+ 80007be:	4b76      	ldr	r3, [pc, #472]	@ (8000998 <Current_Sense_process+0x224>)
  80007c0:	821a      	strh	r2, [r3, #16]
 	for(int i = 1; i < I_AVERAGE; i++){
  80007c2:	2301      	movs	r3, #1
  80007c4:	607b      	str	r3, [r7, #4]
- 80007c6:	e089      	b.n	80008dc <CS_process+0x168>
-		PROC[0] = (PROC[0] + IN1_1_CS[i])/2;
- 80007c8:	4b73      	ldr	r3, [pc, #460]	@ (8000998 <CS_process+0x224>)
+ 80007c6:	e089      	b.n	80008dc <Current_Sense_process+0x168>
+		PROC[0] = (PROC[0] + IN1_1_Current_Sense[i])/2;
+ 80007c8:	4b73      	ldr	r3, [pc, #460]	@ (8000998 <Current_Sense_process+0x224>)
  80007ca:	881b      	ldrh	r3, [r3, #0]
  80007cc:	4619      	mov	r1, r3
- 80007ce:	4a71      	ldr	r2, [pc, #452]	@ (8000994 <CS_process+0x220>)
+ 80007ce:	4a71      	ldr	r2, [pc, #452]	@ (8000994 <Current_Sense_process+0x220>)
  80007d0:	687b      	ldr	r3, [r7, #4]
  80007d2:	f832 3013 	ldrh.w	r3, [r2, r3, lsl #1]
  80007d6:	440b      	add	r3, r1
@@ -1018,13 +1018,13 @@ void CS_process(){
  80007da:	4413      	add	r3, r2
  80007dc:	105b      	asrs	r3, r3, #1
  80007de:	b29a      	uxth	r2, r3
- 80007e0:	4b6d      	ldr	r3, [pc, #436]	@ (8000998 <CS_process+0x224>)
+ 80007e0:	4b6d      	ldr	r3, [pc, #436]	@ (8000998 <Current_Sense_process+0x224>)
  80007e2:	801a      	strh	r2, [r3, #0]
-		PROC[1] = (PROC[1] + IN2_1_CS[i])/2;
- 80007e4:	4b6c      	ldr	r3, [pc, #432]	@ (8000998 <CS_process+0x224>)
+		PROC[1] = (PROC[1] + IN2_1_Current_Sense[i])/2;
+ 80007e4:	4b6c      	ldr	r3, [pc, #432]	@ (8000998 <Current_Sense_process+0x224>)
  80007e6:	885b      	ldrh	r3, [r3, #2]
  80007e8:	4619      	mov	r1, r3
- 80007ea:	4a6c      	ldr	r2, [pc, #432]	@ (800099c <CS_process+0x228>)
+ 80007ea:	4a6c      	ldr	r2, [pc, #432]	@ (800099c <Current_Sense_process+0x228>)
  80007ec:	687b      	ldr	r3, [r7, #4]
  80007ee:	f832 3013 	ldrh.w	r3, [r2, r3, lsl #1]
  80007f2:	440b      	add	r3, r1
@@ -1032,13 +1032,13 @@ void CS_process(){
  80007f6:	4413      	add	r3, r2
  80007f8:	105b      	asrs	r3, r3, #1
  80007fa:	b29a      	uxth	r2, r3
- 80007fc:	4b66      	ldr	r3, [pc, #408]	@ (8000998 <CS_process+0x224>)
+ 80007fc:	4b66      	ldr	r3, [pc, #408]	@ (8000998 <Current_Sense_process+0x224>)
  80007fe:	805a      	strh	r2, [r3, #2]
-		PROC[2] = (PROC[2] + IN3_1_CS[i])/2;
- 8000800:	4b65      	ldr	r3, [pc, #404]	@ (8000998 <CS_process+0x224>)
+		PROC[2] = (PROC[2] + IN3_1_Current_Sense[i])/2;
+ 8000800:	4b65      	ldr	r3, [pc, #404]	@ (8000998 <Current_Sense_process+0x224>)
  8000802:	889b      	ldrh	r3, [r3, #4]
  8000804:	4619      	mov	r1, r3
- 8000806:	4a66      	ldr	r2, [pc, #408]	@ (80009a0 <CS_process+0x22c>)
+ 8000806:	4a66      	ldr	r2, [pc, #408]	@ (80009a0 <Current_Sense_process+0x22c>)
  8000808:	687b      	ldr	r3, [r7, #4]
  800080a:	f832 3013 	ldrh.w	r3, [r2, r3, lsl #1]
  800080e:	440b      	add	r3, r1
@@ -1046,13 +1046,13 @@ void CS_process(){
  8000812:	4413      	add	r3, r2
  8000814:	105b      	asrs	r3, r3, #1
  8000816:	b29a      	uxth	r2, r3
- 8000818:	4b5f      	ldr	r3, [pc, #380]	@ (8000998 <CS_process+0x224>)
+ 8000818:	4b5f      	ldr	r3, [pc, #380]	@ (8000998 <Current_Sense_process+0x224>)
  800081a:	809a      	strh	r2, [r3, #4]
-		PROC[3] = (PROC[3] + IN4_1_CS[i])/2;
- 800081c:	4b5e      	ldr	r3, [pc, #376]	@ (8000998 <CS_process+0x224>)
+		PROC[3] = (PROC[3] + IN4_1_Current_Sense[i])/2;
+ 800081c:	4b5e      	ldr	r3, [pc, #376]	@ (8000998 <Current_Sense_process+0x224>)
  800081e:	88db      	ldrh	r3, [r3, #6]
  8000820:	4619      	mov	r1, r3
- 8000822:	4a60      	ldr	r2, [pc, #384]	@ (80009a4 <CS_process+0x230>)
+ 8000822:	4a60      	ldr	r2, [pc, #384]	@ (80009a4 <Current_Sense_process+0x230>)
  8000824:	687b      	ldr	r3, [r7, #4]
  8000826:	f832 3013 	ldrh.w	r3, [r2, r3, lsl #1]
  800082a:	440b      	add	r3, r1
@@ -1060,13 +1060,13 @@ void CS_process(){
  800082e:	4413      	add	r3, r2
  8000830:	105b      	asrs	r3, r3, #1
  8000832:	b29a      	uxth	r2, r3
- 8000834:	4b58      	ldr	r3, [pc, #352]	@ (8000998 <CS_process+0x224>)
+ 8000834:	4b58      	ldr	r3, [pc, #352]	@ (8000998 <Current_Sense_process+0x224>)
  8000836:	80da      	strh	r2, [r3, #6]
-		PROC[4] = (PROC[4] + IN1_2_CS[i])/2;
- 8000838:	4b57      	ldr	r3, [pc, #348]	@ (8000998 <CS_process+0x224>)
+		PROC[4] = (PROC[4] + IN1_2_Current_Sense[i])/2;
+ 8000838:	4b57      	ldr	r3, [pc, #348]	@ (8000998 <Current_Sense_process+0x224>)
  800083a:	891b      	ldrh	r3, [r3, #8]
  800083c:	4619      	mov	r1, r3
- 800083e:	4a5a      	ldr	r2, [pc, #360]	@ (80009a8 <CS_process+0x234>)
+ 800083e:	4a5a      	ldr	r2, [pc, #360]	@ (80009a8 <Current_Sense_process+0x234>)
  8000840:	687b      	ldr	r3, [r7, #4]
  8000842:	f832 3013 	ldrh.w	r3, [r2, r3, lsl #1]
  8000846:	440b      	add	r3, r1
@@ -1074,13 +1074,13 @@ void CS_process(){
  800084a:	4413      	add	r3, r2
  800084c:	105b      	asrs	r3, r3, #1
  800084e:	b29a      	uxth	r2, r3
- 8000850:	4b51      	ldr	r3, [pc, #324]	@ (8000998 <CS_process+0x224>)
+ 8000850:	4b51      	ldr	r3, [pc, #324]	@ (8000998 <Current_Sense_process+0x224>)
  8000852:	811a      	strh	r2, [r3, #8]
-		PROC[5] = (PROC[5] + IN2_2_CS[i])/2;
- 8000854:	4b50      	ldr	r3, [pc, #320]	@ (8000998 <CS_process+0x224>)
+		PROC[5] = (PROC[5] + IN2_2_Current_Sense[i])/2;
+ 8000854:	4b50      	ldr	r3, [pc, #320]	@ (8000998 <Current_Sense_process+0x224>)
  8000856:	895b      	ldrh	r3, [r3, #10]
  8000858:	4619      	mov	r1, r3
- 800085a:	4a54      	ldr	r2, [pc, #336]	@ (80009ac <CS_process+0x238>)
+ 800085a:	4a54      	ldr	r2, [pc, #336]	@ (80009ac <Current_Sense_process+0x238>)
  800085c:	687b      	ldr	r3, [r7, #4]
  800085e:	f832 3013 	ldrh.w	r3, [r2, r3, lsl #1]
  8000862:	440b      	add	r3, r1
@@ -1088,13 +1088,13 @@ void CS_process(){
  8000866:	4413      	add	r3, r2
  8000868:	105b      	asrs	r3, r3, #1
  800086a:	b29a      	uxth	r2, r3
- 800086c:	4b4a      	ldr	r3, [pc, #296]	@ (8000998 <CS_process+0x224>)
+ 800086c:	4b4a      	ldr	r3, [pc, #296]	@ (8000998 <Current_Sense_process+0x224>)
  800086e:	815a      	strh	r2, [r3, #10]
-		PROC[6] = (PROC[6] + IN3_2_CS[i])/2;
- 8000870:	4b49      	ldr	r3, [pc, #292]	@ (8000998 <CS_process+0x224>)
+		PROC[6] = (PROC[6] + IN3_2_Current_Sense[i])/2;
+ 8000870:	4b49      	ldr	r3, [pc, #292]	@ (8000998 <Current_Sense_process+0x224>)
  8000872:	899b      	ldrh	r3, [r3, #12]
  8000874:	4619      	mov	r1, r3
- 8000876:	4a4e      	ldr	r2, [pc, #312]	@ (80009b0 <CS_process+0x23c>)
+ 8000876:	4a4e      	ldr	r2, [pc, #312]	@ (80009b0 <Current_Sense_process+0x23c>)
  8000878:	687b      	ldr	r3, [r7, #4]
  800087a:	f832 3013 	ldrh.w	r3, [r2, r3, lsl #1]
  800087e:	440b      	add	r3, r1
@@ -1102,13 +1102,13 @@ void CS_process(){
  8000882:	4413      	add	r3, r2
  8000884:	105b      	asrs	r3, r3, #1
  8000886:	b29a      	uxth	r2, r3
- 8000888:	4b43      	ldr	r3, [pc, #268]	@ (8000998 <CS_process+0x224>)
+ 8000888:	4b43      	ldr	r3, [pc, #268]	@ (8000998 <Current_Sense_process+0x224>)
  800088a:	819a      	strh	r2, [r3, #12]
-		PROC[7] = (PROC[7] + IN4_2_CS[i])/2;
- 800088c:	4b42      	ldr	r3, [pc, #264]	@ (8000998 <CS_process+0x224>)
+		PROC[7] = (PROC[7] + IN4_2_Current_Sense[i])/2;
+ 800088c:	4b42      	ldr	r3, [pc, #264]	@ (8000998 <Current_Sense_process+0x224>)
  800088e:	89db      	ldrh	r3, [r3, #14]
  8000890:	4619      	mov	r1, r3
- 8000892:	4a48      	ldr	r2, [pc, #288]	@ (80009b4 <CS_process+0x240>)
+ 8000892:	4a48      	ldr	r2, [pc, #288]	@ (80009b4 <Current_Sense_process+0x240>)
  8000894:	687b      	ldr	r3, [r7, #4]
  8000896:	f832 3013 	ldrh.w	r3, [r2, r3, lsl #1]
  800089a:	440b      	add	r3, r1
@@ -1116,15 +1116,15 @@ void CS_process(){
  800089e:	4413      	add	r3, r2
  80008a0:	105b      	asrs	r3, r3, #1
  80008a2:	b29a      	uxth	r2, r3
- 80008a4:	4b3c      	ldr	r3, [pc, #240]	@ (8000998 <CS_process+0x224>)
+ 80008a4:	4b3c      	ldr	r3, [pc, #240]	@ (8000998 <Current_Sense_process+0x224>)
  80008a6:	81da      	strh	r2, [r3, #14]
 		if(i % 2 == 0){
  80008a8:	687b      	ldr	r3, [r7, #4]
  80008aa:	f003 0301 	and.w	r3, r3, #1
  80008ae:	2b00      	cmp	r3, #0
- 80008b0:	d111      	bne.n	80008d6 <CS_process+0x162>
-			PROC[8] = (PROC[8] + Analog_CS[i/2])/2;
- 80008b2:	4b39      	ldr	r3, [pc, #228]	@ (8000998 <CS_process+0x224>)
+ 80008b0:	d111      	bne.n	80008d6 <Current_Sense_process+0x162>
+			PROC[8] = (PROC[8] + Analog_Current_Sense[i/2])/2;
+ 80008b2:	4b39      	ldr	r3, [pc, #228]	@ (8000998 <Current_Sense_process+0x224>)
  80008b4:	8a1b      	ldrh	r3, [r3, #16]
  80008b6:	4619      	mov	r1, r3
  80008b8:	687b      	ldr	r3, [r7, #4]
@@ -1132,14 +1132,14 @@ void CS_process(){
  80008bc:	4413      	add	r3, r2
  80008be:	105b      	asrs	r3, r3, #1
  80008c0:	461a      	mov	r2, r3
- 80008c2:	4b3d      	ldr	r3, [pc, #244]	@ (80009b8 <CS_process+0x244>)
+ 80008c2:	4b3d      	ldr	r3, [pc, #244]	@ (80009b8 <Current_Sense_process+0x244>)
  80008c4:	f833 3012 	ldrh.w	r3, [r3, r2, lsl #1]
  80008c8:	440b      	add	r3, r1
  80008ca:	0fda      	lsrs	r2, r3, #31
  80008cc:	4413      	add	r3, r2
  80008ce:	105b      	asrs	r3, r3, #1
  80008d0:	b29a      	uxth	r2, r3
- 80008d2:	4b31      	ldr	r3, [pc, #196]	@ (8000998 <CS_process+0x224>)
+ 80008d2:	4b31      	ldr	r3, [pc, #196]	@ (8000998 <Current_Sense_process+0x224>)
  80008d4:	821a      	strh	r2, [r3, #16]
 	for(int i = 1; i < I_AVERAGE; i++){
  80008d6:	687b      	ldr	r3, [r7, #4]
@@ -1147,89 +1147,89 @@ void CS_process(){
  80008da:	607b      	str	r3, [r7, #4]
  80008dc:	687b      	ldr	r3, [r7, #4]
  80008de:	2b1f      	cmp	r3, #31
- 80008e0:	f77f af72 	ble.w	80007c8 <CS_process+0x54>
+ 80008e0:	f77f af72 	ble.w	80007c8 <Current_Sense_process+0x54>
 		}
 	}
-	PROC[0] = CS_Raw_to_mA(PROC[0]);
- 80008e4:	4b2c      	ldr	r3, [pc, #176]	@ (8000998 <CS_process+0x224>)
+	PROC[0] = Current_Sense_Raw_to_mA(PROC[0]);
+ 80008e4:	4b2c      	ldr	r3, [pc, #176]	@ (8000998 <Current_Sense_process+0x224>)
  80008e6:	881b      	ldrh	r3, [r3, #0]
  80008e8:	4618      	mov	r0, r3
- 80008ea:	f000 fb45 	bl	8000f78 <CS_Raw_to_mA>
+ 80008ea:	f000 fb45 	bl	8000f78 <Current_Sense_Raw_to_mA>
  80008ee:	4603      	mov	r3, r0
  80008f0:	461a      	mov	r2, r3
- 80008f2:	4b29      	ldr	r3, [pc, #164]	@ (8000998 <CS_process+0x224>)
+ 80008f2:	4b29      	ldr	r3, [pc, #164]	@ (8000998 <Current_Sense_process+0x224>)
  80008f4:	801a      	strh	r2, [r3, #0]
-	PROC[1] = CS_Raw_to_mA(PROC[1]);
- 80008f6:	4b28      	ldr	r3, [pc, #160]	@ (8000998 <CS_process+0x224>)
+	PROC[1] = Current_Sense_Raw_to_mA(PROC[1]);
+ 80008f6:	4b28      	ldr	r3, [pc, #160]	@ (8000998 <Current_Sense_process+0x224>)
  80008f8:	885b      	ldrh	r3, [r3, #2]
  80008fa:	4618      	mov	r0, r3
- 80008fc:	f000 fb3c 	bl	8000f78 <CS_Raw_to_mA>
+ 80008fc:	f000 fb3c 	bl	8000f78 <Current_Sense_Raw_to_mA>
  8000900:	4603      	mov	r3, r0
  8000902:	461a      	mov	r2, r3
- 8000904:	4b24      	ldr	r3, [pc, #144]	@ (8000998 <CS_process+0x224>)
+ 8000904:	4b24      	ldr	r3, [pc, #144]	@ (8000998 <Current_Sense_process+0x224>)
  8000906:	805a      	strh	r2, [r3, #2]
-	PROC[2] = CS_Raw_to_mA(PROC[2]);
- 8000908:	4b23      	ldr	r3, [pc, #140]	@ (8000998 <CS_process+0x224>)
+	PROC[2] = Current_Sense_Raw_to_mA(PROC[2]);
+ 8000908:	4b23      	ldr	r3, [pc, #140]	@ (8000998 <Current_Sense_process+0x224>)
  800090a:	889b      	ldrh	r3, [r3, #4]
  800090c:	4618      	mov	r0, r3
- 800090e:	f000 fb33 	bl	8000f78 <CS_Raw_to_mA>
+ 800090e:	f000 fb33 	bl	8000f78 <Current_Sense_Raw_to_mA>
  8000912:	4603      	mov	r3, r0
  8000914:	461a      	mov	r2, r3
- 8000916:	4b20      	ldr	r3, [pc, #128]	@ (8000998 <CS_process+0x224>)
+ 8000916:	4b20      	ldr	r3, [pc, #128]	@ (8000998 <Current_Sense_process+0x224>)
  8000918:	809a      	strh	r2, [r3, #4]
-	PROC[3] = CS_Raw_to_mA(PROC[3]);
- 800091a:	4b1f      	ldr	r3, [pc, #124]	@ (8000998 <CS_process+0x224>)
+	PROC[3] = Current_Sense_Raw_to_mA(PROC[3]);
+ 800091a:	4b1f      	ldr	r3, [pc, #124]	@ (8000998 <Current_Sense_process+0x224>)
  800091c:	88db      	ldrh	r3, [r3, #6]
  800091e:	4618      	mov	r0, r3
- 8000920:	f000 fb2a 	bl	8000f78 <CS_Raw_to_mA>
+ 8000920:	f000 fb2a 	bl	8000f78 <Current_Sense_Raw_to_mA>
  8000924:	4603      	mov	r3, r0
  8000926:	461a      	mov	r2, r3
- 8000928:	4b1b      	ldr	r3, [pc, #108]	@ (8000998 <CS_process+0x224>)
+ 8000928:	4b1b      	ldr	r3, [pc, #108]	@ (8000998 <Current_Sense_process+0x224>)
  800092a:	80da      	strh	r2, [r3, #6]
-	PROC[4] = CS_Raw_to_mA(PROC[4]);
- 800092c:	4b1a      	ldr	r3, [pc, #104]	@ (8000998 <CS_process+0x224>)
+	PROC[4] = Current_Sense_Raw_to_mA(PROC[4]);
+ 800092c:	4b1a      	ldr	r3, [pc, #104]	@ (8000998 <Current_Sense_process+0x224>)
  800092e:	891b      	ldrh	r3, [r3, #8]
  8000930:	4618      	mov	r0, r3
- 8000932:	f000 fb21 	bl	8000f78 <CS_Raw_to_mA>
+ 8000932:	f000 fb21 	bl	8000f78 <Current_Sense_Raw_to_mA>
  8000936:	4603      	mov	r3, r0
  8000938:	461a      	mov	r2, r3
- 800093a:	4b17      	ldr	r3, [pc, #92]	@ (8000998 <CS_process+0x224>)
+ 800093a:	4b17      	ldr	r3, [pc, #92]	@ (8000998 <Current_Sense_process+0x224>)
  800093c:	811a      	strh	r2, [r3, #8]
-	PROC[5] = CS_Raw_to_mA(PROC[5]);
- 800093e:	4b16      	ldr	r3, [pc, #88]	@ (8000998 <CS_process+0x224>)
+	PROC[5] = Current_Sense_Raw_to_mA(PROC[5]);
+ 800093e:	4b16      	ldr	r3, [pc, #88]	@ (8000998 <Current_Sense_process+0x224>)
  8000940:	895b      	ldrh	r3, [r3, #10]
  8000942:	4618      	mov	r0, r3
- 8000944:	f000 fb18 	bl	8000f78 <CS_Raw_to_mA>
+ 8000944:	f000 fb18 	bl	8000f78 <Current_Sense_Raw_to_mA>
  8000948:	4603      	mov	r3, r0
  800094a:	461a      	mov	r2, r3
- 800094c:	4b12      	ldr	r3, [pc, #72]	@ (8000998 <CS_process+0x224>)
+ 800094c:	4b12      	ldr	r3, [pc, #72]	@ (8000998 <Current_Sense_process+0x224>)
  800094e:	815a      	strh	r2, [r3, #10]
-	PROC[6] = CS_Raw_to_mA(PROC[6]);
- 8000950:	4b11      	ldr	r3, [pc, #68]	@ (8000998 <CS_process+0x224>)
+	PROC[6] = Current_Sense_Raw_to_mA(PROC[6]);
+ 8000950:	4b11      	ldr	r3, [pc, #68]	@ (8000998 <Current_Sense_process+0x224>)
  8000952:	899b      	ldrh	r3, [r3, #12]
  8000954:	4618      	mov	r0, r3
- 8000956:	f000 fb0f 	bl	8000f78 <CS_Raw_to_mA>
+ 8000956:	f000 fb0f 	bl	8000f78 <Current_Sense_Raw_to_mA>
  800095a:	4603      	mov	r3, r0
  800095c:	461a      	mov	r2, r3
- 800095e:	4b0e      	ldr	r3, [pc, #56]	@ (8000998 <CS_process+0x224>)
+ 800095e:	4b0e      	ldr	r3, [pc, #56]	@ (8000998 <Current_Sense_process+0x224>)
  8000960:	819a      	strh	r2, [r3, #12]
-	PROC[7] = CS_Raw_to_mA(PROC[7]);
- 8000962:	4b0d      	ldr	r3, [pc, #52]	@ (8000998 <CS_process+0x224>)
+	PROC[7] = Current_Sense_Raw_to_mA(PROC[7]);
+ 8000962:	4b0d      	ldr	r3, [pc, #52]	@ (8000998 <Current_Sense_process+0x224>)
  8000964:	89db      	ldrh	r3, [r3, #14]
  8000966:	4618      	mov	r0, r3
- 8000968:	f000 fb06 	bl	8000f78 <CS_Raw_to_mA>
+ 8000968:	f000 fb06 	bl	8000f78 <Current_Sense_Raw_to_mA>
  800096c:	4603      	mov	r3, r0
  800096e:	461a      	mov	r2, r3
- 8000970:	4b09      	ldr	r3, [pc, #36]	@ (8000998 <CS_process+0x224>)
+ 8000970:	4b09      	ldr	r3, [pc, #36]	@ (8000998 <Current_Sense_process+0x224>)
  8000972:	81da      	strh	r2, [r3, #14]
-	PROC[8] = CS_Raw_to_mA(PROC[8]);
- 8000974:	4b08      	ldr	r3, [pc, #32]	@ (8000998 <CS_process+0x224>)
+	PROC[8] = Current_Sense_Raw_to_mA(PROC[8]);
+ 8000974:	4b08      	ldr	r3, [pc, #32]	@ (8000998 <Current_Sense_process+0x224>)
  8000976:	8a1b      	ldrh	r3, [r3, #16]
  8000978:	4618      	mov	r0, r3
- 800097a:	f000 fafd 	bl	8000f78 <CS_Raw_to_mA>
+ 800097a:	f000 fafd 	bl	8000f78 <Current_Sense_Raw_to_mA>
  800097e:	4603      	mov	r3, r0
  8000980:	461a      	mov	r2, r3
- 8000982:	4b05      	ldr	r3, [pc, #20]	@ (8000998 <CS_process+0x224>)
+ 8000982:	4b05      	ldr	r3, [pc, #20]	@ (8000998 <Current_Sense_process+0x224>)
  8000984:	821a      	strh	r2, [r3, #16]
 	check_warnings();
  8000986:	f000 f819 	bl	80009bc <check_warnings>
@@ -1260,7 +1260,7 @@ void check_warnings(){
  80009c2:	2300      	movs	r3, #0
  80009c4:	71fb      	strb	r3, [r7, #7]
  80009c6:	e02a      	b.n	8000a1e <check_warnings+0x62>
-		if(PROC[x] >= WC[x]){
+		if(PROC[x] >= Warning_Current[x]){
  80009c8:	79fb      	ldrb	r3, [r7, #7]
  80009ca:	4a23      	ldr	r2, [pc, #140]	@ (8000a58 <check_warnings+0x9c>)
  80009cc:	f832 2013 	ldrh.w	r2, [r2, r3, lsl #1]
@@ -1269,7 +1269,7 @@ void check_warnings(){
  80009d4:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
  80009d8:	429a      	cmp	r2, r3
  80009da:	d31d      	bcc.n	8000a18 <check_warnings+0x5c>
-			if(PROC[x] >= OC[x]){
+			if(PROC[x] >= Over_Current[x]){
  80009dc:	79fb      	ldrb	r3, [r7, #7]
  80009de:	4a1e      	ldr	r2, [pc, #120]	@ (8000a58 <check_warnings+0x9c>)
  80009e0:	f832 2013 	ldrh.w	r2, [r2, r3, lsl #1]
@@ -1307,18 +1307,18 @@ void check_warnings(){
  8000a20:	2b06      	cmp	r3, #6
  8000a22:	d9d1      	bls.n	80009c8 <check_warnings+0xc>
 		}
-	/*	if(PROC[x] < UC[x]){
+	/*	if(PROC[x] < Under_Current[x]){
 			Under_current(x);
 		}*/
 	}
-	if(PROC[8] >= WC[8]){
+	if(PROC[8] >= Warning_Current[8]){
  8000a24:	4b0c      	ldr	r3, [pc, #48]	@ (8000a58 <check_warnings+0x9c>)
  8000a26:	8a1a      	ldrh	r2, [r3, #16]
  8000a28:	4b0c      	ldr	r3, [pc, #48]	@ (8000a5c <check_warnings+0xa0>)
  8000a2a:	8a1b      	ldrh	r3, [r3, #16]
  8000a2c:	429a      	cmp	r2, r3
  8000a2e:	d30c      	bcc.n	8000a4a <check_warnings+0x8e>
-		if(PROC[8] >= OC[8]){
+		if(PROC[8] >= Over_Current[8]){
  8000a30:	4b09      	ldr	r3, [pc, #36]	@ (8000a58 <check_warnings+0x9c>)
  8000a32:	8a1a      	ldrh	r2, [r3, #16]
  8000a34:	4b0a      	ldr	r3, [pc, #40]	@ (8000a60 <check_warnings+0xa4>)
@@ -1336,7 +1336,7 @@ void check_warnings(){
  8000a46:	f7ff fe0d 	bl	8000664 <Warning_current>
 		}
 	}
-	/*if(PROC[8] < UC[8]){
+	/*if(PROC[8] < Under_Current[8]){
 		Under_current(8);
 	}*/
 	output();
@@ -1353,21 +1353,21 @@ void check_warnings(){
  8000a60:	2000060c 	.word	0x2000060c
  8000a64:	20000632 	.word	0x20000632
 
-08000a68 <CS_read>:
+08000a68 <Current_Sense_read>:
 
-void CS_read(){
+void Current_Sense_read(){
  8000a68:	b580      	push	{r7, lr}
  8000a6a:	b088      	sub	sp, #32
  8000a6c:	af00      	add	r7, sp, #0
 	for(int x = 0; x < 5; x++){
  8000a6e:	2300      	movs	r3, #0
  8000a70:	61fb      	str	r3, [r7, #28]
- 8000a72:	e226      	b.n	8000ec2 <CS_read+0x45a>
+ 8000a72:	e226      	b.n	8000ec2 <Current_Sense_read+0x45a>
 		switch(x){
  8000a74:	69fb      	ldr	r3, [r7, #28]
  8000a76:	2b04      	cmp	r3, #4
- 8000a78:	f200 8220 	bhi.w	8000ebc <CS_read+0x454>
- 8000a7c:	a201      	add	r2, pc, #4	@ (adr r2, 8000a84 <CS_read+0x1c>)
+ 8000a78:	f200 8220 	bhi.w	8000ebc <Current_Sense_read+0x454>
+ 8000a7c:	a201      	add	r2, pc, #4	@ (adr r2, 8000a84 <Current_Sense_read+0x1c>)
  8000a7e:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
  8000a82:	bf00      	nop
  8000a84:	08000a99 	.word	0x08000a99
@@ -1377,91 +1377,91 @@ void CS_read(){
  8000a94:	08000dd3 	.word	0x08000dd3
 		case 0:
 			//chip_select_read();
-			CS_SEL[0] = 0;
- 8000a98:	4b9e      	ldr	r3, [pc, #632]	@ (8000d14 <CS_read+0x2ac>)
+			Current_Sense_SEL[0] = 0;
+ 8000a98:	4b9e      	ldr	r3, [pc, #632]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000a9a:	2200      	movs	r2, #0
  8000a9c:	701a      	strb	r2, [r3, #0]
-			CS_SEL[1] = 0;
- 8000a9e:	4b9d      	ldr	r3, [pc, #628]	@ (8000d14 <CS_read+0x2ac>)
+			Current_Sense_SEL[1] = 0;
+ 8000a9e:	4b9d      	ldr	r3, [pc, #628]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000aa0:	2200      	movs	r2, #0
  8000aa2:	705a      	strb	r2, [r3, #1]
-			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
- 8000aa4:	4b9b      	ldr	r3, [pc, #620]	@ (8000d14 <CS_read+0x2ac>)
+			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,Current_Sense_SEL[0]);
+ 8000aa4:	4b9b      	ldr	r3, [pc, #620]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000aa6:	781b      	ldrb	r3, [r3, #0]
  8000aa8:	461a      	mov	r2, r3
  8000aaa:	2140      	movs	r1, #64	@ 0x40
- 8000aac:	489a      	ldr	r0, [pc, #616]	@ (8000d18 <CS_read+0x2b0>)
+ 8000aac:	489a      	ldr	r0, [pc, #616]	@ (8000d18 <Current_Sense_read+0x2b0>)
  8000aae:	f004 f953 	bl	8004d58 <HAL_GPIO_WritePin>
-			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,CS_SEL[1]);
- 8000ab2:	4b98      	ldr	r3, [pc, #608]	@ (8000d14 <CS_read+0x2ac>)
+			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,Current_Sense_SEL[1]);
+ 8000ab2:	4b98      	ldr	r3, [pc, #608]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000ab4:	785b      	ldrb	r3, [r3, #1]
  8000ab6:	461a      	mov	r2, r3
  8000ab8:	2120      	movs	r1, #32
- 8000aba:	4897      	ldr	r0, [pc, #604]	@ (8000d18 <CS_read+0x2b0>)
+ 8000aba:	4897      	ldr	r0, [pc, #604]	@ (8000d18 <Current_Sense_read+0x2b0>)
  8000abc:	f004 f94c 	bl	8004d58 <HAL_GPIO_WritePin>
 			for(int i = 0; i < I_AVERAGE; i++){
  8000ac0:	2300      	movs	r3, #0
  8000ac2:	61bb      	str	r3, [r7, #24]
- 8000ac4:	e046      	b.n	8000b54 <CS_read+0xec>
+ 8000ac4:	e046      	b.n	8000b54 <Current_Sense_read+0xec>
 				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
- 8000ac6:	4895      	ldr	r0, [pc, #596]	@ (8000d1c <CS_read+0x2b4>)
+ 8000ac6:	4895      	ldr	r0, [pc, #596]	@ (8000d1c <Current_Sense_read+0x2b4>)
  8000ac8:	f001 fef2 	bl	80028b0 <HAL_ADC_Start>
  8000acc:	4603      	mov	r3, r0
  8000ace:	2b00      	cmp	r3, #0
- 8000ad0:	d001      	beq.n	8000ad6 <CS_read+0x6e>
+ 8000ad0:	d001      	beq.n	8000ad6 <Current_Sense_read+0x6e>
  8000ad2:	f000 ff79 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_Start(&hadc2)!=HAL_OK){Error_Handler();}
- 8000ad6:	4892      	ldr	r0, [pc, #584]	@ (8000d20 <CS_read+0x2b8>)
+ 8000ad6:	4892      	ldr	r0, [pc, #584]	@ (8000d20 <Current_Sense_read+0x2b8>)
  8000ad8:	f001 feea 	bl	80028b0 <HAL_ADC_Start>
  8000adc:	4603      	mov	r3, r0
  8000ade:	2b00      	cmp	r3, #0
- 8000ae0:	d001      	beq.n	8000ae6 <CS_read+0x7e>
+ 8000ae0:	d001      	beq.n	8000ae6 <Current_Sense_read+0x7e>
  8000ae2:	f000 ff71 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
  8000ae6:	2164      	movs	r1, #100	@ 0x64
- 8000ae8:	488c      	ldr	r0, [pc, #560]	@ (8000d1c <CS_read+0x2b4>)
+ 8000ae8:	488c      	ldr	r0, [pc, #560]	@ (8000d1c <Current_Sense_read+0x2b4>)
  8000aea:	f001 ffd1 	bl	8002a90 <HAL_ADC_PollForConversion>
  8000aee:	4603      	mov	r3, r0
  8000af0:	2b00      	cmp	r3, #0
- 8000af2:	d001      	beq.n	8000af8 <CS_read+0x90>
+ 8000af2:	d001      	beq.n	8000af8 <Current_Sense_read+0x90>
  8000af4:	f000 ff68 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
  8000af8:	2164      	movs	r1, #100	@ 0x64
- 8000afa:	4889      	ldr	r0, [pc, #548]	@ (8000d20 <CS_read+0x2b8>)
+ 8000afa:	4889      	ldr	r0, [pc, #548]	@ (8000d20 <Current_Sense_read+0x2b8>)
  8000afc:	f001 ffc8 	bl	8002a90 <HAL_ADC_PollForConversion>
  8000b00:	4603      	mov	r3, r0
  8000b02:	2b00      	cmp	r3, #0
- 8000b04:	d001      	beq.n	8000b0a <CS_read+0xa2>
+ 8000b04:	d001      	beq.n	8000b0a <Current_Sense_read+0xa2>
  8000b06:	f000 ff5f 	bl	80019c8 <Error_Handler>
-				IN1_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
- 8000b0a:	4884      	ldr	r0, [pc, #528]	@ (8000d1c <CS_read+0x2b4>)
+				IN1_1_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
+ 8000b0a:	4884      	ldr	r0, [pc, #528]	@ (8000d1c <Current_Sense_read+0x2b4>)
  8000b0c:	f002 fa03 	bl	8002f16 <HAL_ADC_GetValue>
  8000b10:	4603      	mov	r3, r0
  8000b12:	b299      	uxth	r1, r3
- 8000b14:	4a83      	ldr	r2, [pc, #524]	@ (8000d24 <CS_read+0x2bc>)
+ 8000b14:	4a83      	ldr	r2, [pc, #524]	@ (8000d24 <Current_Sense_read+0x2bc>)
  8000b16:	69bb      	ldr	r3, [r7, #24]
  8000b18:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
-				IN1_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
- 8000b1c:	4880      	ldr	r0, [pc, #512]	@ (8000d20 <CS_read+0x2b8>)
+				IN1_2_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
+ 8000b1c:	4880      	ldr	r0, [pc, #512]	@ (8000d20 <Current_Sense_read+0x2b8>)
  8000b1e:	f002 f9fa 	bl	8002f16 <HAL_ADC_GetValue>
  8000b22:	4603      	mov	r3, r0
  8000b24:	b299      	uxth	r1, r3
- 8000b26:	4a80      	ldr	r2, [pc, #512]	@ (8000d28 <CS_read+0x2c0>)
+ 8000b26:	4a80      	ldr	r2, [pc, #512]	@ (8000d28 <Current_Sense_read+0x2c0>)
  8000b28:	69bb      	ldr	r3, [r7, #24]
  8000b2a:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
 				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
- 8000b2e:	487b      	ldr	r0, [pc, #492]	@ (8000d1c <CS_read+0x2b4>)
+ 8000b2e:	487b      	ldr	r0, [pc, #492]	@ (8000d1c <Current_Sense_read+0x2b4>)
  8000b30:	f001 ff7a 	bl	8002a28 <HAL_ADC_Stop>
  8000b34:	4603      	mov	r3, r0
  8000b36:	2b00      	cmp	r3, #0
- 8000b38:	d001      	beq.n	8000b3e <CS_read+0xd6>
+ 8000b38:	d001      	beq.n	8000b3e <Current_Sense_read+0xd6>
  8000b3a:	f000 ff45 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_Stop(&hadc2)!=HAL_OK){Error_Handler();}
- 8000b3e:	4878      	ldr	r0, [pc, #480]	@ (8000d20 <CS_read+0x2b8>)
+ 8000b3e:	4878      	ldr	r0, [pc, #480]	@ (8000d20 <Current_Sense_read+0x2b8>)
  8000b40:	f001 ff72 	bl	8002a28 <HAL_ADC_Stop>
  8000b44:	4603      	mov	r3, r0
  8000b46:	2b00      	cmp	r3, #0
- 8000b48:	d001      	beq.n	8000b4e <CS_read+0xe6>
+ 8000b48:	d001      	beq.n	8000b4e <Current_Sense_read+0xe6>
  8000b4a:	f000 ff3d 	bl	80019c8 <Error_Handler>
 			for(int i = 0; i < I_AVERAGE; i++){
  8000b4e:	69bb      	ldr	r3, [r7, #24]
@@ -1469,97 +1469,97 @@ void CS_read(){
  8000b52:	61bb      	str	r3, [r7, #24]
  8000b54:	69bb      	ldr	r3, [r7, #24]
  8000b56:	2b1f      	cmp	r3, #31
- 8000b58:	ddb5      	ble.n	8000ac6 <CS_read+0x5e>
+ 8000b58:	ddb5      	ble.n	8000ac6 <Current_Sense_read+0x5e>
 			}
 			break;
- 8000b5a:	e1af      	b.n	8000ebc <CS_read+0x454>
+ 8000b5a:	e1af      	b.n	8000ebc <Current_Sense_read+0x454>
 		case 1:
 			//chip_select_read();
-			CS_SEL[0] = 0;
- 8000b5c:	4b6d      	ldr	r3, [pc, #436]	@ (8000d14 <CS_read+0x2ac>)
+			Current_Sense_SEL[0] = 0;
+ 8000b5c:	4b6d      	ldr	r3, [pc, #436]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000b5e:	2200      	movs	r2, #0
  8000b60:	701a      	strb	r2, [r3, #0]
-			CS_SEL[1] = 1;
- 8000b62:	4b6c      	ldr	r3, [pc, #432]	@ (8000d14 <CS_read+0x2ac>)
+			Current_Sense_SEL[1] = 1;
+ 8000b62:	4b6c      	ldr	r3, [pc, #432]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000b64:	2201      	movs	r2, #1
  8000b66:	705a      	strb	r2, [r3, #1]
-			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
- 8000b68:	4b6a      	ldr	r3, [pc, #424]	@ (8000d14 <CS_read+0x2ac>)
+			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,Current_Sense_SEL[0]);
+ 8000b68:	4b6a      	ldr	r3, [pc, #424]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000b6a:	781b      	ldrb	r3, [r3, #0]
  8000b6c:	461a      	mov	r2, r3
  8000b6e:	2140      	movs	r1, #64	@ 0x40
- 8000b70:	4869      	ldr	r0, [pc, #420]	@ (8000d18 <CS_read+0x2b0>)
+ 8000b70:	4869      	ldr	r0, [pc, #420]	@ (8000d18 <Current_Sense_read+0x2b0>)
  8000b72:	f004 f8f1 	bl	8004d58 <HAL_GPIO_WritePin>
-			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,CS_SEL[1]);
- 8000b76:	4b67      	ldr	r3, [pc, #412]	@ (8000d14 <CS_read+0x2ac>)
+			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,Current_Sense_SEL[1]);
+ 8000b76:	4b67      	ldr	r3, [pc, #412]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000b78:	785b      	ldrb	r3, [r3, #1]
  8000b7a:	461a      	mov	r2, r3
  8000b7c:	2120      	movs	r1, #32
- 8000b7e:	4866      	ldr	r0, [pc, #408]	@ (8000d18 <CS_read+0x2b0>)
+ 8000b7e:	4866      	ldr	r0, [pc, #408]	@ (8000d18 <Current_Sense_read+0x2b0>)
  8000b80:	f004 f8ea 	bl	8004d58 <HAL_GPIO_WritePin>
 			for(int i = 0; i < I_AVERAGE; i++){
  8000b84:	2300      	movs	r3, #0
  8000b86:	617b      	str	r3, [r7, #20]
- 8000b88:	e046      	b.n	8000c18 <CS_read+0x1b0>
+ 8000b88:	e046      	b.n	8000c18 <Current_Sense_read+0x1b0>
 				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
- 8000b8a:	4864      	ldr	r0, [pc, #400]	@ (8000d1c <CS_read+0x2b4>)
+ 8000b8a:	4864      	ldr	r0, [pc, #400]	@ (8000d1c <Current_Sense_read+0x2b4>)
  8000b8c:	f001 fe90 	bl	80028b0 <HAL_ADC_Start>
  8000b90:	4603      	mov	r3, r0
  8000b92:	2b00      	cmp	r3, #0
- 8000b94:	d001      	beq.n	8000b9a <CS_read+0x132>
+ 8000b94:	d001      	beq.n	8000b9a <Current_Sense_read+0x132>
  8000b96:	f000 ff17 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_Start(&hadc2)!=HAL_OK){Error_Handler();}
- 8000b9a:	4861      	ldr	r0, [pc, #388]	@ (8000d20 <CS_read+0x2b8>)
+ 8000b9a:	4861      	ldr	r0, [pc, #388]	@ (8000d20 <Current_Sense_read+0x2b8>)
  8000b9c:	f001 fe88 	bl	80028b0 <HAL_ADC_Start>
  8000ba0:	4603      	mov	r3, r0
  8000ba2:	2b00      	cmp	r3, #0
- 8000ba4:	d001      	beq.n	8000baa <CS_read+0x142>
+ 8000ba4:	d001      	beq.n	8000baa <Current_Sense_read+0x142>
  8000ba6:	f000 ff0f 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
  8000baa:	2164      	movs	r1, #100	@ 0x64
- 8000bac:	485b      	ldr	r0, [pc, #364]	@ (8000d1c <CS_read+0x2b4>)
+ 8000bac:	485b      	ldr	r0, [pc, #364]	@ (8000d1c <Current_Sense_read+0x2b4>)
  8000bae:	f001 ff6f 	bl	8002a90 <HAL_ADC_PollForConversion>
  8000bb2:	4603      	mov	r3, r0
  8000bb4:	2b00      	cmp	r3, #0
- 8000bb6:	d001      	beq.n	8000bbc <CS_read+0x154>
+ 8000bb6:	d001      	beq.n	8000bbc <Current_Sense_read+0x154>
  8000bb8:	f000 ff06 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
  8000bbc:	2164      	movs	r1, #100	@ 0x64
- 8000bbe:	4858      	ldr	r0, [pc, #352]	@ (8000d20 <CS_read+0x2b8>)
+ 8000bbe:	4858      	ldr	r0, [pc, #352]	@ (8000d20 <Current_Sense_read+0x2b8>)
  8000bc0:	f001 ff66 	bl	8002a90 <HAL_ADC_PollForConversion>
  8000bc4:	4603      	mov	r3, r0
  8000bc6:	2b00      	cmp	r3, #0
- 8000bc8:	d001      	beq.n	8000bce <CS_read+0x166>
+ 8000bc8:	d001      	beq.n	8000bce <Current_Sense_read+0x166>
  8000bca:	f000 fefd 	bl	80019c8 <Error_Handler>
-				IN2_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
- 8000bce:	4853      	ldr	r0, [pc, #332]	@ (8000d1c <CS_read+0x2b4>)
+				IN2_1_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
+ 8000bce:	4853      	ldr	r0, [pc, #332]	@ (8000d1c <Current_Sense_read+0x2b4>)
  8000bd0:	f002 f9a1 	bl	8002f16 <HAL_ADC_GetValue>
  8000bd4:	4603      	mov	r3, r0
  8000bd6:	b299      	uxth	r1, r3
- 8000bd8:	4a54      	ldr	r2, [pc, #336]	@ (8000d2c <CS_read+0x2c4>)
+ 8000bd8:	4a54      	ldr	r2, [pc, #336]	@ (8000d2c <Current_Sense_read+0x2c4>)
  8000bda:	697b      	ldr	r3, [r7, #20]
  8000bdc:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
-				IN2_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
- 8000be0:	484f      	ldr	r0, [pc, #316]	@ (8000d20 <CS_read+0x2b8>)
+				IN2_2_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
+ 8000be0:	484f      	ldr	r0, [pc, #316]	@ (8000d20 <Current_Sense_read+0x2b8>)
  8000be2:	f002 f998 	bl	8002f16 <HAL_ADC_GetValue>
  8000be6:	4603      	mov	r3, r0
  8000be8:	b299      	uxth	r1, r3
- 8000bea:	4a51      	ldr	r2, [pc, #324]	@ (8000d30 <CS_read+0x2c8>)
+ 8000bea:	4a51      	ldr	r2, [pc, #324]	@ (8000d30 <Current_Sense_read+0x2c8>)
  8000bec:	697b      	ldr	r3, [r7, #20]
  8000bee:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
 				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
- 8000bf2:	484a      	ldr	r0, [pc, #296]	@ (8000d1c <CS_read+0x2b4>)
+ 8000bf2:	484a      	ldr	r0, [pc, #296]	@ (8000d1c <Current_Sense_read+0x2b4>)
  8000bf4:	f001 ff18 	bl	8002a28 <HAL_ADC_Stop>
  8000bf8:	4603      	mov	r3, r0
  8000bfa:	2b00      	cmp	r3, #0
- 8000bfc:	d001      	beq.n	8000c02 <CS_read+0x19a>
+ 8000bfc:	d001      	beq.n	8000c02 <Current_Sense_read+0x19a>
  8000bfe:	f000 fee3 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_Stop(&hadc2)!=HAL_OK){Error_Handler();}
- 8000c02:	4847      	ldr	r0, [pc, #284]	@ (8000d20 <CS_read+0x2b8>)
+ 8000c02:	4847      	ldr	r0, [pc, #284]	@ (8000d20 <Current_Sense_read+0x2b8>)
  8000c04:	f001 ff10 	bl	8002a28 <HAL_ADC_Stop>
  8000c08:	4603      	mov	r3, r0
  8000c0a:	2b00      	cmp	r3, #0
- 8000c0c:	d001      	beq.n	8000c12 <CS_read+0x1aa>
+ 8000c0c:	d001      	beq.n	8000c12 <Current_Sense_read+0x1aa>
  8000c0e:	f000 fedb 	bl	80019c8 <Error_Handler>
 			for(int i = 0; i < I_AVERAGE; i++){
  8000c12:	697b      	ldr	r3, [r7, #20]
@@ -1567,97 +1567,97 @@ void CS_read(){
  8000c16:	617b      	str	r3, [r7, #20]
  8000c18:	697b      	ldr	r3, [r7, #20]
  8000c1a:	2b1f      	cmp	r3, #31
- 8000c1c:	ddb5      	ble.n	8000b8a <CS_read+0x122>
+ 8000c1c:	ddb5      	ble.n	8000b8a <Current_Sense_read+0x122>
 			}
 			break;
- 8000c1e:	e14d      	b.n	8000ebc <CS_read+0x454>
+ 8000c1e:	e14d      	b.n	8000ebc <Current_Sense_read+0x454>
 		case 2:
 			//chip_select_read();
-			CS_SEL[0] = 1;
- 8000c20:	4b3c      	ldr	r3, [pc, #240]	@ (8000d14 <CS_read+0x2ac>)
+			Current_Sense_SEL[0] = 1;
+ 8000c20:	4b3c      	ldr	r3, [pc, #240]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000c22:	2201      	movs	r2, #1
  8000c24:	701a      	strb	r2, [r3, #0]
-			CS_SEL[1] = 0;
- 8000c26:	4b3b      	ldr	r3, [pc, #236]	@ (8000d14 <CS_read+0x2ac>)
+			Current_Sense_SEL[1] = 0;
+ 8000c26:	4b3b      	ldr	r3, [pc, #236]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000c28:	2200      	movs	r2, #0
  8000c2a:	705a      	strb	r2, [r3, #1]
-			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
- 8000c2c:	4b39      	ldr	r3, [pc, #228]	@ (8000d14 <CS_read+0x2ac>)
+			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,Current_Sense_SEL[0]);
+ 8000c2c:	4b39      	ldr	r3, [pc, #228]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000c2e:	781b      	ldrb	r3, [r3, #0]
  8000c30:	461a      	mov	r2, r3
  8000c32:	2140      	movs	r1, #64	@ 0x40
- 8000c34:	4838      	ldr	r0, [pc, #224]	@ (8000d18 <CS_read+0x2b0>)
+ 8000c34:	4838      	ldr	r0, [pc, #224]	@ (8000d18 <Current_Sense_read+0x2b0>)
  8000c36:	f004 f88f 	bl	8004d58 <HAL_GPIO_WritePin>
-			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,CS_SEL[1]);
- 8000c3a:	4b36      	ldr	r3, [pc, #216]	@ (8000d14 <CS_read+0x2ac>)
+			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,Current_Sense_SEL[1]);
+ 8000c3a:	4b36      	ldr	r3, [pc, #216]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000c3c:	785b      	ldrb	r3, [r3, #1]
  8000c3e:	461a      	mov	r2, r3
  8000c40:	2120      	movs	r1, #32
- 8000c42:	4835      	ldr	r0, [pc, #212]	@ (8000d18 <CS_read+0x2b0>)
+ 8000c42:	4835      	ldr	r0, [pc, #212]	@ (8000d18 <Current_Sense_read+0x2b0>)
  8000c44:	f004 f888 	bl	8004d58 <HAL_GPIO_WritePin>
 			for(int i = 0; i < I_AVERAGE; i++){
  8000c48:	2300      	movs	r3, #0
  8000c4a:	613b      	str	r3, [r7, #16]
- 8000c4c:	e046      	b.n	8000cdc <CS_read+0x274>
+ 8000c4c:	e046      	b.n	8000cdc <Current_Sense_read+0x274>
 				if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
- 8000c4e:	4833      	ldr	r0, [pc, #204]	@ (8000d1c <CS_read+0x2b4>)
+ 8000c4e:	4833      	ldr	r0, [pc, #204]	@ (8000d1c <Current_Sense_read+0x2b4>)
  8000c50:	f001 fff6 	bl	8002c40 <HAL_ADC_Start_IT>
  8000c54:	4603      	mov	r3, r0
  8000c56:	2b00      	cmp	r3, #0
- 8000c58:	d001      	beq.n	8000c5e <CS_read+0x1f6>
+ 8000c58:	d001      	beq.n	8000c5e <Current_Sense_read+0x1f6>
  8000c5a:	f000 feb5 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
- 8000c5e:	4830      	ldr	r0, [pc, #192]	@ (8000d20 <CS_read+0x2b8>)
+ 8000c5e:	4830      	ldr	r0, [pc, #192]	@ (8000d20 <Current_Sense_read+0x2b8>)
  8000c60:	f001 ffee 	bl	8002c40 <HAL_ADC_Start_IT>
  8000c64:	4603      	mov	r3, r0
  8000c66:	2b00      	cmp	r3, #0
- 8000c68:	d001      	beq.n	8000c6e <CS_read+0x206>
+ 8000c68:	d001      	beq.n	8000c6e <Current_Sense_read+0x206>
  8000c6a:	f000 fead 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
  8000c6e:	2164      	movs	r1, #100	@ 0x64
- 8000c70:	482a      	ldr	r0, [pc, #168]	@ (8000d1c <CS_read+0x2b4>)
+ 8000c70:	482a      	ldr	r0, [pc, #168]	@ (8000d1c <Current_Sense_read+0x2b4>)
  8000c72:	f001 ff0d 	bl	8002a90 <HAL_ADC_PollForConversion>
  8000c76:	4603      	mov	r3, r0
  8000c78:	2b00      	cmp	r3, #0
- 8000c7a:	d001      	beq.n	8000c80 <CS_read+0x218>
+ 8000c7a:	d001      	beq.n	8000c80 <Current_Sense_read+0x218>
  8000c7c:	f000 fea4 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
  8000c80:	2164      	movs	r1, #100	@ 0x64
- 8000c82:	4827      	ldr	r0, [pc, #156]	@ (8000d20 <CS_read+0x2b8>)
+ 8000c82:	4827      	ldr	r0, [pc, #156]	@ (8000d20 <Current_Sense_read+0x2b8>)
  8000c84:	f001 ff04 	bl	8002a90 <HAL_ADC_PollForConversion>
  8000c88:	4603      	mov	r3, r0
  8000c8a:	2b00      	cmp	r3, #0
- 8000c8c:	d001      	beq.n	8000c92 <CS_read+0x22a>
+ 8000c8c:	d001      	beq.n	8000c92 <Current_Sense_read+0x22a>
  8000c8e:	f000 fe9b 	bl	80019c8 <Error_Handler>
-				IN3_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
- 8000c92:	4822      	ldr	r0, [pc, #136]	@ (8000d1c <CS_read+0x2b4>)
+				IN3_1_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
+ 8000c92:	4822      	ldr	r0, [pc, #136]	@ (8000d1c <Current_Sense_read+0x2b4>)
  8000c94:	f002 f93f 	bl	8002f16 <HAL_ADC_GetValue>
  8000c98:	4603      	mov	r3, r0
  8000c9a:	b299      	uxth	r1, r3
- 8000c9c:	4a25      	ldr	r2, [pc, #148]	@ (8000d34 <CS_read+0x2cc>)
+ 8000c9c:	4a25      	ldr	r2, [pc, #148]	@ (8000d34 <Current_Sense_read+0x2cc>)
  8000c9e:	693b      	ldr	r3, [r7, #16]
  8000ca0:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
-				IN3_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
- 8000ca4:	481e      	ldr	r0, [pc, #120]	@ (8000d20 <CS_read+0x2b8>)
+				IN3_2_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
+ 8000ca4:	481e      	ldr	r0, [pc, #120]	@ (8000d20 <Current_Sense_read+0x2b8>)
  8000ca6:	f002 f936 	bl	8002f16 <HAL_ADC_GetValue>
  8000caa:	4603      	mov	r3, r0
  8000cac:	b299      	uxth	r1, r3
- 8000cae:	4a22      	ldr	r2, [pc, #136]	@ (8000d38 <CS_read+0x2d0>)
+ 8000cae:	4a22      	ldr	r2, [pc, #136]	@ (8000d38 <Current_Sense_read+0x2d0>)
  8000cb0:	693b      	ldr	r3, [r7, #16]
  8000cb2:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
 				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
- 8000cb6:	4819      	ldr	r0, [pc, #100]	@ (8000d1c <CS_read+0x2b4>)
+ 8000cb6:	4819      	ldr	r0, [pc, #100]	@ (8000d1c <Current_Sense_read+0x2b4>)
  8000cb8:	f002 f8f2 	bl	8002ea0 <HAL_ADC_Stop_IT>
  8000cbc:	4603      	mov	r3, r0
  8000cbe:	2b00      	cmp	r3, #0
- 8000cc0:	d001      	beq.n	8000cc6 <CS_read+0x25e>
+ 8000cc0:	d001      	beq.n	8000cc6 <Current_Sense_read+0x25e>
  8000cc2:	f000 fe81 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
- 8000cc6:	4816      	ldr	r0, [pc, #88]	@ (8000d20 <CS_read+0x2b8>)
+ 8000cc6:	4816      	ldr	r0, [pc, #88]	@ (8000d20 <Current_Sense_read+0x2b8>)
  8000cc8:	f002 f8ea 	bl	8002ea0 <HAL_ADC_Stop_IT>
  8000ccc:	4603      	mov	r3, r0
  8000cce:	2b00      	cmp	r3, #0
- 8000cd0:	d001      	beq.n	8000cd6 <CS_read+0x26e>
+ 8000cd0:	d001      	beq.n	8000cd6 <Current_Sense_read+0x26e>
  8000cd2:	f000 fe79 	bl	80019c8 <Error_Handler>
 			for(int i = 0; i < I_AVERAGE; i++){
  8000cd6:	693b      	ldr	r3, [r7, #16]
@@ -1665,38 +1665,38 @@ void CS_read(){
  8000cda:	613b      	str	r3, [r7, #16]
  8000cdc:	693b      	ldr	r3, [r7, #16]
  8000cde:	2b1f      	cmp	r3, #31
- 8000ce0:	ddb5      	ble.n	8000c4e <CS_read+0x1e6>
+ 8000ce0:	ddb5      	ble.n	8000c4e <Current_Sense_read+0x1e6>
 			}
 			break;
- 8000ce2:	e0eb      	b.n	8000ebc <CS_read+0x454>
+ 8000ce2:	e0eb      	b.n	8000ebc <Current_Sense_read+0x454>
 		case 3:
 			//chip_select_read();
-			CS_SEL[0] = 1;
- 8000ce4:	4b0b      	ldr	r3, [pc, #44]	@ (8000d14 <CS_read+0x2ac>)
+			Current_Sense_SEL[0] = 1;
+ 8000ce4:	4b0b      	ldr	r3, [pc, #44]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000ce6:	2201      	movs	r2, #1
  8000ce8:	701a      	strb	r2, [r3, #0]
-			CS_SEL[1] = 1;
- 8000cea:	4b0a      	ldr	r3, [pc, #40]	@ (8000d14 <CS_read+0x2ac>)
+			Current_Sense_SEL[1] = 1;
+ 8000cea:	4b0a      	ldr	r3, [pc, #40]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000cec:	2201      	movs	r2, #1
  8000cee:	705a      	strb	r2, [r3, #1]
-			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
- 8000cf0:	4b08      	ldr	r3, [pc, #32]	@ (8000d14 <CS_read+0x2ac>)
+			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,Current_Sense_SEL[0]);
+ 8000cf0:	4b08      	ldr	r3, [pc, #32]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000cf2:	781b      	ldrb	r3, [r3, #0]
  8000cf4:	461a      	mov	r2, r3
  8000cf6:	2140      	movs	r1, #64	@ 0x40
- 8000cf8:	4807      	ldr	r0, [pc, #28]	@ (8000d18 <CS_read+0x2b0>)
+ 8000cf8:	4807      	ldr	r0, [pc, #28]	@ (8000d18 <Current_Sense_read+0x2b0>)
  8000cfa:	f004 f82d 	bl	8004d58 <HAL_GPIO_WritePin>
-			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,CS_SEL[1]);
- 8000cfe:	4b05      	ldr	r3, [pc, #20]	@ (8000d14 <CS_read+0x2ac>)
+			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,Current_Sense_SEL[1]);
+ 8000cfe:	4b05      	ldr	r3, [pc, #20]	@ (8000d14 <Current_Sense_read+0x2ac>)
  8000d00:	785b      	ldrb	r3, [r3, #1]
  8000d02:	461a      	mov	r2, r3
  8000d04:	2120      	movs	r1, #32
- 8000d06:	4804      	ldr	r0, [pc, #16]	@ (8000d18 <CS_read+0x2b0>)
+ 8000d06:	4804      	ldr	r0, [pc, #16]	@ (8000d18 <Current_Sense_read+0x2b0>)
  8000d08:	f004 f826 	bl	8004d58 <HAL_GPIO_WritePin>
 			for(int i = 0; i < I_AVERAGE; i++){
  8000d0c:	2300      	movs	r3, #0
  8000d0e:	60fb      	str	r3, [r7, #12]
- 8000d10:	e05b      	b.n	8000dca <CS_read+0x362>
+ 8000d10:	e05b      	b.n	8000dca <Current_Sense_read+0x362>
  8000d12:	bf00      	nop
  8000d14:	20000630 	.word	0x20000630
  8000d18:	48000400 	.word	0x48000400
@@ -1709,64 +1709,64 @@ void CS_read(){
  8000d34:	20000408 	.word	0x20000408
  8000d38:	20000508 	.word	0x20000508
 				if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
- 8000d3c:	4866      	ldr	r0, [pc, #408]	@ (8000ed8 <CS_read+0x470>)
+ 8000d3c:	4866      	ldr	r0, [pc, #408]	@ (8000ed8 <Current_Sense_read+0x470>)
  8000d3e:	f001 ff7f 	bl	8002c40 <HAL_ADC_Start_IT>
  8000d42:	4603      	mov	r3, r0
  8000d44:	2b00      	cmp	r3, #0
- 8000d46:	d001      	beq.n	8000d4c <CS_read+0x2e4>
+ 8000d46:	d001      	beq.n	8000d4c <Current_Sense_read+0x2e4>
  8000d48:	f000 fe3e 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
- 8000d4c:	4863      	ldr	r0, [pc, #396]	@ (8000edc <CS_read+0x474>)
+ 8000d4c:	4863      	ldr	r0, [pc, #396]	@ (8000edc <Current_Sense_read+0x474>)
  8000d4e:	f001 ff77 	bl	8002c40 <HAL_ADC_Start_IT>
  8000d52:	4603      	mov	r3, r0
  8000d54:	2b00      	cmp	r3, #0
- 8000d56:	d001      	beq.n	8000d5c <CS_read+0x2f4>
+ 8000d56:	d001      	beq.n	8000d5c <Current_Sense_read+0x2f4>
  8000d58:	f000 fe36 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
  8000d5c:	2164      	movs	r1, #100	@ 0x64
- 8000d5e:	485e      	ldr	r0, [pc, #376]	@ (8000ed8 <CS_read+0x470>)
+ 8000d5e:	485e      	ldr	r0, [pc, #376]	@ (8000ed8 <Current_Sense_read+0x470>)
  8000d60:	f001 fe96 	bl	8002a90 <HAL_ADC_PollForConversion>
  8000d64:	4603      	mov	r3, r0
  8000d66:	2b00      	cmp	r3, #0
- 8000d68:	d001      	beq.n	8000d6e <CS_read+0x306>
+ 8000d68:	d001      	beq.n	8000d6e <Current_Sense_read+0x306>
  8000d6a:	f000 fe2d 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
  8000d6e:	2164      	movs	r1, #100	@ 0x64
- 8000d70:	485a      	ldr	r0, [pc, #360]	@ (8000edc <CS_read+0x474>)
+ 8000d70:	485a      	ldr	r0, [pc, #360]	@ (8000edc <Current_Sense_read+0x474>)
  8000d72:	f001 fe8d 	bl	8002a90 <HAL_ADC_PollForConversion>
  8000d76:	4603      	mov	r3, r0
  8000d78:	2b00      	cmp	r3, #0
- 8000d7a:	d001      	beq.n	8000d80 <CS_read+0x318>
+ 8000d7a:	d001      	beq.n	8000d80 <Current_Sense_read+0x318>
  8000d7c:	f000 fe24 	bl	80019c8 <Error_Handler>
-				IN4_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
- 8000d80:	4855      	ldr	r0, [pc, #340]	@ (8000ed8 <CS_read+0x470>)
+				IN4_1_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
+ 8000d80:	4855      	ldr	r0, [pc, #340]	@ (8000ed8 <Current_Sense_read+0x470>)
  8000d82:	f002 f8c8 	bl	8002f16 <HAL_ADC_GetValue>
  8000d86:	4603      	mov	r3, r0
  8000d88:	b299      	uxth	r1, r3
- 8000d8a:	4a55      	ldr	r2, [pc, #340]	@ (8000ee0 <CS_read+0x478>)
+ 8000d8a:	4a55      	ldr	r2, [pc, #340]	@ (8000ee0 <Current_Sense_read+0x478>)
  8000d8c:	68fb      	ldr	r3, [r7, #12]
  8000d8e:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
-				IN4_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
- 8000d92:	4852      	ldr	r0, [pc, #328]	@ (8000edc <CS_read+0x474>)
+				IN4_2_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
+ 8000d92:	4852      	ldr	r0, [pc, #328]	@ (8000edc <Current_Sense_read+0x474>)
  8000d94:	f002 f8bf 	bl	8002f16 <HAL_ADC_GetValue>
  8000d98:	4603      	mov	r3, r0
  8000d9a:	b299      	uxth	r1, r3
- 8000d9c:	4a51      	ldr	r2, [pc, #324]	@ (8000ee4 <CS_read+0x47c>)
+ 8000d9c:	4a51      	ldr	r2, [pc, #324]	@ (8000ee4 <Current_Sense_read+0x47c>)
  8000d9e:	68fb      	ldr	r3, [r7, #12]
  8000da0:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
 				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
- 8000da4:	484c      	ldr	r0, [pc, #304]	@ (8000ed8 <CS_read+0x470>)
+ 8000da4:	484c      	ldr	r0, [pc, #304]	@ (8000ed8 <Current_Sense_read+0x470>)
  8000da6:	f002 f87b 	bl	8002ea0 <HAL_ADC_Stop_IT>
  8000daa:	4603      	mov	r3, r0
  8000dac:	2b00      	cmp	r3, #0
- 8000dae:	d001      	beq.n	8000db4 <CS_read+0x34c>
+ 8000dae:	d001      	beq.n	8000db4 <Current_Sense_read+0x34c>
  8000db0:	f000 fe0a 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
- 8000db4:	4849      	ldr	r0, [pc, #292]	@ (8000edc <CS_read+0x474>)
+ 8000db4:	4849      	ldr	r0, [pc, #292]	@ (8000edc <Current_Sense_read+0x474>)
  8000db6:	f002 f873 	bl	8002ea0 <HAL_ADC_Stop_IT>
  8000dba:	4603      	mov	r3, r0
  8000dbc:	2b00      	cmp	r3, #0
- 8000dbe:	d001      	beq.n	8000dc4 <CS_read+0x35c>
+ 8000dbe:	d001      	beq.n	8000dc4 <Current_Sense_read+0x35c>
  8000dc0:	f000 fe02 	bl	80019c8 <Error_Handler>
 			for(int i = 0; i < I_AVERAGE; i++){
  8000dc4:	68fb      	ldr	r3, [r7, #12]
@@ -1774,45 +1774,45 @@ void CS_read(){
  8000dc8:	60fb      	str	r3, [r7, #12]
  8000dca:	68fb      	ldr	r3, [r7, #12]
  8000dcc:	2b1f      	cmp	r3, #31
- 8000dce:	ddb5      	ble.n	8000d3c <CS_read+0x2d4>
+ 8000dce:	ddb5      	ble.n	8000d3c <Current_Sense_read+0x2d4>
 			}
 			break;
- 8000dd0:	e074      	b.n	8000ebc <CS_read+0x454>
+ 8000dd0:	e074      	b.n	8000ebc <Current_Sense_read+0x454>
 		case 4:
 			//analog_read();
 			for(int i = 0; i < I_AVERAGE/2; i++){
  8000dd2:	2300      	movs	r3, #0
  8000dd4:	60bb      	str	r3, [r7, #8]
- 8000dd6:	e024      	b.n	8000e22 <CS_read+0x3ba>
+ 8000dd6:	e024      	b.n	8000e22 <Current_Sense_read+0x3ba>
 				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
- 8000dd8:	483f      	ldr	r0, [pc, #252]	@ (8000ed8 <CS_read+0x470>)
+ 8000dd8:	483f      	ldr	r0, [pc, #252]	@ (8000ed8 <Current_Sense_read+0x470>)
  8000dda:	f001 fd69 	bl	80028b0 <HAL_ADC_Start>
  8000dde:	4603      	mov	r3, r0
  8000de0:	2b00      	cmp	r3, #0
- 8000de2:	d001      	beq.n	8000de8 <CS_read+0x380>
+ 8000de2:	d001      	beq.n	8000de8 <Current_Sense_read+0x380>
  8000de4:	f000 fdf0 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
  8000de8:	2164      	movs	r1, #100	@ 0x64
- 8000dea:	483b      	ldr	r0, [pc, #236]	@ (8000ed8 <CS_read+0x470>)
+ 8000dea:	483b      	ldr	r0, [pc, #236]	@ (8000ed8 <Current_Sense_read+0x470>)
  8000dec:	f001 fe50 	bl	8002a90 <HAL_ADC_PollForConversion>
  8000df0:	4603      	mov	r3, r0
  8000df2:	2b00      	cmp	r3, #0
- 8000df4:	d001      	beq.n	8000dfa <CS_read+0x392>
+ 8000df4:	d001      	beq.n	8000dfa <Current_Sense_read+0x392>
  8000df6:	f000 fde7 	bl	80019c8 <Error_Handler>
-				Analog_CS_1[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
- 8000dfa:	4837      	ldr	r0, [pc, #220]	@ (8000ed8 <CS_read+0x470>)
+				Analog_Current_Sense_1[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+ 8000dfa:	4837      	ldr	r0, [pc, #220]	@ (8000ed8 <Current_Sense_read+0x470>)
  8000dfc:	f002 f88b 	bl	8002f16 <HAL_ADC_GetValue>
  8000e00:	4603      	mov	r3, r0
  8000e02:	b299      	uxth	r1, r3
- 8000e04:	4a38      	ldr	r2, [pc, #224]	@ (8000ee8 <CS_read+0x480>)
+ 8000e04:	4a38      	ldr	r2, [pc, #224]	@ (8000ee8 <Current_Sense_read+0x480>)
  8000e06:	68bb      	ldr	r3, [r7, #8]
  8000e08:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
 				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
- 8000e0c:	4832      	ldr	r0, [pc, #200]	@ (8000ed8 <CS_read+0x470>)
+ 8000e0c:	4832      	ldr	r0, [pc, #200]	@ (8000ed8 <Current_Sense_read+0x470>)
  8000e0e:	f001 fe0b 	bl	8002a28 <HAL_ADC_Stop>
  8000e12:	4603      	mov	r3, r0
  8000e14:	2b00      	cmp	r3, #0
- 8000e16:	d001      	beq.n	8000e1c <CS_read+0x3b4>
+ 8000e16:	d001      	beq.n	8000e1c <Current_Sense_read+0x3b4>
  8000e18:	f000 fdd6 	bl	80019c8 <Error_Handler>
 			for(int i = 0; i < I_AVERAGE/2; i++){
  8000e1c:	68bb      	ldr	r3, [r7, #8]
@@ -1820,68 +1820,68 @@ void CS_read(){
  8000e20:	60bb      	str	r3, [r7, #8]
  8000e22:	68bb      	ldr	r3, [r7, #8]
  8000e24:	2b0f      	cmp	r3, #15
- 8000e26:	ddd7      	ble.n	8000dd8 <CS_read+0x370>
+ 8000e26:	ddd7      	ble.n	8000dd8 <Current_Sense_read+0x370>
 			}
 			//analog_read();
 			for(int i = 0; i < I_AVERAGE/2; i++){
  8000e28:	2300      	movs	r3, #0
  8000e2a:	607b      	str	r3, [r7, #4]
- 8000e2c:	e042      	b.n	8000eb4 <CS_read+0x44c>
+ 8000e2c:	e042      	b.n	8000eb4 <Current_Sense_read+0x44c>
 				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
- 8000e2e:	482a      	ldr	r0, [pc, #168]	@ (8000ed8 <CS_read+0x470>)
+ 8000e2e:	482a      	ldr	r0, [pc, #168]	@ (8000ed8 <Current_Sense_read+0x470>)
  8000e30:	f001 fd3e 	bl	80028b0 <HAL_ADC_Start>
  8000e34:	4603      	mov	r3, r0
  8000e36:	2b00      	cmp	r3, #0
- 8000e38:	d001      	beq.n	8000e3e <CS_read+0x3d6>
+ 8000e38:	d001      	beq.n	8000e3e <Current_Sense_read+0x3d6>
  8000e3a:	f000 fdc5 	bl	80019c8 <Error_Handler>
 				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
  8000e3e:	2164      	movs	r1, #100	@ 0x64
- 8000e40:	4825      	ldr	r0, [pc, #148]	@ (8000ed8 <CS_read+0x470>)
+ 8000e40:	4825      	ldr	r0, [pc, #148]	@ (8000ed8 <Current_Sense_read+0x470>)
  8000e42:	f001 fe25 	bl	8002a90 <HAL_ADC_PollForConversion>
  8000e46:	4603      	mov	r3, r0
  8000e48:	2b00      	cmp	r3, #0
- 8000e4a:	d001      	beq.n	8000e50 <CS_read+0x3e8>
+ 8000e4a:	d001      	beq.n	8000e50 <Current_Sense_read+0x3e8>
  8000e4c:	f000 fdbc 	bl	80019c8 <Error_Handler>
-				Analog_CS_2[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
- 8000e50:	4821      	ldr	r0, [pc, #132]	@ (8000ed8 <CS_read+0x470>)
+				Analog_Current_Sense_2[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+ 8000e50:	4821      	ldr	r0, [pc, #132]	@ (8000ed8 <Current_Sense_read+0x470>)
  8000e52:	f002 f860 	bl	8002f16 <HAL_ADC_GetValue>
  8000e56:	4603      	mov	r3, r0
  8000e58:	b299      	uxth	r1, r3
- 8000e5a:	4a24      	ldr	r2, [pc, #144]	@ (8000eec <CS_read+0x484>)
+ 8000e5a:	4a24      	ldr	r2, [pc, #144]	@ (8000eec <Current_Sense_read+0x484>)
  8000e5c:	687b      	ldr	r3, [r7, #4]
  8000e5e:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
 				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
- 8000e62:	481d      	ldr	r0, [pc, #116]	@ (8000ed8 <CS_read+0x470>)
+ 8000e62:	481d      	ldr	r0, [pc, #116]	@ (8000ed8 <Current_Sense_read+0x470>)
  8000e64:	f001 fde0 	bl	8002a28 <HAL_ADC_Stop>
  8000e68:	4603      	mov	r3, r0
  8000e6a:	2b00      	cmp	r3, #0
- 8000e6c:	d001      	beq.n	8000e72 <CS_read+0x40a>
+ 8000e6c:	d001      	beq.n	8000e72 <Current_Sense_read+0x40a>
  8000e6e:	f000 fdab 	bl	80019c8 <Error_Handler>
-				if(Analog_CS_1[i]>Analog_CS_2[i]){
- 8000e72:	4a1d      	ldr	r2, [pc, #116]	@ (8000ee8 <CS_read+0x480>)
+				if(Analog_Current_Sense_1[i]>Analog_Current_Sense_2[i]){
+ 8000e72:	4a1d      	ldr	r2, [pc, #116]	@ (8000ee8 <Current_Sense_read+0x480>)
  8000e74:	687b      	ldr	r3, [r7, #4]
  8000e76:	f832 2013 	ldrh.w	r2, [r2, r3, lsl #1]
- 8000e7a:	491c      	ldr	r1, [pc, #112]	@ (8000eec <CS_read+0x484>)
+ 8000e7a:	491c      	ldr	r1, [pc, #112]	@ (8000eec <Current_Sense_read+0x484>)
  8000e7c:	687b      	ldr	r3, [r7, #4]
  8000e7e:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
  8000e82:	429a      	cmp	r2, r3
- 8000e84:	d90e      	bls.n	8000ea4 <CS_read+0x43c>
-					Analog_CS[i] = Analog_CS_1[i] - Analog_CS_2[i];
- 8000e86:	4a18      	ldr	r2, [pc, #96]	@ (8000ee8 <CS_read+0x480>)
+ 8000e84:	d90e      	bls.n	8000ea4 <Current_Sense_read+0x43c>
+					Analog_Current_Sense[i] = Analog_Current_Sense_1[i] - Analog_Current_Sense_2[i];
+ 8000e86:	4a18      	ldr	r2, [pc, #96]	@ (8000ee8 <Current_Sense_read+0x480>)
  8000e88:	687b      	ldr	r3, [r7, #4]
  8000e8a:	f832 2013 	ldrh.w	r2, [r2, r3, lsl #1]
- 8000e8e:	4917      	ldr	r1, [pc, #92]	@ (8000eec <CS_read+0x484>)
+ 8000e8e:	4917      	ldr	r1, [pc, #92]	@ (8000eec <Current_Sense_read+0x484>)
  8000e90:	687b      	ldr	r3, [r7, #4]
  8000e92:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
  8000e96:	1ad3      	subs	r3, r2, r3
  8000e98:	b299      	uxth	r1, r3
- 8000e9a:	4a15      	ldr	r2, [pc, #84]	@ (8000ef0 <CS_read+0x488>)
+ 8000e9a:	4a15      	ldr	r2, [pc, #84]	@ (8000ef0 <Current_Sense_read+0x488>)
  8000e9c:	687b      	ldr	r3, [r7, #4]
  8000e9e:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
- 8000ea2:	e004      	b.n	8000eae <CS_read+0x446>
+ 8000ea2:	e004      	b.n	8000eae <Current_Sense_read+0x446>
 				}else{
-					Analog_CS[i] = 0;
- 8000ea4:	4a12      	ldr	r2, [pc, #72]	@ (8000ef0 <CS_read+0x488>)
+					Analog_Current_Sense[i] = 0;
+ 8000ea4:	4a12      	ldr	r2, [pc, #72]	@ (8000ef0 <Current_Sense_read+0x488>)
  8000ea6:	687b      	ldr	r3, [r7, #4]
  8000ea8:	2100      	movs	r1, #0
  8000eaa:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
@@ -1891,7 +1891,7 @@ void CS_read(){
  8000eb2:	607b      	str	r3, [r7, #4]
  8000eb4:	687b      	ldr	r3, [r7, #4]
  8000eb6:	2b0f      	cmp	r3, #15
- 8000eb8:	ddb9      	ble.n	8000e2e <CS_read+0x3c6>
+ 8000eb8:	ddb9      	ble.n	8000e2e <Current_Sense_read+0x3c6>
 				}
 			}
 			break;
@@ -1902,14 +1902,14 @@ void CS_read(){
  8000ec0:	61fb      	str	r3, [r7, #28]
  8000ec2:	69fb      	ldr	r3, [r7, #28]
  8000ec4:	2b04      	cmp	r3, #4
- 8000ec6:	f77f add5 	ble.w	8000a74 <CS_read+0xc>
+ 8000ec6:	f77f add5 	ble.w	8000a74 <Current_Sense_read+0xc>
 		}else{
 			print_out(1,"S1: ",data_output_switch);
 		}*/
 //------------------------------------------------------
 	}
-	CS_process();
- 8000eca:	f7ff fc53 	bl	8000774 <CS_process>
+	Current_Sense_process();
+ 8000eca:	f7ff fc53 	bl	8000774 <Current_Sense_process>
 }
  8000ece:	bf00      	nop
  8000ed0:	3720      	adds	r7, #32
@@ -2008,9 +2008,9 @@ uint8_t set_bit(uint8_t byte, uint8_t pos, uint8_t new_bit){
  8000f72:	f85d 7b04 	ldr.w	r7, [sp], #4
  8000f76:	4770      	bx	lr
 
-08000f78 <CS_Raw_to_mA>:
+08000f78 <Current_Sense_Raw_to_mA>:
 
-uint16_t CS_Raw_to_mA(uint16_t raw){
+uint16_t Current_Sense_Raw_to_mA(uint16_t raw){
  8000f78:	b480      	push	{r7}
  8000f7a:	b085      	sub	sp, #20
  8000f7c:	af00      	add	r7, sp, #0
@@ -2029,7 +2029,7 @@ uint16_t CS_Raw_to_mA(uint16_t raw){
  8000f8c:	88fb      	ldrh	r3, [r7, #6]
  8000f8e:	f640 42e4 	movw	r2, #3300	@ 0xce4
  8000f92:	fb02 f303 	mul.w	r3, r2, r3
- 8000f96:	4a07      	ldr	r2, [pc, #28]	@ (8000fb4 <CS_Raw_to_mA+0x3c>)
+ 8000f96:	4a07      	ldr	r2, [pc, #28]	@ (8000fb4 <Current_Sense_Raw_to_mA+0x3c>)
  8000f98:	fb82 1203 	smull	r1, r2, r2, r3
  8000f9c:	441a      	add	r2, r3
  8000f9e:	12d2      	asrs	r2, r2, #11
@@ -2177,8 +2177,8 @@ int main(void)
  800107a:	b29b      	uxth	r3, r3
  800107c:	2b00      	cmp	r3, #0
  800107e:	d1e8      	bne.n	8001052 <main+0x9a>
-		  CS_read();
- 8001080:	f7ff fcf2 	bl	8000a68 <CS_read>
+		  Current_Sense_read();
+ 8001080:	f7ff fcf2 	bl	8000a68 <Current_Sense_read>
 		 __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1,PWM_speed[0]);
  8001084:	e7e5      	b.n	8001052 <main+0x9a>
  8001086:	bf00      	nop

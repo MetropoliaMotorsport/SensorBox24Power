@@ -171,9 +171,6 @@ void decode(){
 		Default_Switch_State = set_bit(Default_Switch_State,RxData[1],RxData[2]); //if RxData[2] is 0 -> OFF, if RxData[2] is 1 -> ON
 		output();
 		break;
-	case 3:
-		//HAL_GPIO_WritePin(GPIOB,AnalogPower_EN_Pin,RxData[1]);
-		break;
 	default:
 		Error_Handler();
 		break;
@@ -182,138 +179,138 @@ void decode(){
 
 
 
-void CS_process(){
+void Current_Sense_process(){
 	//4031 == 3.3V since 12bit, have to pick shunt resistor according to this
-	PROC[0] = IN1_1_CS[0];
-	PROC[1] = IN2_1_CS[0];
-	PROC[2] = IN3_1_CS[0];
-	PROC[3] = IN4_1_CS[0];
-	PROC[4] = IN1_2_CS[0];
-	PROC[5] = IN2_2_CS[0];
-	PROC[6] = IN3_2_CS[0];
-	PROC[7] = IN4_2_CS[0];
-	PROC[8] = Analog_CS[0];
+	PROC[0] = IN1_1_Current_Sense[0];
+	PROC[1] = IN2_1_Current_Sense[0];
+	PROC[2] = IN3_1_Current_Sense[0];
+	PROC[3] = IN4_1_Current_Sense[0];
+	PROC[4] = IN1_2_Current_Sense[0];
+	PROC[5] = IN2_2_Current_Sense[0];
+	PROC[6] = IN3_2_Current_Sense[0];
+	PROC[7] = IN4_2_Current_Sense[0];
+	PROC[8] = Analog_Current_Sense[0];
 	for(int i = 1; i < I_AVERAGE; i++){
-		PROC[0] = (PROC[0] + IN1_1_CS[i])/2;
-		PROC[1] = (PROC[1] + IN2_1_CS[i])/2;
-		PROC[2] = (PROC[2] + IN3_1_CS[i])/2;
-		PROC[3] = (PROC[3] + IN4_1_CS[i])/2;
-		PROC[4] = (PROC[4] + IN1_2_CS[i])/2;
-		PROC[5] = (PROC[5] + IN2_2_CS[i])/2;
-		PROC[6] = (PROC[6] + IN3_2_CS[i])/2;
-		PROC[7] = (PROC[7] + IN4_2_CS[i])/2;
+		PROC[0] = (PROC[0] + IN1_1_Current_Sense[i])/2;
+		PROC[1] = (PROC[1] + IN2_1_Current_Sense[i])/2;
+		PROC[2] = (PROC[2] + IN3_1_Current_Sense[i])/2;
+		PROC[3] = (PROC[3] + IN4_1_Current_Sense[i])/2;
+		PROC[4] = (PROC[4] + IN1_2_Current_Sense[i])/2;
+		PROC[5] = (PROC[5] + IN2_2_Current_Sense[i])/2;
+		PROC[6] = (PROC[6] + IN3_2_Current_Sense[i])/2;
+		PROC[7] = (PROC[7] + IN4_2_Current_Sense[i])/2;
 		if(i % 2 == 0){
-			PROC[8] = (PROC[8] + Analog_CS[i/2])/2;
+			PROC[8] = (PROC[8] + Analog_Current_Sense[i/2])/2;
 		}
 	}
-	PROC[0] = CS_Raw_to_mA(PROC[0]);
-	PROC[1] = CS_Raw_to_mA(PROC[1]);
-	PROC[2] = CS_Raw_to_mA(PROC[2]);
-	PROC[3] = CS_Raw_to_mA(PROC[3]);
-	PROC[4] = CS_Raw_to_mA(PROC[4]);
-	PROC[5] = CS_Raw_to_mA(PROC[5]);
-	PROC[6] = CS_Raw_to_mA(PROC[6]);
-	PROC[7] = CS_Raw_to_mA(PROC[7]);
-	PROC[8] = CS_Raw_to_mA(PROC[8]);
+	PROC[0] = Current_Sense_Raw_to_mA(PROC[0]);
+	PROC[1] = Current_Sense_Raw_to_mA(PROC[1]);
+	PROC[2] = Current_Sense_Raw_to_mA(PROC[2]);
+	PROC[3] = Current_Sense_Raw_to_mA(PROC[3]);
+	PROC[4] = Current_Sense_Raw_to_mA(PROC[4]);
+	PROC[5] = Current_Sense_Raw_to_mA(PROC[5]);
+	PROC[6] = Current_Sense_Raw_to_mA(PROC[6]);
+	PROC[7] = Current_Sense_Raw_to_mA(PROC[7]);
+	PROC[8] = Current_Sense_Raw_to_mA(PROC[8]);
 	check_warnings();
 }
 
 void check_warnings(){
 	for(uint8_t x = 0; x < 7; x++){
-		if(PROC[x] >= WC[x]){
-			if(PROC[x] >= OC[x]){
+		if(PROC[x] >= Warning_Current[x]){
+			if(PROC[x] >= Over_Current[x]){
 				Default_Switch_State = set_bit(Default_Switch_State, x, 0);
 				Over_current(x);
 			}else{
 				Warning_current(x);
 			}
 		}
-	/*	if(PROC[x] < UC[x]){
+	/*	if(PROC[x] < Under_Current[x]){
 			Under_current(x);
 		}*/
 	}
-	if(PROC[8] >= WC[8]){
-		if(PROC[8] >= OC[8]){
+	if(PROC[8] >= Warning_Current[8]){
+		if(PROC[8] >= Over_Current[8]){
 			Over_current(8);
 			//HAL_GPIO_WritePin(GPIOB,AnalogPower_EN_Pin,0);
 		}else{
 			Warning_current(8);
 		}
 	}
-	/*if(PROC[8] < UC[8]){
+	/*if(PROC[8] < Under_Current[8]){
 		Under_current(8);
 	}*/
 	output();
 
 }
 
-void CS_read(){
+void Current_Sense_read(){
 	for(int x = 0; x < 5; x++){
 		switch(x){
 		case 0:
 			//chip_select_read();
-			CS_SEL[0] = 0;
-			CS_SEL[1] = 0;
-			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
-			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,CS_SEL[1]);
+			Current_Sense_SEL[0] = 0;
+			Current_Sense_SEL[1] = 0;
+			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,Current_Sense_SEL[0]);
+			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,Current_Sense_SEL[1]);
 			for(int i = 0; i < I_AVERAGE; i++){
 				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Start(&hadc2)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
-				IN1_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
-				IN1_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
+				IN1_1_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
+				IN1_2_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
 				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Stop(&hadc2)!=HAL_OK){Error_Handler();}
 			}
 			break;
 		case 1:
 			//chip_select_read();
-			CS_SEL[0] = 0;
-			CS_SEL[1] = 1;
-			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
-			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,CS_SEL[1]);
+			Current_Sense_SEL[0] = 0;
+			Current_Sense_SEL[1] = 1;
+			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,Current_Sense_SEL[0]);
+			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,Current_Sense_SEL[1]);
 			for(int i = 0; i < I_AVERAGE; i++){
 				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Start(&hadc2)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
-				IN2_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
-				IN2_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
+				IN2_1_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
+				IN2_2_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
 				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Stop(&hadc2)!=HAL_OK){Error_Handler();}
 			}
 			break;
 		case 2:
 			//chip_select_read();
-			CS_SEL[0] = 1;
-			CS_SEL[1] = 0;
-			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
-			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,CS_SEL[1]);
+			Current_Sense_SEL[0] = 1;
+			Current_Sense_SEL[1] = 0;
+			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,Current_Sense_SEL[0]);
+			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,Current_Sense_SEL[1]);
 			for(int i = 0; i < I_AVERAGE; i++){
 				if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
-				IN3_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
-				IN3_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
+				IN3_1_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
+				IN3_2_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
 				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
 			}
 			break;
 		case 3:
 			//chip_select_read();
-			CS_SEL[0] = 1;
-			CS_SEL[1] = 1;
-			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,CS_SEL[0]);
-			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,CS_SEL[1]);
+			Current_Sense_SEL[0] = 1;
+			Current_Sense_SEL[1] = 1;
+			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,Current_Sense_SEL[0]);
+			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,Current_Sense_SEL[1]);
 			for(int i = 0; i < I_AVERAGE; i++){
 				if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
-				IN4_1_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
-				IN4_2_CS[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
+				IN4_1_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
+				IN4_2_Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
 				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
 			}
@@ -323,25 +320,25 @@ void CS_read(){
 			for(int i = 0; i < I_AVERAGE/2; i++){
 				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
-				Analog_CS_1[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+				Analog_Current_Sense_1[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
 				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
 			}
 			//analog_read();
 			for(int i = 0; i < I_AVERAGE/2; i++){
 				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
 				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();} //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
-				Analog_CS_2[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
+				Analog_Current_Sense_2[i] = (uint16_t)HAL_ADC_GetValue(&hadc1); //have to repeat this in all loops, so that the rank 2 ADC gets emptied as well
 				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
-				if(Analog_CS_1[i]>Analog_CS_2[i]){
-					Analog_CS[i] = Analog_CS_1[i] - Analog_CS_2[i];
+				if(Analog_Current_Sense_1[i]>Analog_Current_Sense_2[i]){
+					Analog_Current_Sense[i] = Analog_Current_Sense_1[i] - Analog_Current_Sense_2[i];
 				}else{
-					Analog_CS[i] = 0;
+					Analog_Current_Sense[i] = 0;
 				}
 			}
 			break;
 
 		}
-//		This function is for checking how CS_SEL pins behave
+//		This function is for checking how Current_Sense_SEL pins behave
 //		During writing the code it behaved as expected
 //------------------------------------------------------
 /*		if(HAL_GPIO_ReadPin(SEL0_READ_GPIO_Port, SEL0_READ_Pin) == GPIO_PIN_RESET){
@@ -356,7 +353,7 @@ void CS_read(){
 		}*/
 //------------------------------------------------------
 	}
-	CS_process();
+	Current_Sense_process();
 }
 
 
@@ -379,7 +376,7 @@ uint8_t set_bit(uint8_t byte, uint8_t pos, uint8_t new_bit){
 	return byte;
 }
 
-uint16_t CS_Raw_to_mA(uint16_t raw){
+uint16_t Current_Sense_Raw_to_mA(uint16_t raw){
 	//4095 is the max, depending on resistors we will find the current values		3.3 V == 4,95 A
 	uint32_t max_mA = 4950;
 	uint16_t current = 0;
@@ -389,47 +386,3 @@ uint16_t CS_Raw_to_mA(uint16_t raw){
 
 	return current;
 }
-
-void analog_read(){
-
-	ADC_ChannelConfTypeDef sConfig = {0};
-
-	if(toggle == 0){
-		sConfig.Channel = ADC_CHANNEL_3;
-		sConfig.Rank = ADC_REGULAR_RANK_1;
-		sConfig.SamplingTime = ADC_SAMPLETIME_12CYCLES_5;
-		sConfig.OffsetNumber = ADC_OFFSET_NONE;
-		sConfig.SingleDiff = ADC_SINGLE_ENDED;
-		toggle = 1;
-	}else{
-		sConfig.Channel = ADC_CHANNEL_4;
-		sConfig.Rank = ADC_REGULAR_RANK_1;
-		sConfig.SamplingTime = ADC_SAMPLETIME_12CYCLES_5;
-		sConfig.OffsetNumber = ADC_OFFSET_NONE;
-		sConfig.SingleDiff = ADC_SINGLE_ENDED;
-		toggle = 0;
-	}
-	if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-	{
-		Error_Handler();
-	}
-}
-
-void chip_select_read(){
-	ADC_ChannelConfTypeDef sConfig = {0};
-	  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
-	  */
-	  sConfig.Channel = ADC_CHANNEL_1;
-	  sConfig.Rank = ADC_REGULAR_RANK_1;
-	  sConfig.SamplingTime = ADC_SAMPLETIME_12CYCLES_5;
-	  sConfig.SingleDiff = ADC_SINGLE_ENDED;
-	  sConfig.OffsetNumber = ADC_OFFSET_NONE;
-	  sConfig.Offset = 0;
-	  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-	  {
-	    Error_Handler();
-	  }
-}
-
-
-

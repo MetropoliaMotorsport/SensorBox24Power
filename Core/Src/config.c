@@ -25,49 +25,49 @@ void Config_1(void){
 	CAN_interval = 1000; //in ms
 
 	//OUTPUT 1 in mA
-	WC[0] = 1900;
-	OC[0] = 2050;
-	UC[0] = 00;
+	Warning_Current[0] = 1900;
+	Over_Current[0] = 2050;
+	Under_Current[0] = 00;
 
 	//OUTPUT 2 in mA
-	WC[1] = 1900;
-	OC[1] = 2050;
-	UC[1] = 00;
+	Warning_Current[1] = 1900;
+	Over_Current[1] = 2050;
+	Under_Current[1] = 00;
 
 	//OUTPUT 3 in mA
-	WC[2] = 1900;
-	OC[2] = 2050;
-	UC[2] = 00;
+	Warning_Current[2] = 1900;
+	Over_Current[2] = 2050;
+	Under_Current[2] = 00;
 
 	//OUTPUT 4 in mA
-	WC[3] = 1900;
-	OC[3] = 2050;
-	UC[3] = 00;
+	Warning_Current[3] = 1900;
+	Over_Current[3] = 2050;
+	Under_Current[3] = 00;
 
 	//OUTPUT 5 in mA
-	WC[4] = 1900;
-	OC[4] = 2050;
-	UC[4] = 00;
+	Warning_Current[4] = 1900;
+	Over_Current[4] = 2050;
+	Under_Current[4] = 00;
 
 	//OUTPUT 6 in mA
-	WC[5] = 1900;
-	OC[5] = 2050;
-	UC[5] = 00;
+	Warning_Current[5] = 1900;
+	Over_Current[5] = 2050;
+	Under_Current[5] = 00;
 
 	//OUTPUT 7 in mA
-	WC[6] = 1900;
-	OC[6] = 2050;
-	UC[6] = 00;
+	Warning_Current[6] = 1900;
+	Over_Current[6] = 2050;
+	Under_Current[6] = 00;
 
 	//OUTPUT 8 in mA
-	WC[7] = 1900;
-	OC[7] = 2050;
-	UC[7] = 00;
+	Warning_Current[7] = 1900;
+	Over_Current[7] = 2050;
+	Under_Current[7] = 00;
 
 	//For analog node
-	WC[8] = 2000;
-	OC[8] = 2000;
-	UC[8] = 0;
+	Warning_Current[8] = 2000;
+	Over_Current[8] = 2000;
+	Under_Current[8] = 0;
 
 	Default_Switch_State = 0b00000000; //each bit represent one output [8,7,6,5,4,3,2,1]
 	PWM_out_enable = 0b11;
@@ -88,49 +88,49 @@ void Config_2(void){
 	CAN_interval = 1000; //in ms
 
 	//OUTPUT 1 in mA
-	WC[0] = 1900;
-	OC[0] = 2050;
-	UC[0] = 1800;
+	Warning_Current[0] = 1900;
+	Over_Current[0] = 2050;
+	Under_Current[0] = 1800;
 
 	//OUTPUT 2 in mA
-	WC[1] = 1900;
-	OC[1] = 2050;
-	UC[1] = 1800;
+	Warning_Current[1] = 1900;
+	Over_Current[1] = 2050;
+	Under_Current[1] = 1800;
 
 	//OUTPUT 3 in mA
-	WC[2] = 1900;
-	OC[2] = 2050;
-	UC[2] = 1800;
+	Warning_Current[2] = 1900;
+	Over_Current[2] = 2050;
+	Under_Current[2] = 1800;
 
 	//OUTPUT 4 in mA
-	WC[3] = 1900;
-	OC[3] = 2050;
-	UC[3] = 1800;
+	Warning_Current[3] = 1900;
+	Over_Current[3] = 2050;
+	Under_Current[3] = 1800;
 
 	//OUTPUT 5 in mA
-	WC[4] = 1900;
-	OC[4] = 2050;
-	UC[4] = 1800;
+	Warning_Current[4] = 1900;
+	Over_Current[4] = 2050;
+	Under_Current[4] = 1800;
 
 	//OUTPUT 6 in mA
-	WC[5] = 1900;
-	OC[5] = 2050;
-	UC[5] = 1800;
+	Warning_Current[5] = 1900;
+	Over_Current[5] = 2050;
+	Under_Current[5] = 1800;
 
 	//OUTPUT 7 in mA
-	WC[6] = 1900;
-	OC[6] = 2050;
-	UC[6] = 1800;
+	Warning_Current[6] = 1900;
+	Over_Current[6] = 2050;
+	Under_Current[6] = 1800;
 
 	//OUTPUT 8 in mA
-	WC[7] = 1900;
-	OC[7] = 2050;
-	UC[7] = 1800;
+	Warning_Current[7] = 1900;
+	Over_Current[7] = 2050;
+	Under_Current[7] = 1800;
 
 	Default_Switch_State = 0b00000000; //each bit represent one output [1,2,3,4,5,6,7,8]
 	PWM_out_enable = 0b00;
 
-	//clock is xy MHz, thus set it such that xy/(prescaler*100) is going to be the frequency
+	//clOver_Currentk is xy MHz, thus set it sUnder_Currenth that xy/(prescaler*100) is going to be the frequency
 	PWM_Prescalers[0] = 0;
 	PWM_Prescalers[1] = 0;
 
@@ -153,49 +153,49 @@ void Config_3(void){
 	CAN_interval = 1000; //in ms
 
 	//OUTPUT 1 in mA
-	WC[0] = 1900;
-	OC[0] = 2050;
-	UC[0] = 1800;
+	Warning_Current[0] = 1900;
+	Over_Current[0] = 2050;
+	Under_Current[0] = 1800;
 
 	//OUTPUT 2 in mA
-	WC[1] = 1900;
-	OC[1] = 2050;
-	UC[1] = 1800;
+	Warning_Current[1] = 1900;
+	Over_Current[1] = 2050;
+	Under_Current[1] = 1800;
 
 	//OUTPUT 3 in mA
-	WC[2] = 1900;
-	OC[2] = 2050;
-	UC[2] = 1800;
+	Warning_Current[2] = 1900;
+	Over_Current[2] = 2050;
+	Under_Current[2] = 1800;
 
 	//OUTPUT 4 in mA
-	WC[3] = 1900;
-	OC[3] = 2050;
-	UC[3] = 1800;
+	Warning_Current[3] = 1900;
+	Over_Current[3] = 2050;
+	Under_Current[3] = 1800;
 
 	//OUTPUT 5 in mA
-	WC[4] = 1900;
-	OC[4] = 2050;
-	UC[4] = 1800;
+	Warning_Current[4] = 1900;
+	Over_Current[4] = 2050;
+	Under_Current[4] = 1800;
 
 	//OUTPUT 6 in mA
-	WC[5] = 1900;
-	OC[5] = 2050;
-	UC[5] = 1800;
+	Warning_Current[5] = 1900;
+	Over_Current[5] = 2050;
+	Under_Current[5] = 1800;
 
 	//OUTPUT 7 in mA
-	WC[6] = 1900;
-	OC[6] = 2050;
-	UC[6] = 1800;
+	Warning_Current[6] = 1900;
+	Over_Current[6] = 2050;
+	Under_Current[6] = 1800;
 
 	//OUTPUT 8 in mA
-	WC[7] = 1900;
-	OC[7] = 2050;
-	UC[7] = 1800;
+	Warning_Current[7] = 1900;
+	Over_Current[7] = 2050;
+	Under_Current[7] = 1800;
 
-	Default_Switch_State = 0b11111111; //each bit represent one output [1,2,3,4,5,6,7,8]
+	Default_Switch_State = 0b00000000; //each bit represent one output [1,2,3,4,5,6,7,8]
 	PWM_out_enable = 0b00;
 
-	//clock is xy MHz, thus set it such that xy/(prescaler*100) is going to be the frequency
+	//clOver_Currentk is xy MHz, thus set it sUnder_Currenth that xy/(prescaler*100) is going to be the frequency
 	PWM_Prescalers[0] = 0;
 	PWM_Prescalers[1] = 0;
 

@@ -9,9 +9,6 @@
 #define INC_COMMANDS_H_
 
 void decode(void);
-void PWM(void);
-void OUT_READ(uint8_t value);
 void set_pwm_duty_cycle(TIM_HandleTypeDef *htim);
-void set_pwm_freq(TIM_HandleTypeDef *htim);
 
 #endif /* INC_COMMANDS_H_ */
