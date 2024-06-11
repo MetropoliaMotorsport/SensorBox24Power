@@ -16,6 +16,8 @@
 #define FAN 3
 #define PUMP 4
 #define BUZZER 5
+#define TSAL 6
+#define IMU 7
 
 void Config_Setup(void);
 void Config_1(void);

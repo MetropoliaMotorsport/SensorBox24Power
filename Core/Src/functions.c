@@ -48,6 +48,7 @@ void CanSend(uint8_t *TxData){
 	}
 }
 
+
 void CAN_switch_state(uint8_t values){
 	uint8_t TxData1[5];
 	uint8_t TxData2[5];

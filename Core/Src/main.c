@@ -174,6 +174,7 @@ int main(void)
 
   if(HAL_FDCAN_Start(&hfdcan1)!= HAL_OK){ Error_Handler(); }else{HAL_GPIO_WritePin(GPIOB,LED1_Pin,1); }
   if(HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE,0) != HAL_OK) { Error_Handler(); }
+  HAL_Delay(100);
   HAL_GPIO_WritePin(GPIOA,LED2_Pin,1);
   /* USER CODE END 2 */
 
@@ -187,13 +188,9 @@ int main(void)
 		 __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1,PWM_speed[0]);
 
 		 __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1,PWM_speed[1]);
-	  if(millis % 100 == 0){
-
+	  if(millis % 20 == 0){
 		  Current_Sense_read();
 	  }
-	  //check_warnings();
-	  //if receives message to change pwm then set_pwm(duty cycle)
-
   }
   /* USER CODE END 3 */
 }
