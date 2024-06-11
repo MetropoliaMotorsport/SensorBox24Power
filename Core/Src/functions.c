@@ -130,39 +130,14 @@ void decode(){
 	case 1:							//Set PWM RxData[1] -> which PWM, RxData[2] = 1 -> Duty Cycle || RxData[2] = 2 -> Frequency, RxData[3] -> value
 		switch(RxData[1]){
 		case 1:										//PUMPS
-			switch(RxData[2]){
-			case 1:
-				PWM_width[0] = RxData[3];
-				set_pwm_duty_cycle(&htim1);
-				break;
-			case 2:
-				PWM_Prescalers[0] = RxData[3];
-				set_pwm_freq(&htim1);
-				break;
-			default:
-				//decode_error();
-				Error_Handler();
-				break;
-			}
+			PWM_width[0] = RxData[2];
+			set_pwm_duty_cycle(&htim1);
 			break;
 		case 2:										//FANS
-			switch(RxData[2]){
-			case 1:
-				PWM_width[1] = RxData[3];
-				set_pwm_duty_cycle(&htim2);
-				break;
-			case 2:
-				PWM_Prescalers[1] = RxData[3];
-				set_pwm_freq(&htim2);
-				break;
-			default:
-				//decode_error();
-				Error_Handler();
-				break;
-			}
+			PWM_width[1] = RxData[2];
+			set_pwm_duty_cycle(&htim2);
 			break;
 		default:
-			//decode_error(); //TODO: IMPLEMENT
 			Error_Handler();
 			break;
 		}
@@ -171,7 +146,19 @@ void decode(){
 		Default_Switch_State = set_bit(Default_Switch_State,RxData[1],RxData[2]); //if RxData[2] is 0 -> OFF, if RxData[2] is 1 -> ON
 		output();
 		break;
+	case 3:							// turning analog node on and off, RxData[1] -> 0 is off 1 is on
+		HAL_GPIO_WritePin(GPIOA,LED2_Pin,RxData[1]);
+		break;
+	case 4:							//switch BRAKE_LIGHT	RxData[1] --> 0 for off and 1 for on
+		for(int i = 0; i < 8; i++){
+			if(output_list[i] == BRAKE_LIGHT){
+				Default_Switch_State = set_bit(Default_Switch_State,i,RxData[1]);
+				output();
+			}
+		}
+		break;
 	default:
+		//decode_error(); //TODO: IMPLEMENT
 		Error_Handler();
 		break;
 	}

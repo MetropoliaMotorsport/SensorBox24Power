@@ -70,6 +70,16 @@ void Config_1(void){
 	Under_Current[8] = 0;
 
 	Default_Switch_State = 0b00000000; //each bit represent one output [8,7,6,5,4,3,2,1]
+
+	output_list[0] = BRAKE_LIGHT;
+	output_list[1] = FAN;
+	output_list[2] = FAN;
+	output_list[3] = PUMP;
+	output_list[4] = 0;	//NC
+	output_list[5] = 0;	//NC
+	output_list[6] = 0;	//NC
+	output_list[7] = 0;	//NC
+
 	PWM_out_enable = 0b11;
 
 	//Duty cycle 0-100%

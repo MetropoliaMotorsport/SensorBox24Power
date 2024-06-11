@@ -93,6 +93,7 @@ void Error_Handler(void);
 extern uint8_t CAN_ID;
 extern uint16_t CAN_interval;
 extern uint8_t Default_Switch_State;
+extern uint8_t output_list[8];
 extern uint8_t PWM_out_enable;
 extern uint16_t PWM_Prescalers[2];
 extern uint16_t PWM_width[2];

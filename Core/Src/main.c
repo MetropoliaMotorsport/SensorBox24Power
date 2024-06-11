@@ -85,6 +85,7 @@ uint8_t can_select;
 uint8_t Current_Sense_SEL[2];
 
 uint8_t Default_Switch_State;
+uint8_t output_list[8];
 
 uint8_t PWM_out_enable;
 uint16_t PWM_Prescalers[2];
@@ -159,6 +160,8 @@ int main(void)
   MX_TIM16_Init();
   MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
+  HAL_GPIO_WritePin(GPIOA,LED2_Pin,0);
+
   HAL_TIM_PWM_Init(&htim1);
   HAL_TIM_PWM_Init(&htim2);
   HAL_TIM_Base_Start_IT(&htim3);
@@ -171,7 +174,7 @@ int main(void)
 
   if(HAL_FDCAN_Start(&hfdcan1)!= HAL_OK){ Error_Handler(); }else{HAL_GPIO_WritePin(GPIOB,LED1_Pin,1); }
   if(HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE,0) != HAL_OK) { Error_Handler(); }
-  //HAL_GPIO_WritePin(GPIOB,AnalogPower_EN_Pin,1);
+  HAL_GPIO_WritePin(GPIOA,LED2_Pin,1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -185,6 +188,7 @@ int main(void)
 
 		 __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1,PWM_speed[1]);
 	  if(millis % 100 == 0){
+
 		  Current_Sense_read();
 	  }
 	  //check_warnings();

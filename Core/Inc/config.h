@@ -11,6 +11,12 @@
 
 #define ID 1 //1 for front, 2 for back
 
+#define BRAKE_LIGHT 1
+#define BRAKE_PRESSURE_SENSOR 2
+#define FAN 3
+#define PUMP 4
+#define BUZZER 5
+
 void Config_Setup(void);
 void Config_1(void);
 void Config_2(void);
