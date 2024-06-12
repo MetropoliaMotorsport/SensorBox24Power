@@ -174,6 +174,8 @@ int main(void)
 
   if(HAL_FDCAN_Start(&hfdcan1)!= HAL_OK){ Error_Handler(); }else{HAL_GPIO_WritePin(GPIOB,LED1_Pin,1); }
   if(HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE,0) != HAL_OK) { Error_Handler(); }
+
+  HAL_Delay(2000);
   HAL_GPIO_WritePin(GPIOA,LED2_Pin,1);
   /* USER CODE END 2 */
 
