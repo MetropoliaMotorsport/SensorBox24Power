@@ -37,11 +37,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  000207aa  00000000  00000000  00023d3e  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   000150d0  00000000  00000000  000444e8  2**0
+ 17 .debug_line   000150ce  00000000  00000000  000444e8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000da62c  00000000  00000000  000595b8  2**0
+ 18 .debug_str    000da62c  00000000  00000000  000595b6  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  00133be4  2**0
+ 19 .comment      00000043  00000000  00000000  00133be2  2**0
                   CONTENTS, READONLY
  20 .debug_frame  00005670  00000000  00000000  00133c28  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
@@ -174,10 +174,13 @@ void Config_Setup(void)
 {
  80002ac:	b580      	push	{r7, lr}
  80002ae:	af00      	add	r7, sp, #0
-#if ID == 1
 
 		Config_1();
- 80002b0:	f000 f802 	bl	80002b8 <Config_1>
+
+#elif ID == 2
+
+		Config_2();
+ 80002b0:	f000 f802 	bl	80002b8 <Config_2>
 #else //catch everything that is not a proper ID, give it settings that the debug board would get
 
 		Config_3();
@@ -187,202 +190,203 @@ void Config_Setup(void)
  80002b4:	bf00      	nop
  80002b6:	bd80      	pop	{r7, pc}
 
-080002b8 <Config_1>:
+080002b8 <Config_2>:
+	//set_pwm_freq(&htim2);
 
-void Config_1(void){
+	output();
+}
+
+void Config_2(void){
  80002b8:	b580      	push	{r7, lr}
  80002ba:	af00      	add	r7, sp, #0
 
-	CAN_ID = 17;
- 80002bc:	4b48      	ldr	r3, [pc, #288]	@ (80003e0 <Config_1+0x128>)
- 80002be:	2211      	movs	r2, #17
+	CAN_ID = 22;
+ 80002bc:	4b48      	ldr	r3, [pc, #288]	@ (80003e0 <Config_2+0x128>)
+ 80002be:	2216      	movs	r2, #22
  80002c0:	701a      	strb	r2, [r3, #0]
 	CAN_interval = 1000; //in ms
- 80002c2:	4b48      	ldr	r3, [pc, #288]	@ (80003e4 <Config_1+0x12c>)
+ 80002c2:	4b48      	ldr	r3, [pc, #288]	@ (80003e4 <Config_2+0x12c>)
  80002c4:	f44f 727a 	mov.w	r2, #1000	@ 0x3e8
  80002c8:	801a      	strh	r2, [r3, #0]
 
 	//OUTPUT 1 in mA
 	Warning_Current[0] = 1900;
- 80002ca:	4b47      	ldr	r3, [pc, #284]	@ (80003e8 <Config_1+0x130>)
+ 80002ca:	4b47      	ldr	r3, [pc, #284]	@ (80003e8 <Config_2+0x130>)
  80002cc:	f240 726c 	movw	r2, #1900	@ 0x76c
  80002d0:	801a      	strh	r2, [r3, #0]
 	Over_Current[0] = 2050;
- 80002d2:	4b46      	ldr	r3, [pc, #280]	@ (80003ec <Config_1+0x134>)
+ 80002d2:	4b46      	ldr	r3, [pc, #280]	@ (80003ec <Config_2+0x134>)
  80002d4:	f640 0202 	movw	r2, #2050	@ 0x802
  80002d8:	801a      	strh	r2, [r3, #0]
 	Under_Current[0] = 00;
- 80002da:	4b45      	ldr	r3, [pc, #276]	@ (80003f0 <Config_1+0x138>)
+ 80002da:	4b45      	ldr	r3, [pc, #276]	@ (80003f0 <Config_2+0x138>)
  80002dc:	2200      	movs	r2, #0
  80002de:	801a      	strh	r2, [r3, #0]
 
 	//OUTPUT 2 in mA
 	Warning_Current[1] = 1900;
- 80002e0:	4b41      	ldr	r3, [pc, #260]	@ (80003e8 <Config_1+0x130>)
+ 80002e0:	4b41      	ldr	r3, [pc, #260]	@ (80003e8 <Config_2+0x130>)
  80002e2:	f240 726c 	movw	r2, #1900	@ 0x76c
  80002e6:	805a      	strh	r2, [r3, #2]
 	Over_Current[1] = 2050;
- 80002e8:	4b40      	ldr	r3, [pc, #256]	@ (80003ec <Config_1+0x134>)
+ 80002e8:	4b40      	ldr	r3, [pc, #256]	@ (80003ec <Config_2+0x134>)
  80002ea:	f640 0202 	movw	r2, #2050	@ 0x802
  80002ee:	805a      	strh	r2, [r3, #2]
 	Under_Current[1] = 00;
- 80002f0:	4b3f      	ldr	r3, [pc, #252]	@ (80003f0 <Config_1+0x138>)
+ 80002f0:	4b3f      	ldr	r3, [pc, #252]	@ (80003f0 <Config_2+0x138>)
  80002f2:	2200      	movs	r2, #0
  80002f4:	805a      	strh	r2, [r3, #2]
 
 	//OUTPUT 3 in mA
 	Warning_Current[2] = 1900;
- 80002f6:	4b3c      	ldr	r3, [pc, #240]	@ (80003e8 <Config_1+0x130>)
+ 80002f6:	4b3c      	ldr	r3, [pc, #240]	@ (80003e8 <Config_2+0x130>)
  80002f8:	f240 726c 	movw	r2, #1900	@ 0x76c
  80002fc:	809a      	strh	r2, [r3, #4]
 	Over_Current[2] = 2050;
- 80002fe:	4b3b      	ldr	r3, [pc, #236]	@ (80003ec <Config_1+0x134>)
+ 80002fe:	4b3b      	ldr	r3, [pc, #236]	@ (80003ec <Config_2+0x134>)
  8000300:	f640 0202 	movw	r2, #2050	@ 0x802
  8000304:	809a      	strh	r2, [r3, #4]
 	Under_Current[2] = 00;
- 8000306:	4b3a      	ldr	r3, [pc, #232]	@ (80003f0 <Config_1+0x138>)
+ 8000306:	4b3a      	ldr	r3, [pc, #232]	@ (80003f0 <Config_2+0x138>)
  8000308:	2200      	movs	r2, #0
  800030a:	809a      	strh	r2, [r3, #4]
 
 	//OUTPUT 4 in mA
 	Warning_Current[3] = 1900;
- 800030c:	4b36      	ldr	r3, [pc, #216]	@ (80003e8 <Config_1+0x130>)
+ 800030c:	4b36      	ldr	r3, [pc, #216]	@ (80003e8 <Config_2+0x130>)
  800030e:	f240 726c 	movw	r2, #1900	@ 0x76c
  8000312:	80da      	strh	r2, [r3, #6]
 	Over_Current[3] = 2050;
- 8000314:	4b35      	ldr	r3, [pc, #212]	@ (80003ec <Config_1+0x134>)
+ 8000314:	4b35      	ldr	r3, [pc, #212]	@ (80003ec <Config_2+0x134>)
  8000316:	f640 0202 	movw	r2, #2050	@ 0x802
  800031a:	80da      	strh	r2, [r3, #6]
 	Under_Current[3] = 00;
- 800031c:	4b34      	ldr	r3, [pc, #208]	@ (80003f0 <Config_1+0x138>)
+ 800031c:	4b34      	ldr	r3, [pc, #208]	@ (80003f0 <Config_2+0x138>)
  800031e:	2200      	movs	r2, #0
  8000320:	80da      	strh	r2, [r3, #6]
 
 	//OUTPUT 5 in mA
 	Warning_Current[4] = 1900;
- 8000322:	4b31      	ldr	r3, [pc, #196]	@ (80003e8 <Config_1+0x130>)
+ 8000322:	4b31      	ldr	r3, [pc, #196]	@ (80003e8 <Config_2+0x130>)
  8000324:	f240 726c 	movw	r2, #1900	@ 0x76c
  8000328:	811a      	strh	r2, [r3, #8]
 	Over_Current[4] = 2050;
- 800032a:	4b30      	ldr	r3, [pc, #192]	@ (80003ec <Config_1+0x134>)
+ 800032a:	4b30      	ldr	r3, [pc, #192]	@ (80003ec <Config_2+0x134>)
  800032c:	f640 0202 	movw	r2, #2050	@ 0x802
  8000330:	811a      	strh	r2, [r3, #8]
 	Under_Current[4] = 00;
- 8000332:	4b2f      	ldr	r3, [pc, #188]	@ (80003f0 <Config_1+0x138>)
+ 8000332:	4b2f      	ldr	r3, [pc, #188]	@ (80003f0 <Config_2+0x138>)
  8000334:	2200      	movs	r2, #0
  8000336:	811a      	strh	r2, [r3, #8]
 
 	//OUTPUT 6 in mA
 	Warning_Current[5] = 1900;
- 8000338:	4b2b      	ldr	r3, [pc, #172]	@ (80003e8 <Config_1+0x130>)
+ 8000338:	4b2b      	ldr	r3, [pc, #172]	@ (80003e8 <Config_2+0x130>)
  800033a:	f240 726c 	movw	r2, #1900	@ 0x76c
  800033e:	815a      	strh	r2, [r3, #10]
 	Over_Current[5] = 2050;
- 8000340:	4b2a      	ldr	r3, [pc, #168]	@ (80003ec <Config_1+0x134>)
+ 8000340:	4b2a      	ldr	r3, [pc, #168]	@ (80003ec <Config_2+0x134>)
  8000342:	f640 0202 	movw	r2, #2050	@ 0x802
  8000346:	815a      	strh	r2, [r3, #10]
 	Under_Current[5] = 00;
- 8000348:	4b29      	ldr	r3, [pc, #164]	@ (80003f0 <Config_1+0x138>)
+ 8000348:	4b29      	ldr	r3, [pc, #164]	@ (80003f0 <Config_2+0x138>)
  800034a:	2200      	movs	r2, #0
  800034c:	815a      	strh	r2, [r3, #10]
 
 	//OUTPUT 7 in mA
-	Warning_Current[6] = 1900;
- 800034e:	4b26      	ldr	r3, [pc, #152]	@ (80003e8 <Config_1+0x130>)
- 8000350:	f240 726c 	movw	r2, #1900	@ 0x76c
+	Warning_Current[6] = 2700;
+ 800034e:	4b26      	ldr	r3, [pc, #152]	@ (80003e8 <Config_2+0x130>)
+ 8000350:	f640 228c 	movw	r2, #2700	@ 0xa8c
  8000354:	819a      	strh	r2, [r3, #12]
-	Over_Current[6] = 2050;
- 8000356:	4b25      	ldr	r3, [pc, #148]	@ (80003ec <Config_1+0x134>)
- 8000358:	f640 0202 	movw	r2, #2050	@ 0x802
+	Over_Current[6] = 3000;
+ 8000356:	4b25      	ldr	r3, [pc, #148]	@ (80003ec <Config_2+0x134>)
+ 8000358:	f640 32b8 	movw	r2, #3000	@ 0xbb8
  800035c:	819a      	strh	r2, [r3, #12]
 	Under_Current[6] = 00;
- 800035e:	4b24      	ldr	r3, [pc, #144]	@ (80003f0 <Config_1+0x138>)
+ 800035e:	4b24      	ldr	r3, [pc, #144]	@ (80003f0 <Config_2+0x138>)
  8000360:	2200      	movs	r2, #0
  8000362:	819a      	strh	r2, [r3, #12]
 
 	//OUTPUT 8 in mA
 	Warning_Current[7] = 1900;
- 8000364:	4b20      	ldr	r3, [pc, #128]	@ (80003e8 <Config_1+0x130>)
+ 8000364:	4b20      	ldr	r3, [pc, #128]	@ (80003e8 <Config_2+0x130>)
  8000366:	f240 726c 	movw	r2, #1900	@ 0x76c
  800036a:	81da      	strh	r2, [r3, #14]
 	Over_Current[7] = 2050;
- 800036c:	4b1f      	ldr	r3, [pc, #124]	@ (80003ec <Config_1+0x134>)
+ 800036c:	4b1f      	ldr	r3, [pc, #124]	@ (80003ec <Config_2+0x134>)
  800036e:	f640 0202 	movw	r2, #2050	@ 0x802
  8000372:	81da      	strh	r2, [r3, #14]
 	Under_Current[7] = 00;
- 8000374:	4b1e      	ldr	r3, [pc, #120]	@ (80003f0 <Config_1+0x138>)
+ 8000374:	4b1e      	ldr	r3, [pc, #120]	@ (80003f0 <Config_2+0x138>)
  8000376:	2200      	movs	r2, #0
  8000378:	81da      	strh	r2, [r3, #14]
 
 	//For analog node
 	Warning_Current[8] = 2000;
- 800037a:	4b1b      	ldr	r3, [pc, #108]	@ (80003e8 <Config_1+0x130>)
+ 800037a:	4b1b      	ldr	r3, [pc, #108]	@ (80003e8 <Config_2+0x130>)
  800037c:	f44f 62fa 	mov.w	r2, #2000	@ 0x7d0
  8000380:	821a      	strh	r2, [r3, #16]
 	Over_Current[8] = 2000;
- 8000382:	4b1a      	ldr	r3, [pc, #104]	@ (80003ec <Config_1+0x134>)
+ 8000382:	4b1a      	ldr	r3, [pc, #104]	@ (80003ec <Config_2+0x134>)
  8000384:	f44f 62fa 	mov.w	r2, #2000	@ 0x7d0
  8000388:	821a      	strh	r2, [r3, #16]
 	Under_Current[8] = 0;
- 800038a:	4b19      	ldr	r3, [pc, #100]	@ (80003f0 <Config_1+0x138>)
+ 800038a:	4b19      	ldr	r3, [pc, #100]	@ (80003f0 <Config_2+0x138>)
  800038c:	2200      	movs	r2, #0
  800038e:	821a      	strh	r2, [r3, #16]
 
-	Default_Switch_State = 0b00000000; //each bit represent one output [8,7,6,5,4,3,2,1]
- 8000390:	4b18      	ldr	r3, [pc, #96]	@ (80003f4 <Config_1+0x13c>)
- 8000392:	2200      	movs	r2, #0
+	Default_Switch_State = 0b01000111; //each bit represent one output [8,7,6,5,4,3,2,1]
+ 8000390:	4b18      	ldr	r3, [pc, #96]	@ (80003f4 <Config_2+0x13c>)
+ 8000392:	2247      	movs	r2, #71	@ 0x47
  8000394:	701a      	strb	r2, [r3, #0]
 
-	output_list[0] = BRAKE_LIGHT;
- 8000396:	4b18      	ldr	r3, [pc, #96]	@ (80003f8 <Config_1+0x140>)
- 8000398:	2201      	movs	r2, #1
+	output_list[0] = TSAL;
+ 8000396:	4b18      	ldr	r3, [pc, #96]	@ (80003f8 <Config_2+0x140>)
+ 8000398:	2206      	movs	r2, #6
  800039a:	701a      	strb	r2, [r3, #0]
 	output_list[1] = FAN;
- 800039c:	4b16      	ldr	r3, [pc, #88]	@ (80003f8 <Config_1+0x140>)
+ 800039c:	4b16      	ldr	r3, [pc, #88]	@ (80003f8 <Config_2+0x140>)
  800039e:	2203      	movs	r2, #3
  80003a0:	705a      	strb	r2, [r3, #1]
 	output_list[2] = FAN;
- 80003a2:	4b15      	ldr	r3, [pc, #84]	@ (80003f8 <Config_1+0x140>)
+ 80003a2:	4b15      	ldr	r3, [pc, #84]	@ (80003f8 <Config_2+0x140>)
  80003a4:	2203      	movs	r2, #3
  80003a6:	709a      	strb	r2, [r3, #2]
-	output_list[3] = PUMP;
- 80003a8:	4b13      	ldr	r3, [pc, #76]	@ (80003f8 <Config_1+0x140>)
- 80003aa:	2204      	movs	r2, #4
+	output_list[3] = BRAKE_LIGHT;
+ 80003a8:	4b13      	ldr	r3, [pc, #76]	@ (80003f8 <Config_2+0x140>)
+ 80003aa:	2201      	movs	r2, #1
  80003ac:	70da      	strb	r2, [r3, #3]
-	output_list[4] = 0;	//NC
- 80003ae:	4b12      	ldr	r3, [pc, #72]	@ (80003f8 <Config_1+0x140>)
- 80003b0:	2200      	movs	r2, #0
+	output_list[4] = BUZZER;	//NC
+ 80003ae:	4b12      	ldr	r3, [pc, #72]	@ (80003f8 <Config_2+0x140>)
+ 80003b0:	2205      	movs	r2, #5
  80003b2:	711a      	strb	r2, [r3, #4]
-	output_list[5] = 0;	//NC
- 80003b4:	4b10      	ldr	r3, [pc, #64]	@ (80003f8 <Config_1+0x140>)
- 80003b6:	2200      	movs	r2, #0
+	output_list[5] = IMU;	//NC
+ 80003b4:	4b10      	ldr	r3, [pc, #64]	@ (80003f8 <Config_2+0x140>)
+ 80003b6:	2207      	movs	r2, #7
  80003b8:	715a      	strb	r2, [r3, #5]
-	output_list[6] = 0;	//NC
- 80003ba:	4b0f      	ldr	r3, [pc, #60]	@ (80003f8 <Config_1+0x140>)
- 80003bc:	2200      	movs	r2, #0
+	output_list[6] = PUMP;	//NC
+ 80003ba:	4b0f      	ldr	r3, [pc, #60]	@ (80003f8 <Config_2+0x140>)
+ 80003bc:	2204      	movs	r2, #4
  80003be:	719a      	strb	r2, [r3, #6]
 	output_list[7] = 0;	//NC
- 80003c0:	4b0d      	ldr	r3, [pc, #52]	@ (80003f8 <Config_1+0x140>)
+ 80003c0:	4b0d      	ldr	r3, [pc, #52]	@ (80003f8 <Config_2+0x140>)
  80003c2:	2200      	movs	r2, #0
  80003c4:	71da      	strb	r2, [r3, #7]
 
 	PWM_out_enable = 0b11;
- 80003c6:	4b0d      	ldr	r3, [pc, #52]	@ (80003fc <Config_1+0x144>)
+ 80003c6:	4b0d      	ldr	r3, [pc, #52]	@ (80003fc <Config_2+0x144>)
  80003c8:	2203      	movs	r2, #3
  80003ca:	701a      	strb	r2, [r3, #0]
 
 	//Duty cycle 0-100%
 	PWM_width[0] = 10;
- 80003cc:	4b0c      	ldr	r3, [pc, #48]	@ (8000400 <Config_1+0x148>)
+ 80003cc:	4b0c      	ldr	r3, [pc, #48]	@ (8000400 <Config_2+0x148>)
  80003ce:	220a      	movs	r2, #10
  80003d0:	801a      	strh	r2, [r3, #0]
 	PWM_width[1] = 10;
- 80003d2:	4b0b      	ldr	r3, [pc, #44]	@ (8000400 <Config_1+0x148>)
+ 80003d2:	4b0b      	ldr	r3, [pc, #44]	@ (8000400 <Config_2+0x148>)
  80003d4:	220a      	movs	r2, #10
  80003d6:	805a      	strh	r2, [r3, #2]
-
-	//set_pwm_freq(&htim1);
-	//set_pwm_freq(&htim2);
 
 	output();
  80003d8:	f000 f8c4 	bl	8000564 <output>

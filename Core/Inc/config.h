@@ -9,7 +9,7 @@
 #define INC_CONFIG_H_
 
 
-#define ID 1 //1 for front, 2 for back
+#define ID 2 //1 for front, 2 for back
 
 #define BRAKE_LIGHT 1
 #define BRAKE_PRESSURE_SENSOR 2

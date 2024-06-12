@@ -21,7 +21,7 @@ void Config_Setup(void)
 
 void Config_1(void){
 
-	CAN_ID = 17;
+	CAN_ID = 21;
 	CAN_interval = 1000; //in ms
 
 	//OUTPUT 1 in mA
@@ -94,7 +94,7 @@ void Config_1(void){
 
 void Config_2(void){
 
-	CAN_ID = 18;
+	CAN_ID = 22;
 	CAN_interval = 1000; //in ms
 
 	//OUTPUT 1 in mA
