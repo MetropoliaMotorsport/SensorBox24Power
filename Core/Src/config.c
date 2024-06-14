@@ -57,7 +57,7 @@ void Config_1(void){
 
 void Config_2(void){
 
-	CAN_ID = 18;
+	CAN_ID = 22;
 	CAN_interval = 1000; //in ms
 
 	//definition of Outputs
@@ -79,7 +79,7 @@ void Config_2(void){
 	outputs[OUT2_2.pin] = OUT2_2;
 	outputs[OUT3_2.pin] = OUT3_2;
 
-	Default_Switch_State = 0b00000000; //each bit represent one output [8,7,6,5,4,3,2,1]
+	Default_Switch_State = 0b00000001; //each bit represent one output [8,7,6,5,4,3,2,1]
 
 	PWM_out_enable = 0b11;
 
