@@ -95,14 +95,12 @@ void Config_1(void){
 	PWM_width[0] = 10;
 	PWM_width[1] = 10;
 
-<<<<<<< Updated upstream
+
 	//set_pwm_freq(&htim1);
 	//set_pwm_freq(&htim2);
 
-	output();
-=======
 	switch_output();
->>>>>>> Stashed changes
+
 }
 
 void Config_2(void){
@@ -172,7 +170,7 @@ void Config_2(void){
 	PWM_width[0] = 10;
 	PWM_width[1] = 10;
 
-	output();
+	swtich_output();
 }
 
 void Config_3(void){
@@ -234,10 +232,7 @@ void Config_3(void){
 	set_pwm_duty_cycle(&htim1);
 	set_pwm_duty_cycle(&htim2);
 
-	set_pwm_freq(&htim1);
-	set_pwm_freq(&htim2);
-
-	output();
+	switch_output();
 }
 
 

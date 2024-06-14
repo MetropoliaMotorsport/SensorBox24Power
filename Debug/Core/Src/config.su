@@ -1,10 +1,4 @@
 ../Core/Src/config.c:6:6:Config_Setup	8	static
-<<<<<<< Updated upstream
-../Core/Src/config.c:22:6:Config_1	8	static
-../Core/Src/config.c:95:6:Config_2	8	static
-../Core/Src/config.c:165:6:Config_3	8	static
-=======
 ../Core/Src/config.c:22:6:Config_1	616	static
-../Core/Src/config.c:101:6:Config_2	8	static
-../Core/Src/config.c:171:6:Config_3	8	static
->>>>>>> Stashed changes
+../Core/Src/config.c:106:6:Config_2	8	static
+../Core/Src/config.c:176:6:Config_3	8	static
