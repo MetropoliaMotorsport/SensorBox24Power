@@ -153,7 +153,7 @@ void decode(){
 		break;
 	case 4:							//switch BRAKE_LIGHT	RxData[1] --> 0 for off and 1 for on
 		for(int i = 0; i < 8; i++){
-			if(output_list[i] == BRAKE_LIGHT){
+			if(outputs.device[i] == BRAKE_LIGHT){
 				Default_Switch_State = set_bit(Default_Switch_State,i,RxData[1]);
 				switch_output();
 			}
