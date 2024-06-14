@@ -88,7 +88,6 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN Private defines */
 
-#define I_AVERAGE  32
 
 extern uint8_t CAN_ID;
 extern uint16_t CAN_interval;

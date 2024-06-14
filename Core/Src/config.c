@@ -24,6 +24,24 @@ void Config_1(void){
 	CAN_ID = 17;
 	CAN_interval = 1000; //in ms
 
+
+	Outputs OUT0_1 = {NC, 2050, 1900, 0, OUT0_1_pin};
+	Outputs OUT1_1 = {NC, 2050, 1900, 0, OUT1_1_pin};
+	Outputs OUT2_1 = {NC, 2050, 1900, 0, OUT2_1_pin};
+	Outputs OUT3_1 = {NC, 2050, 1900, 0, OUT3_1_pin};
+	Outputs OUT0_2 = {NC, 2050, 1900, 0, OUT0_2_pin};
+	Outputs OUT1_2 = {NC, 2050, 1900, 0, OUT1_2_pin};
+	Outputs OUT2_2 = {NC, 2050, 1900, 0, OUT2_2_pin};
+	Outputs OUT3_2 = {NC, 2050, 1900, 0, OUT3_2_pin};
+
+	outputs[OUT0_1.pin] = OUT0_1;
+	outputs[OUT1_1.pin] = OUT1_1;
+	outputs[OUT2_1.pin] = OUT2_1;
+	outputs[OUT3_1.pin] = OUT3_1;
+	outputs[OUT0_2.pin] = OUT0_2;
+	outputs[OUT1_2.pin] = OUT1_2;
+	outputs[OUT2_2.pin] = OUT2_2;
+	outputs[OUT3_2.pin] = OUT3_2;
 	//OUTPUT 1 in mA
 	Warning_Current[0] = 1900;
 	Over_Current[0] = 2050;
@@ -71,25 +89,20 @@ void Config_1(void){
 
 	Default_Switch_State = 0b00000000; //each bit represent one output [8,7,6,5,4,3,2,1]
 
-	output_list[0] = BRAKE_LIGHT;
-	output_list[1] = FAN;
-	output_list[2] = FAN;
-	output_list[3] = PUMP;
-	output_list[4] = 0;	//NC
-	output_list[5] = 0;	//NC
-	output_list[6] = 0;	//NC
-	output_list[7] = 0;	//NC
-
 	PWM_out_enable = 0b11;
 
 	//Duty cycle 0-100%
 	PWM_width[0] = 10;
 	PWM_width[1] = 10;
 
+<<<<<<< Updated upstream
 	//set_pwm_freq(&htim1);
 	//set_pwm_freq(&htim2);
 
 	output();
+=======
+	switch_output();
+>>>>>>> Stashed changes
 }
 
 void Config_2(void){

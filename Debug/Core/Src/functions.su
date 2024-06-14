@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 ../Core/Src/functions.c:21:6:HAL_FDCAN_RxFifo0Callback	16	static
 ../Core/Src/functions.c:44:6:CanSend	16	static
 ../Core/Src/functions.c:51:6:CAN_switch_state	40	static
@@ -15,3 +16,19 @@
 ../Core/Src/functions.c:312:9:check_bit	24	static
 ../Core/Src/functions.c:321:9:set_bit	24	static
 ../Core/Src/functions.c:331:10:Current_Sense_Raw_to_mA	24	static
+=======
+../Core/Src/functions.c:22:6:HAL_FDCAN_RxFifo0Callback	16	static
+../Core/Src/functions.c:45:6:CanSend	16	static
+../Core/Src/functions.c:53:6:CAN_switch_state	40	static
+../Core/Src/functions.c:75:6:switch_output	16	static
+../Core/Src/functions.c:112:6:Over_current	16	static
+../Core/Src/functions.c:118:6:Warning_current	16	static
+../Core/Src/functions.c:124:6:Under_current	16	static
+../Core/Src/functions.c:130:6:decode	16	static
+../Core/Src/functions.c:171:6:Current_Sense_process	16	static
+../Core/Src/functions.c:202:6:check_warnings	16	static
+../Core/Src/functions.c:219:6:Current_Sense_read	40	static
+../Core/Src/functions.c:327:9:check_bit	24	static
+../Core/Src/functions.c:336:9:set_bit	24	static
+../Core/Src/functions.c:346:10:Current_Sense_Raw_to_mA	24	static
+>>>>>>> Stashed changes

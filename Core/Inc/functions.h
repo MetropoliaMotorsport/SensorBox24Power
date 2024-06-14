@@ -16,7 +16,7 @@ void ReadAnalogCurrentSense(uint16_t *analog_sense, int size);
 void Current_Sense_read();
 void Current_Sense_process();
 void check_warnings();
-void output();
+void switch_output();
 uint16_t Current_Sense_Raw_to_mA(uint16_t raw);
 void decode();
 uint8_t check_bit(uint8_t byte, uint8_t bitn);

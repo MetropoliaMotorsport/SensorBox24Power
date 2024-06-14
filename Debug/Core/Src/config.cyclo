@@ -1,4 +1,9 @@
 ../Core/Src/config.c:6:6:Config_Setup	1
 ../Core/Src/config.c:22:6:Config_1	1
+<<<<<<< Updated upstream
 ../Core/Src/config.c:95:6:Config_2	1
 ../Core/Src/config.c:165:6:Config_3	1
+=======
+../Core/Src/config.c:101:6:Config_2	1
+../Core/Src/config.c:171:6:Config_3	1
+>>>>>>> Stashed changes
