@@ -49,7 +49,7 @@ void CanSend(uint8_t *TxData){
 	}
 }
 
-
+//function to send state of switches on CAN, for debugging!
 void CAN_switch_state(uint8_t values){
 	uint8_t TxData1[5];
 	uint8_t TxData2[5];
@@ -171,133 +171,77 @@ void decode(){
 void Current_Sense_process(){
 	//4031 == 3.3V since 12bit, have to pick shunt resistor according to this
 	for(int i = 0; i < 8; i++){
-		outputs[i].actual_current = outputs[i].Current_Sense[0];
+		outputs[i].raw_current = outputs[i].Current_Sense[0];
+		for(int z = 1; z < I_AVERAGE; z++){
+			outputs[i].raw_current = (outputs[i].raw_current + outputs[i].Current_Sense[0])/2;
+
+		}
+		outputs[i].actual_current = Current_Sense_Raw_to_mA(outputs[i].raw_current);
 	}
-	for(int i = 1; i < I_AVERAGE; i++){
-		PROC[0] = (PROC[0] + IN1_1_Current_Sense[i])/2;
-		PROC[1] = (PROC[1] + IN2_1_Current_Sense[i])/2;
-		PROC[2] = (PROC[2] + IN3_1_Current_Sense[i])/2;
-		PROC[3] = (PROC[3] + IN4_1_Current_Sense[i])/2;
-		PROC[4] = (PROC[4] + IN1_2_Current_Sense[i])/2;
-		PROC[5] = (PROC[5] + IN2_2_Current_Sense[i])/2;
-		PROC[6] = (PROC[6] + IN3_2_Current_Sense[i])/2;
-		PROC[7] = (PROC[7] + IN4_2_Current_Sense[i])/2;
-	}
-	PROC[0] = Current_Sense_Raw_to_mA(PROC[0]);
-	PROC[1] = Current_Sense_Raw_to_mA(PROC[1]);
-	PROC[2] = Current_Sense_Raw_to_mA(PROC[2]);
-	PROC[3] = Current_Sense_Raw_to_mA(PROC[3]);
-	PROC[4] = Current_Sense_Raw_to_mA(PROC[4]);
-	PROC[5] = Current_Sense_Raw_to_mA(PROC[5]);
-	PROC[6] = Current_Sense_Raw_to_mA(PROC[6]);
-	PROC[7] = Current_Sense_Raw_to_mA(PROC[7]);
 	check_warnings();
 }
 
 void check_warnings(){
 	for(uint8_t x = 0; x < 7; x++){
-		if(outputs[x].actual_current >= outputs[x].Warning_Current){
-			if(outputs[x].actual_current >= outputs[x].Over_Current){
-				Default_Switch_State = set_bit(Default_Switch_State, outputs[x].pin, 0);
-				Over_current(x);
-			}else{
-				Warning_current(x);
+		if(outputs[x].device != NC){
+			if(outputs[x].actual_current >= outputs[x].Warning_Current){
+				if(outputs[x].actual_current >= outputs[x].Over_Current){
+					Default_Switch_State = set_bit(Default_Switch_State, outputs[x].pin, 0);
+					Over_current(x);
+				}else{
+					Warning_current(x);
+				}
 			}
 		}
-	/*	if(PROC[x] < Under_Current[x]){
+		if(outputs[x].actual_current < outputs[x].Under_Current){
 			Under_current(x);
-		}*/
+		}
 	}
 	switch_output();
 }
 
+
+void ConfigureCurrentSense(uint8_t SEL0, uint8_t SEL1){
+	HAL_GPIO_WritePin(GPIOB,SEL0_Pin,SEL0);
+	HAL_GPIO_WritePin(GPIOB,SEL1_Pin,SEL1);
+}
+
+void ReadADCValues(uint16_t *adc1_values, uint16_t *adc2_values){
+	for(int i = 0; i < I_AVERAGE; i++){
+		if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
+		if(HAL_ADC_Start(&hadc2)!=HAL_OK){Error_Handler();}
+		if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
+		if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
+        adc1_values[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
+        adc2_values[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
+		if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
+		if(HAL_ADC_Stop(&hadc2)!=HAL_OK){Error_Handler();}
+	}
+}
+
 void Current_Sense_read(){
-	for(int x = 0; x < 5; x++){
+	for(int x = 0;x < 5; x++){
 		switch(x){
 		case 0:
-			Current_Sense_SEL[0] = 0;
-			Current_Sense_SEL[1] = 0;
-			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,Current_Sense_SEL[0]);
-			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,Current_Sense_SEL[1]);
-			for(int i = 0; i < I_AVERAGE; i++){
-				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_Start(&hadc2)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
-				outputs[0].Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
-				outputs[4].Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
-				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_Stop(&hadc2)!=HAL_OK){Error_Handler();}
-			}
+			ConfigureCurrentSense(0, 0);
+			ReadADCValues(outputs[0].Current_Sense, outputs[4].Current_Sense);
 			break;
 		case 1:
-			Current_Sense_SEL[0] = 0;
-			Current_Sense_SEL[1] = 1;
-			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,Current_Sense_SEL[0]);
-			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,Current_Sense_SEL[1]);
-			for(int i = 0; i < I_AVERAGE; i++){
-				if(HAL_ADC_Start(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_Start(&hadc2)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
-				outputs[1].Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
-				outputs[5].Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
-				if(HAL_ADC_Stop(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_Stop(&hadc2)!=HAL_OK){Error_Handler();}
-			}
+			ConfigureCurrentSense(0, 1);
+			ReadADCValues(outputs[1].Current_Sense, outputs[5].Current_Sense);
 			break;
 		case 2:
-			//chip_select_read();
-			Current_Sense_SEL[0] = 1;
-			Current_Sense_SEL[1] = 0;
-			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,Current_Sense_SEL[0]);
-			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,Current_Sense_SEL[1]);
-			for(int i = 0; i < I_AVERAGE; i++){
-				if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
-				outputs[3].Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
-				outputs[6].Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
-				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
-			}
+			ConfigureCurrentSense(1, 0);
+			ReadADCValues(outputs[2].Current_Sense, outputs[6].Current_Sense);
 			break;
 		case 3:
-			Current_Sense_SEL[0] = 1;
-			Current_Sense_SEL[1] = 1;
-			HAL_GPIO_WritePin(GPIOB,SEL0_Pin,Current_Sense_SEL[0]);
-			HAL_GPIO_WritePin(GPIOB,SEL1_Pin,Current_Sense_SEL[1]);
-			for(int i = 0; i < I_AVERAGE; i++){
-				if(HAL_ADC_Start_IT(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_Start_IT(&hadc2)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc1,100)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_PollForConversion(&hadc2,100)!=HAL_OK){Error_Handler();}
-				outputs[4].Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc1);
-				outputs[7].Current_Sense[i] = (uint16_t)HAL_ADC_GetValue(&hadc2);
-				if(HAL_ADC_Stop_IT(&hadc1)!=HAL_OK){Error_Handler();}
-				if(HAL_ADC_Stop_IT(&hadc2)!=HAL_OK){Error_Handler();}
-			}
+			ConfigureCurrentSense(1, 1);
+			ReadADCValues(outputs[3].Current_Sense, outputs[7].Current_Sense);
 			break;
 		}
-//		This function is for checking how Current_Sense_SEL pins behave
-//		During writing the code it behaved as expected
-//------------------------------------------------------
-/*		if(HAL_GPIO_ReadPin(SEL0_READ_GPIO_Port, SEL0_READ_Pin) == GPIO_PIN_RESET){
-			print_out(0,"S0: ",data_output_switch);
-		}else{
-			print_out(1,"S0: ",data_output_switch);
-		}
-		if(HAL_GPIO_ReadPin(SEL1_READ_GPIO_Port, SEL1_READ_Pin) == GPIO_PIN_RESET){
-			print_out(0,"S1: ",data_output_switch);
-		}else{
-			print_out(1,"S1: ",data_output_switch);
-		}*/
-//------------------------------------------------------
 	}
 	Current_Sense_process();
 }
-
 
 uint8_t check_bit(uint8_t byte, uint8_t bitn){
 	uint8_t buffer = 1<<bitn;

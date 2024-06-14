@@ -11,8 +11,7 @@
 #include <stdbool.h>
 
 void ConfigureCurrentSense(uint8_t sel0, uint8_t sel1);
-void ReadADCValues(uint16_t *adc1_values, uint16_t *adc2_values, int size, bool interrupt_mode);
-void ReadAnalogCurrentSense(uint16_t *analog_sense, int size);
+void ReadADCValues(uint16_t *adc1_values, uint16_t *adc2_values);
 void Current_Sense_read();
 void Current_Sense_process();
 void check_warnings();

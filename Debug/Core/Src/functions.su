@@ -7,8 +7,10 @@
 ../Core/Src/functions.c:124:6:Under_current	16	static
 ../Core/Src/functions.c:130:6:decode	16	static
 ../Core/Src/functions.c:171:6:Current_Sense_process	16	static
-../Core/Src/functions.c:197:6:check_warnings	16	static
-../Core/Src/functions.c:214:6:Current_Sense_read	32	static
-../Core/Src/functions.c:302:9:check_bit	24	static
-../Core/Src/functions.c:311:9:set_bit	24	static
-../Core/Src/functions.c:321:10:Current_Sense_Raw_to_mA	24	static
+../Core/Src/functions.c:184:6:check_warnings	16	static
+../Core/Src/functions.c:204:6:ConfigureCurrentSense	16	static
+../Core/Src/functions.c:209:6:ReadADCValues	24	static
+../Core/Src/functions.c:222:6:Current_Sense_read	16	static
+../Core/Src/functions.c:246:9:check_bit	24	static
+../Core/Src/functions.c:255:9:set_bit	24	static
+../Core/Src/functions.c:265:10:Current_Sense_Raw_to_mA	24	static

@@ -35,6 +35,7 @@ typedef struct{
 	uint16_t Under_Current;
 	uint8_t pin;
 	uint16_t actual_current;
+	uint16_t raw_current;
 	uint16_t Current_Sense[I_AVERAGE];
 }Outputs;
 
