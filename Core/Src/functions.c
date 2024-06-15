@@ -24,12 +24,13 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 	if((RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) != RESET)
 	{
 		/* Retreive Rx messages from RX FIFO0 */
-		if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
+		if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &RxHeader, RxMessage.Bytes) != HAL_OK)
 		{
 			/* Reception Error */
 			Error_Handler();
 		}else{
 			if(RxHeader.Identifier == CAN_ID){
+				RxMessage.DLC = RxHeader.DataLength;
 				decode();
 			}
 		}
@@ -70,42 +71,15 @@ void CAN_switch_state(uint8_t values){
 	}
 }
 
-
+void switch_on_off(GPIO_TypeDef *port, uint16_t pin, uint8_t state){
+	HAL_GPIO_WritePin(port, pin, state);
+}
 
 void switch_output(){
 	uint8_t i = 0;
-	uint8_t bit = 0;
 	for(i = 0; i < 8;i++){
-		bit = check_bit(Default_Switch_State, i);
-		switch(i){
-		case 0:
-			HAL_GPIO_WritePin(GPIOB,IN0_Pin,bit);
-			break;
-		case 1:
-			HAL_GPIO_WritePin(GPIOA,IN1_Pin,bit);
-			break;
-		case 2:
-			HAL_GPIO_WritePin(GPIOA,IN2_Pin,bit);
-			break;
-		case 3:
-			HAL_GPIO_WritePin(GPIOA,IN3_Pin,bit);
-			break;
-		case 4:
-			HAL_GPIO_WritePin(GPIOA,IN0_2_Pin,bit);
-			break;
-		case 5:
-			HAL_GPIO_WritePin(GPIOA,IN1_2_Pin,bit);
-			break;
-		case 6:
-			HAL_GPIO_WritePin(GPIOB,IN2_2_Pin,bit);
-			break;
-		case 7:
-			HAL_GPIO_WritePin(GPIOB,IN3_2_Pin,bit);
-			break;
-		default:
-			Error_Handler();
-			break;
-		}
+		outputs[i].state = check_bit(Default_Switch_State, i);
+		switch_on_off(outputs[i].port, outputs[i].physical_pin, outputs[i].state);
 	}
 }
 
@@ -128,15 +102,15 @@ void Under_current(uint8_t output_pin){
 }
 
 void decode(){
-	switch(RxData[0]){
+	switch(RxMessage.Bytes[0]){
 	case 1:							//Set PWM RxData[1] -> which PWM, RxData[2] = 1 -> Duty Cycle || RxData[2] = 2 -> Frequency, RxData[3] -> value
-		switch(RxData[1]){
+		switch(RxMessage.Bytes[1]){
 		case 1:										//PUMPS
-			PWM_width[0] = RxData[2];
+			PWM_width[0] = RxMessage.Bytes[2];
 			set_pwm_duty_cycle(&htim1);
 			break;
 		case 2:										//FANS
-			PWM_width[1] = RxData[2];
+			PWM_width[1] = RxMessage.Bytes[2];
 			set_pwm_duty_cycle(&htim2);
 			break;
 		default:
@@ -145,16 +119,24 @@ void decode(){
 		}
 		break;
 	case 2:							//Switch output on/off
-		Default_Switch_State = set_bit(Default_Switch_State,RxData[1],RxData[2]); //if RxData[2] is 0 -> OFF, if RxData[2] is 1 -> ON
+		Default_Switch_State = set_bit(Default_Switch_State,RxMessage.Bytes[1],RxMessage.Bytes[2]); //if RxData[2] is 0 -> OFF, if RxData[2] is 1 -> ON
 		switch_output();
 		break;
 	case 3:							// turning analog node on and off, RxData[1] -> 0 is off 1 is on
-		HAL_GPIO_WritePin(GPIOA,LED2_Pin,RxData[1]);
+		HAL_GPIO_WritePin(GPIOA,LED2_Pin,RxMessage.Bytes[1]);
 		break;
 	case 4:							//switch BRAKE_LIGHT	RxData[1] --> 0 for off and 1 for on
 		for(int i = 0; i < 8; i++){
-			if(outputs.device[i] == BRAKE_LIGHT){
-				Default_Switch_State = set_bit(Default_Switch_State,i,RxData[1]);
+			if(outputs[i].device == BRAKE_LIGHT){
+				Default_Switch_State = set_bit(Default_Switch_State,i,RxMessage.Bytes[1]);
+				switch_output();
+			}
+		}
+		break;
+	case 5:							//switch BUZZER on off
+		for(int i = 0; i < 8; i++){
+			if(outputs[i].device == BUZZER){
+				Default_Switch_State = set_bit(Default_Switch_State,i,RxMessage.Bytes[1]);
 				switch_output();
 			}
 		}
@@ -267,8 +249,9 @@ uint16_t Current_Sense_Raw_to_mA(uint16_t raw){
 	uint32_t max_mA = 4950;
 	uint16_t current = 0;
 
-	//current = raw*max_mA / 4095;
-	current = raw*3300 / 4095;
+	current = raw*max_mA / 4095;
+	//current = raw*3300 / 4095;
 
 	return current;
 }
+

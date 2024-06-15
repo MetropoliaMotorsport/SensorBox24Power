@@ -33,13 +33,17 @@ typedef struct{
 	uint16_t Over_Current;
 	uint16_t Warning_Current;
 	uint16_t Under_Current;
+	GPIO_TypeDef *port;
+	uint16_t physical_pin;
 	uint8_t pin;
 	uint16_t actual_current;
 	uint16_t raw_current;
 	uint16_t Current_Sense[I_AVERAGE];
+	uint8_t state;
 }Outputs;
 
 extern Outputs outputs[8];
+
 
 enum pins{
 	OUT0_1_pin, OUT1_1_pin, OUT2_1_pin, OUT3_1_pin,

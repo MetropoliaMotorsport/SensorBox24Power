@@ -97,6 +97,7 @@ uint8_t CAN_ID;
 uint16_t CAN_interval;
 FDCAN_TxHeaderTypeDef TxHeader;
 FDCAN_RxHeaderTypeDef RxHeader;
+CAN_Message RxMessage;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
