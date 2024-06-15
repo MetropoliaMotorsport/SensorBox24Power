@@ -62,8 +62,8 @@ void Config_2(void){
 
 	//definition of Outputs
 	Outputs OUT0_1 = {TSAL, 2050, 1900, 0, GPIOB, IN0_Pin, OUT0_1_pin};
-	Outputs OUT1_1 = {FAN, 2050, 1900, 0, GPIOA, IN1_Pin, OUT1_1_pin};
-	Outputs OUT2_1 = {FAN, 2050, 1900, 0, GPIOA, IN2_Pin, OUT2_1_pin};
+	Outputs OUT1_1 = {TSAL_RED, 2050, 1900, 0, GPIOA, IN1_Pin, OUT1_1_pin};
+	Outputs OUT2_1 = {TSAL_GREEN, 2050, 1900, 0, GPIOA, IN2_Pin, OUT2_1_pin};
 	Outputs OUT3_1 = {BRAKE_LIGHT, 2050, 1900, 0, GPIOA, IN3_Pin, OUT3_1_pin};
 	Outputs OUT0_2 = {BUZZER, 2050, 1900, 0, GPIOA, IN0_2_Pin, OUT0_2_pin};
 	Outputs OUT1_2 = {IMU, 2050, 1900, 0, GPIOA, IN1_2_Pin, OUT1_2_pin};
@@ -79,7 +79,7 @@ void Config_2(void){
 	outputs[OUT2_2.pin] = OUT2_2;
 	outputs[OUT3_2.pin] = OUT3_2;
 
-	Default_Switch_State = 0b01100111; //each bit represent one output [8,7,6,5,4,3,2,1]
+	Default_Switch_State = 0b01100011; //each bit represent one output [8,7,6,5,4,3,2,1]
 
 	PWM_out_enable = 0b11;
 

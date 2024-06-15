@@ -21,7 +21,9 @@
 #define PUMP 4
 #define BUZZER 5
 #define TSAL 6
-#define IMU 7
+#define TSAL_RED 7
+#define TSAL_GREEN 8
+#define IMU 9
 
 void Config_Setup(void);
 void Config_1(void);

@@ -141,6 +141,45 @@ void decode(){
 			}
 		}
 		break;
+	case 6:	//TSAL
+		switch(RxMessage.Bytes[0]){
+		case 0: 					//on off
+			for(int i = 0; i < 8; i++){
+				if(outputs[i].device == TSAL){
+					Default_Switch_State = set_bit(Default_Switch_State,i,RxMessage.Bytes[1]);
+					switch_output();
+				}
+			}
+			break;
+		case 1:						//TSAL COLOR
+			switch(RxMessage.Bytes[1]){
+				case 0:				//RED
+					for(int i = 0; i < 8; i++){
+						if(outputs[i].device == TSAL_RED){
+							Default_Switch_State = set_bit(Default_Switch_State,i,RxMessage.Bytes[2]);
+							switch_output();
+						}
+						if(outputs[i].device == TSAL_GREEN){
+							Default_Switch_State = set_bit(Default_Switch_State,i,!RxMessage.Bytes[2]);
+							switch_output();
+						}
+					}
+					break;
+				case 1:				//GREEN
+					for(int i = 0; i < 8; i++){
+						if(outputs[i].device == TSAL_GREEN){
+							Default_Switch_State = set_bit(Default_Switch_State,i,RxMessage.Bytes[2]);
+							switch_output();
+						}
+						if(outputs[i].device == TSAL_RED){
+							Default_Switch_State = set_bit(Default_Switch_State,i,!RxMessage.Bytes[2]);
+							switch_output();
+						}
+					}
+					break;
+			}
+		}
+		break;
 	default:
 		//decode_error(); //TODO: IMPLEMENT
 		Error_Handler();
