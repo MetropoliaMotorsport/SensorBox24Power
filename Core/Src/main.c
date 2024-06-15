@@ -191,7 +191,7 @@ int main(void)
 		 __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1,PWM_speed[0]);
 
 		 __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1,PWM_speed[1]);
-	  if(millis % 100 == 0){
+	  if(millis % 10 == 0){
 
 		  Current_Sense_read();
 	  }

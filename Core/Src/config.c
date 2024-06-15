@@ -21,7 +21,7 @@ void Config_Setup(void)
 
 void Config_1(void){
 
-	CAN_ID = 17;
+	CAN_ID = 21;
 	CAN_interval = 1000; //in ms
 
 	//definition of Outputs
