@@ -22,7 +22,7 @@
 #define BUZZER 5
 #define TSAL 6
 #define TSAL_RED 7
-#define TSAL_GREEN 8
+#define INVERTERS 8
 #define IMU 9
 
 void Config_Setup(void);

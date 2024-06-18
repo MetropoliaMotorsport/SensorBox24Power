@@ -102,88 +102,19 @@ void Under_current(uint8_t output_pin){
 }
 
 void decode(){
-	switch(RxMessage.Bytes[0]){
-	case 1:							//Set PWM RxData[1] -> which PWM, RxData[2] = 1 -> Duty Cycle || RxData[2] = 2 -> Frequency, RxData[3] -> value
-		switch(RxMessage.Bytes[1]){
-		case 1:										//PUMPS
-			PWM_width[0] = RxMessage.Bytes[2];
-			set_pwm_duty_cycle(&htim1);
+	
+	switch (RxMessage.Bytes[0]) //PWM or switch output
+	{
+		case 1:
+			PWM_width[RxMessage.Bytes[1]] = RxMessage.Bytes[2]; // 0 - htim1 1 - htim2
+			(RxMessage.Bytes[1]) ? set_pwm_duty_cycle(&htim2) : set_pwm_duty_cycle(&htim1);
 			break;
-		case 2:										//FANS
-			PWM_width[1] = RxMessage.Bytes[2];
-			set_pwm_duty_cycle(&htim2);
-			break;
+		case 2:
+				Default_Switch_State = set_bit(Default_Switch_State,RxMessage.Bytes[1],RxMessage.Bytes[2]);
+				switch_output();
 		default:
-			Error_Handler();
 			break;
-		}
-		break;
-	case 2:							//Switch output on/off
-		Default_Switch_State = set_bit(Default_Switch_State,RxMessage.Bytes[1],RxMessage.Bytes[2]); //if RxData[2] is 0 -> OFF, if RxData[2] is 1 -> ON
-		switch_output();
-		break;
-	case 3:							// turning analog node on and off, RxData[1] -> 0 is off 1 is on
-		HAL_GPIO_WritePin(GPIOA,LED2_Pin,RxMessage.Bytes[1]);
-		break;
-	case 4:							//switch BRAKE_LIGHT	RxData[1] --> 0 for off and 1 for on
-		for(int i = 0; i < 8; i++){
-			if(outputs[i].device == BRAKE_LIGHT){
-				Default_Switch_State = set_bit(Default_Switch_State,i,RxMessage.Bytes[1]);
-				switch_output();
-			}
-		}
-		break;
-	case 5:							//switch BUZZER on off
-		for(int i = 0; i < 8; i++){
-			if(outputs[i].device == BUZZER){
-				Default_Switch_State = set_bit(Default_Switch_State,i,RxMessage.Bytes[1]);
-				switch_output();
-			}
-		}
-		break;
-	case 6:	//TSAL
-		switch(RxMessage.Bytes[0]){
-		case 0: 					//on off
-			for(int i = 0; i < 8; i++){
-				if(outputs[i].device == TSAL){
-					Default_Switch_State = set_bit(Default_Switch_State,i,RxMessage.Bytes[1]);
-					switch_output();
-				}
-			}
-			break;
-		case 1:						//TSAL COLOR
-			switch(RxMessage.Bytes[1]){
-				case 0:				//RED
-					for(int i = 0; i < 8; i++){
-						if(outputs[i].device == TSAL_RED){
-							Default_Switch_State = set_bit(Default_Switch_State,i,RxMessage.Bytes[2]);
-							switch_output();
-						}
-						if(outputs[i].device == TSAL_GREEN){
-							Default_Switch_State = set_bit(Default_Switch_State,i,!RxMessage.Bytes[2]);
-							switch_output();
-						}
-					}
-					break;
-				case 1:				//GREEN
-					for(int i = 0; i < 8; i++){
-						if(outputs[i].device == TSAL_GREEN){
-							Default_Switch_State = set_bit(Default_Switch_State,i,RxMessage.Bytes[2]);
-							switch_output();
-						}
-						if(outputs[i].device == TSAL_RED){
-							Default_Switch_State = set_bit(Default_Switch_State,i,!RxMessage.Bytes[2]);
-							switch_output();
-						}
-					}
-					break;
-			}
-		}
-		break;
-	default:
-		//decode_error(); //TODO: IMPLEMENT
-		Error_Handler();
-		break;
+
 	}
 }
 
