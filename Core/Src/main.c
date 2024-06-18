@@ -66,6 +66,7 @@ uint16_t Analog_Current_Sense_1[I_AVERAGE/2];
 uint16_t Analog_Current_Sense_2[I_AVERAGE/2];
 uint16_t Analog_Current_Sense[I_AVERAGE/2];
 uint16_t PROC[9];
+Outputs outputs[8];
 uint16_t IN1_1_mA;
 uint16_t IN2_1_mA;
 uint16_t IN3_1_mA;
@@ -96,6 +97,7 @@ uint8_t CAN_ID;
 uint16_t CAN_interval;
 FDCAN_TxHeaderTypeDef TxHeader;
 FDCAN_RxHeaderTypeDef RxHeader;
+CAN_Message RxMessage;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -189,7 +191,7 @@ int main(void)
 		 __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1,PWM_speed[0]);
 
 		 __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1,PWM_speed[1]);
-	  if(millis % 100 == 0){
+	  if(millis % 10 == 0){
 
 		  Current_Sense_read();
 	  }

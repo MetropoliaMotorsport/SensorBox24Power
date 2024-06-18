@@ -88,42 +88,15 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN Private defines */
 
-#define I_AVERAGE  32
 
 extern uint8_t CAN_ID;
 extern uint16_t CAN_interval;
 extern uint8_t Default_Switch_State;
-extern uint8_t output_list[8];
 extern uint8_t PWM_out_enable;
-extern uint16_t PWM_Prescalers[2];
 extern uint16_t PWM_width[2];
 extern uint16_t PWM_speed[2];
-extern uint16_t Warning_Current[8]; //current warnings
-extern uint16_t Over_Current[8]; //over currents
-extern uint16_t Under_Current[8]; //under currents
-extern uint16_t IN1_1_Current_Sense[I_AVERAGE];
-extern uint16_t IN2_1_Current_Sense[I_AVERAGE];
-extern uint16_t IN3_1_Current_Sense[I_AVERAGE];
-extern uint16_t IN4_1_Current_Sense[I_AVERAGE];
-extern uint16_t IN1_2_Current_Sense[I_AVERAGE];
-extern uint16_t IN2_2_Current_Sense[I_AVERAGE];
-extern uint16_t IN3_2_Current_Sense[I_AVERAGE];
-extern uint16_t IN4_2_Current_Sense[I_AVERAGE];
-extern uint16_t Analog_Current_Sense_1[I_AVERAGE/2];
-extern uint16_t Analog_Current_Sense_2[I_AVERAGE/2];
-extern uint16_t Analog_Current_Sense[I_AVERAGE/2];
-extern uint8_t Current_Sense_SEL[2];
-extern uint16_t PROC[9];
 extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc2;
-extern uint16_t IN1_1_mA;
-extern uint16_t IN2_1_mA;
-extern uint16_t IN3_1_mA;
-extern uint16_t IN4_1_mA;
-extern uint16_t IN1_2_mA;
-extern uint16_t IN2_2_mA;
-extern uint16_t IN3_2_mA;
-extern uint16_t IN4_2_mA;
 extern uint16_t us;
 extern uint16_t millis;
 extern uint8_t can_select;
